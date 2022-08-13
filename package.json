@@ -1,0 +1,20 @@
+{
+  "name": "@commander-js/extra-typings",
+  "version": "0.1.0",
+  "description": "Infer strong typings for options and action handlers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/commander-js/extra-typings.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/commander-js/extra-typings/issues"
+  },
+  "homepage": "https://github.com/commander-js/extra-typings#readme"
+}
