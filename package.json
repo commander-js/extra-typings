@@ -12,12 +12,12 @@
   },
   "files": [
     "index.js",
-    "typings/index.d.ts"
+    "index.d.ts"
   ],
   "type": "commonjs",
   "exports": {
     ".": {
-      "types": "./typings/index.d.ts",
+      "types": "./index.d.ts",
       "require": "./index.js",
       "import": "./esm.mjs"
     },
