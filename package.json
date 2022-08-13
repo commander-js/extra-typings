@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "Infer strong typings for options and action handlers",
   "main": "index.js",
+  "peerDependencies": {
+    "commander": "9.x"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,9 +13,23 @@
     "type": "git",
     "url": "git+https://github.com/commander-js/extra-typings.git"
   },
+  "files": [
+    "index.js",
+    "typings/index.d.ts"
+  ],
+  "type": "commonjs",
+  "exports": {
+    ".": {
+      "types": "./typings/index.d.ts",
+      "require": "./index.js",
+      "import": "./esm.mjs"
+    },
+    "./esm.mjs": "./esm.mjs"
+  },
+  "types": "typings/index.d.ts",
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/commander-js/extra-typings/issues"
   },
