@@ -185,7 +185,7 @@ program
   .option('--required <r>')
   .option('--optional [o]')
   .action(options => {
-    expectType<{ debug?: true | undefined, required?: string, optional?: true | string }>(options);
+    expectType<{ debug?: true, required?: string, optional?: true | string }>(options);
   });
 
 // option names
