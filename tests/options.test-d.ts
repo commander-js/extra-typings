@@ -177,3 +177,72 @@ const ao8 = program
   .addOption(new Option('--no-password'))
   .opts();
 expectType<{ password?: string | false }>(ao8);
+
+// check passed into action handler
+
+program
+  .option('-d, --debug')
+  .option('--required <r>')
+  .option('--optional [o]')
+  .action(options => {
+    expectType<{ debug?: true | undefined, required?: string, optional?: true | string }>(options);
+  });
+
+// option names
+
+const on1 = program
+  .addOption(new Option('-d, --debug'))
+  .opts();
+expectType<{ debug?: true }>(on1);
+
+const on2 = program
+  .addOption(new Option('-C, --no-colour'))
+  .opts();
+expectType<{ colour: boolean }>(on2);
+
+const on3 = program
+  .addOption(new Option('--camel-case'))
+  .opts();
+expectType<{ camelCase?: true }>(on3);
+
+const on4 = program
+  .addOption(new Option('--no-camel-case'))
+  .opts();
+expectType<{ camelCase: boolean }>(on4);
+
+// usage styles
+
+const us1 = program
+  .addOption(new Option('-d, --debug'))
+  .opts();
+expectType<{ debug?: true }>(us1);
+
+const us2 = program
+  .addOption(new Option('-d'))
+  .opts();
+expectType<{ d?: true }>(us2);
+
+const us3 = program
+  .addOption(new Option('--debug'))
+  .opts();
+expectType<{ debug?: true }>(us3);
+
+const us4 = program
+  .addOption(new Option('-d,--debug'))
+  .opts();
+expectType<{ debug?: true }>(us4);
+
+const us5 = program
+  .addOption(new Option('-d|--debug'))
+  .opts();
+expectType<{ debug?: true }>(us5);
+
+const us6 = program
+  .addOption(new Option('-d | --debug'))
+  .opts();
+expectType<{ debug?: true }>(us6);
+
+const us7 = program
+  .addOption(new Option('-d --debug'))
+  .opts();
+expectType<{ debug?: true }>(us7);
