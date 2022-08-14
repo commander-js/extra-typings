@@ -1,9 +1,11 @@
 import { expectType, expectAssignable } from 'tsd';
 import { Command, Argument, OptionValues } from '..';
 
+// Reusing same program variable through tests for convenience.
 const program = new Command();
 
-// Reusing same program variable for convenience.
+// Non-empty array, but may dumb it down to string[] as minor benefits.
+type VaridicStrings = [string, ...string[]];
 
 /**
  * Check when no command-arguments.
@@ -53,14 +55,14 @@ program
 program
   .argument('<mult...>')
   .action((m, options) => {
-    expectType<[string, ...string[]]>(m);
+    expectType<VaridicStrings>(m);
     expectType<OptionValues>(options);
   });
 
 program
   .argument('[mult...]')
   .action((m, options) => {
-    expectType<[string, ...string[]] | undefined>(m);
+    expectType<VaridicStrings | undefined>(m);
     expectAssignable<typeof m>(undefined);
     expectType<OptionValues>(options);
   });
