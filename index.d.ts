@@ -212,7 +212,7 @@ export class CommanderError extends Error {
     argOptional(): Argument<string, ArgType | undefined>;
   }
   
-  export class Option<Usage extends string = '', PresetT = undefined, DefaultT = never, CoerceT = undefined, Mandatory extends boolean = false> {
+  export class Option<Usage extends string = '', PresetT = undefined, DefaultT = undefined, CoerceT = undefined, Mandatory extends boolean = false> {
     flags: string;
     description: string;
   
