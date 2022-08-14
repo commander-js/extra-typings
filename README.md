@@ -3,7 +3,7 @@
 This package offers experimental TypeScript typings for `commander` which infer strong types for:
 
 - all the parameters of the action handler, including the options
-- options returnsed by `.opts()`
+- options returned by `.opts()`
 
 Limitations
 
