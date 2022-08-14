@@ -31,6 +31,11 @@ type InferArguments<S extends string> =
         ? [InferArgument<First>, ...InferArguments<TrimLeft<Rest>>]
         : [InferArgument<S>];
 
+type InferCommmandArguments<S extends string> =
+  S extends `${string} ${infer Args}`
+      ? InferArguments<TrimLeft<Args>>
+      : [];
+
 type NullableCopy<T, U> =
     U extends undefined
         ? T | undefined
@@ -441,7 +446,7 @@ export class CommanderError extends Error {
      * @param opts - configuration options
      * @returns new command
      */
-    command(nameAndArgs: string, opts?: CommandOptions): ReturnType<this['createCommand']>;
+    command<Usage extends string>(nameAndArgs: Usage, opts?: CommandOptions): Command<[...InferCommmandArguments<Usage>]>;
     /**
      * Define a command, implemented in a separate executable file.
      *

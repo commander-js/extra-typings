@@ -221,5 +221,25 @@ program
 
 
 /** 
- * ToDo: command-arguments from .command('name <ARGS>')
+ * Check command-arguments from .command('name <ARGS>')
  */
+
+program
+  .command('sub1')
+  .action((options) => {
+    expectAssignable<OptionValues>(options);
+  });
+
+program
+  .command('sub2 <foo>')
+  .action((foo, options) => {
+    expectType<string>(foo);
+    expectAssignable<OptionValues>(options);
+  });
+
+program
+  .command('sub3 [bar]')
+  .action((bar, options) => {
+    expectType<string | undefined>(bar);
+    expectAssignable<OptionValues>(options);
+  });
