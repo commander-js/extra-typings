@@ -9,6 +9,9 @@ type CamelCase<S extends string> = S extends `${infer W}-${infer Rest}`
 
 // This is a trick to encourage TypeScript to resolve intersections for displaying,
 // like { a: number } & { b : string } => { a: number, b: string }
+// References:
+// - https://github.com/sindresorhus/type-fest/blob/main/source/simplify.d.ts
+// - https://effectivetypescript.com/2022/02/25/gentips-4-display/
 type Resolve<T> = T extends infer O ? { [K in keyof O]: O[K] } : never;
 
 type InferVariadic<S extends string, ArgT> =
