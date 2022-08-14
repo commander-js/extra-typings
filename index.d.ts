@@ -403,7 +403,7 @@ export class CommanderError extends Error {
     [key: string]: any;
   }
   
-  export class Command<Args extends any[] = [], Options = {}> {
+  export class Command<Args extends any[] = [], Opts = {}> {
     args: string[];
     processedArgs: any[];
     commands: Command[];
@@ -628,7 +628,7 @@ export class CommanderError extends Error {
      *
      * @returns `this` command for chaining
      */
-    action(fn: (...args: [...Args, Options, this]) => void): this;
+    action(fn: (...args: [...Args, Opts, this]) => void): this;
 
     /**
      * Define option with `flags`, `description` and optional
@@ -675,13 +675,13 @@ export class CommanderError extends Error {
      * @returns `this` command for chaining
      */
     option<S extends string>(
-        usage: S, description?: string): Command<Args, InferOptions<Options, S, undefined, undefined, false>>;
+        usage: S, description?: string): Command<Args, InferOptions<Opts, S, undefined, undefined, false>>;
     option<S extends string, DefaultT extends string | boolean | string[] | []>(
-        usage: S, description?: string, defaultValue?: DefaultT): Command<Args, InferOptions<Options, S, DefaultT, undefined, false>>;
+        usage: S, description?: string, defaultValue?: DefaultT): Command<Args, InferOptions<Opts, S, DefaultT, undefined, false>>;
     option<S extends string, T>(
-        usage: S, description: string, fn: (value: string, previous: T) => T): Command<Args, InferOptions<Options, S, undefined, T, false>>;
+        usage: S, description: string, fn: (value: string, previous: T) => T): Command<Args, InferOptions<Opts, S, undefined, T, false>>;
     option<S extends string, T>(
-        usage: S, description: string, fn: (value: string, previous: T) => T, defaultValue?: T): Command<Args, InferOptions<Options, S, T, T, false>>;
+        usage: S, description: string, fn: (value: string, previous: T) => T, defaultValue?: T): Command<Args, InferOptions<Opts, S, T, T, false>>;
       
     /**
      * Define a required option, which must have a value after parsing. This usually means
@@ -690,13 +690,13 @@ export class CommanderError extends Error {
      * The `flags` string contains the short and/or long flags, separated by comma, a pipe or space.
      */
     requiredOption<S extends string>(
-        usage: S, description?: string): Command<Args, InferOptions<Options, S, undefined, undefined, true>>;
+        usage: S, description?: string): Command<Args, InferOptions<Opts, S, undefined, undefined, true>>;
     requiredOption<S extends string, DefaultT extends string | boolean | string[]>(
-        usage: S, description?: string, defaultValue?: DefaultT): Command<Args, InferOptions<Options, S, DefaultT, undefined, true>>;
+        usage: S, description?: string, defaultValue?: DefaultT): Command<Args, InferOptions<Opts, S, DefaultT, undefined, true>>;
     requiredOption<S extends string, T>(
-        usage: S, description: string, fn: (value: string, previous: T) => T): Command<Args, InferOptions<Options, S, undefined, T, true>>;
+        usage: S, description: string, fn: (value: string, previous: T) => T): Command<Args, InferOptions<Opts, S, undefined, T, true>>;
     requiredOption<S extends string, T, D extends T>(
-        usage: S, description: string, fn: (value: string, previous: T) => T, defaultValue?: D): Command<Args, InferOptions<Options, S, D, T, true>>;
+        usage: S, description: string, fn: (value: string, previous: T) => T, defaultValue?: D): Command<Args, InferOptions<Opts, S, D, T, true>>;
       
     /**
      * Factory routine to create a new unattached option.
@@ -713,7 +713,7 @@ export class CommanderError extends Error {
      * See .option() and .requiredOption() for creating and attaching an option in a single call.
      */
     addOption<Usage extends string, PresetT, DefaultT, CoerceT, Mandatory extends boolean>(
-        option: Option<Usage, PresetT, DefaultT, CoerceT, Mandatory>): Command<Args, InferOptions<Options, Usage, DefaultT, CoerceT, Mandatory, PresetT>>;
+        option: Option<Usage, PresetT, DefaultT, CoerceT, Mandatory>): Command<Args, InferOptions<Opts, Usage, DefaultT, CoerceT, Mandatory, PresetT>>;
      
     /**
      * Whether to store option values as properties on command object,
@@ -845,7 +845,7 @@ export class CommanderError extends Error {
     /**
      * Return an object containing local option values as key-value pairs
      */
-    opts(): Options;
+    opts(): Opts;
   
     /**
      * Return an object containing merged local and global option values as key-value pairs.
