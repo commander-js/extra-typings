@@ -7,6 +7,8 @@ type CamelCase<S extends string> = S extends `${infer W}-${infer Rest}`
   ? CamelCase<`${W}${Capitalize<Rest>}`>
   : S;
 
+// This is a trick to encourage TypeScript to resolve intersections for displaying,
+// like { a: number } & { b : string } => { a: number, b: string }
 type Resolve<T> = T extends infer O ? { [K in keyof O]: O[K] } : never;
 
 type InferVariadic<S extends string, ArgT> =
