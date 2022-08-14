@@ -1,6 +1,3 @@
-// Using method rather than property for method-signature-style, to document method overloads separately. Allow either.
-/* eslint-disable @typescript-eslint/method-signature-style */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 type TrimRight<S extends string> = S extends `${infer R} ` ? TrimRight<R> : S;
 type TrimLeft<S extends string> = S extends ` ${infer R}` ? TrimLeft<R> : S;
@@ -13,28 +10,26 @@ type CamelCase<S extends string> = S extends `${infer W}-${infer Rest}`
 type Resolve<T> = T extends infer O ? { [K in keyof O]: O[K] } : never;
 
 type InferVariadic<S extends string, ArgT> =
-S extends `${string}...`
-  ? [ArgT, ...ArgT[]] // non-empty array
-  : ArgT;
+  S extends `${string}...`
+    ? [ArgT, ...ArgT[]] // non-empty array
+    : ArgT;
 
-type InferArgumentType<S extends string, ArgT> =
-  S extends `<${infer ArgName}>`
-    ? InferVariadic<ArgName, ArgT>
-    : S extends `[${infer ArgName}]`
-      ? InferVariadic<ArgName, ArgT> | undefined
-      : unknown; // the implementation fallback is treat as required, but we can be stricter here
+type InferArgumentType<Value extends string, DefaultT, CoerceT> =
+  [CoerceT] extends [undefined]
+    ? InferVariadic<Value, string> | DefaultT
+    : CoerceT | DefaultT;
 
-type InferArgumentTypeWithDefault<S extends string, ArgT, DefaultT> =
-    S extends `<${string}>`
-    ? InferArgumentType<S, ArgT> // default never used for a required arg
-    : DefaultT extends undefined
-        ? InferArgumentType<S, ArgT> // paranoia
-        : NonNullable<InferArgumentType<S, ArgT>> | DefaultT;
+type InferArgument<S extends string, DefaultT = undefined, CoerceT = undefined> =
+  S extends `<${infer Value}>`
+    ? InferArgumentType<Value, never, CoerceT>
+    : S extends `[${infer Value}]`
+      ? InferArgumentType<Value, DefaultT, CoerceT>
+      : InferArgumentType<S, never, CoerceT>; // the implementation fallback is treat as <required>
 
-type StringToArgumentsList<S extends string> =
+type InferArguments<S extends string> =
     S extends `${infer First} ${infer Rest}`
-        ? [InferArgumentType<First, string>, ...StringToArgumentsList<TrimLeft<Rest>>]
-        : [InferArgumentType<S, string>];
+        ? [InferArgument<First>, ...InferArguments<TrimLeft<Rest>>]
+        : [InferArgument<S>];
 
 type NullableCopy<T, U> =
     U extends undefined
@@ -71,23 +66,27 @@ type IsAlwaysDefined<DefaulT, Mandatory extends boolean> =
             ? false
             : true;
 
+// Modify PresetT to take into account negated.
 type NegatePresetType<Flag extends string, PresetT> =
     Flag extends `--no-${string}`
         ? undefined extends PresetT ? false : PresetT
         : undefined extends PresetT ? true : PresetT;
           
+// Modify DefaultT to take into account negated.
 type NegateDefaultType<Flag extends string, DefaultT> =
     Flag extends `--no-${string}`
         ? [undefined] extends [DefaultT] ? true : DefaultT
         : [undefined] extends [DefaultT] ? never : DefaultT; // don't add undefined, will make property optional later
     
-type CoerceValueType<Value extends string, CoerceT, ValueT> =
+// Modify ValueT to take into account coerce function.
+type CoerceValueType<CoerceT, ValueT> =
     [ValueT] extends [never]
         ? never
         : [CoerceT] extends [undefined]
-            ? Value extends `${string}...` ? [string, ...string[]] : string
+            ? ValueT
             : CoerceT;
       
+// Modify PresetT to take into account coerce function.
 type CoercePresetType<CoerceT, PresetT> =
     [PresetT] extends [never]
         ? never
@@ -95,44 +94,47 @@ type CoercePresetType<CoerceT, PresetT> =
             ? PresetT
             : undefined extends PresetT ? undefined : CoerceT;
 
-            type BuildOptionProperty<Name extends string, FullValueT, AlwaysDefined extends boolean> =
-  
-AlwaysDefined extends true
-    ? { [K in Name]: FullValueT }
-    : { [K in Name]?: FullValueT };
+type BuildOptionProperty<Name extends string, FullValueT, AlwaysDefined extends boolean> =  
+  AlwaysDefined extends true
+      ? { [K in Name]: FullValueT }
+      : { [K in Name]?: FullValueT };
 
-type InferOptions5<Options, Name extends string, FullValueT, AlwaysDefined extends boolean> =
+type InferOptionsCombine<Options, Name extends string, FullValueT, AlwaysDefined extends boolean> =
   Resolve<CombineOptions<Options, BuildOptionProperty<Name, FullValueT, AlwaysDefined>>>;
 
 // Combine the possible types
-type InferOptions4<Options, Flag extends string, Name extends string, ValueT, PresetT, DefaultT, AlwaysDefined extends boolean> =
+type InferOptionsNegateCombo<Options, Flag extends string, Name extends string, ValueT, PresetT, DefaultT, AlwaysDefined extends boolean> =
   Flag extends `--no-${string}`
     ? Name extends keyof Options
-      ? InferOptions5<Options, Name, PresetT, true> // combo does not set default, leave that to positive option
-      : InferOptions5<Options, Name, PresetT | DefaultT, true> // lone negated option sets default
-    : InferOptions5<Options, Name, ValueT | PresetT | DefaultT, AlwaysDefined>;
+      ? InferOptionsCombine<Options, Name, PresetT, true> // combo does not set default, leave that to positive option
+      : InferOptionsCombine<Options, Name, PresetT | DefaultT, true> // lone negated option sets default
+    : InferOptionsCombine<Options, Name, ValueT | PresetT | DefaultT, AlwaysDefined>;
 
 // Recalc values taking into account negated option.
 // Fill in appropriate PresetT value if undefined.
-type InferOptions3<Options, Flag extends string, Value extends string, ValueT, PresetT, DefaultT, CoerceT, Mandatory extends boolean> =
-  InferOptions4<Options, Flag, ConvertFlagToName<Flag>,
-  CoerceValueType<Value, CoerceT, ValueT>,
+type InferOptionTypes<Options, Flag extends string, Value extends string, ValueT, PresetT, DefaultT, CoerceT, Mandatory extends boolean> =
+  InferOptionsNegateCombo<Options, Flag, ConvertFlagToName<Flag>,
+  CoerceValueType<CoerceT, InferVariadic<Value, ValueT>>,
   NegatePresetType<Flag, CoercePresetType<CoerceT, PresetT>>,
   NegateDefaultType<Flag, DefaultT>,
   IsAlwaysDefined<DefaultT, Mandatory>>;
 
-type InferOptions2<Options, Flags extends string, Value extends string, ValueT, PresetT, DefaultT, CoerceT, Mandatory extends boolean> =
-  InferOptions3<Options, FlagsToFlag<Trim<Flags>>, Trim<Value>, ValueT, PresetT, DefaultT, CoerceT, Mandatory>;
+type InferOptionsFlag<Options, Flags extends string, Value extends string, ValueT, PresetT, DefaultT, CoerceT, Mandatory extends boolean> =
+  InferOptionTypes<Options, FlagsToFlag<Trim<Flags>>, Trim<Value>, ValueT, PresetT, DefaultT, CoerceT, Mandatory>;
 
 // Split up Usage into Flags and Value
 type InferOptions<Options, Usage extends string, DefaultT, CoerceT, Mandatory extends boolean, PresetT = undefined> =
   Usage extends `${infer Flags} <${infer Value}>`
-    ? InferOptions2<Options, Flags, Value, string, never, DefaultT, CoerceT, Mandatory>
+    ? InferOptionsFlag<Options, Flags, Value, string, never, DefaultT, CoerceT, Mandatory>
     : Usage extends `${infer Flags} [${infer Value}]`
-      ? InferOptions2<Options, Flags, Value, string, PresetT, DefaultT, CoerceT, Mandatory>
-      : InferOptions2<Options, Usage, '', never, PresetT, DefaultT, CoerceT, Mandatory>;
+      ? InferOptionsFlag<Options, Flags, Value, string, PresetT, DefaultT, CoerceT, Mandatory>
+      : InferOptionsFlag<Options, Usage, '', never, PresetT, DefaultT, CoerceT, Mandatory>;
 
-// ----- full copy of normal commander typings, with extra type inference -----
+// ----- full copy of normal commander typings from here down, with extra type inference -----
+
+// Using method rather than property for method-signature-style, to document method overloads separately. Allow either.
+/* eslint-disable @typescript-eslint/method-signature-style */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 export class CommanderError extends Error {
     code: string;
@@ -167,7 +169,7 @@ export class CommanderError extends Error {
     exitCode?: number;
   }
   
-  export class Argument<Usage extends string = '', ArgType = InferArgumentType<Usage, string>> {
+  export class Argument<Usage extends string = '', ArgType = InferArgument<Usage>> {
     description: string;
     required: boolean;
     variadic: boolean;
@@ -500,13 +502,13 @@ export class CommanderError extends Error {
      * @returns `this` command for chaining
      */
     argument<S extends string, T>(
-        flags: S, description: string, fn: (value: string, previous: T) => T): Command<[...Args, InferArgumentType<S, T>]>;
+        flags: S, description: string, fn: (value: string, previous: T) => T): Command<[...Args, InferArgument<S, undefined, T>]>;
     argument<S extends string, T>(
-        flags: S, description: string, fn: (value: string, previous: T) => T, defaultValue: T): Command<[...Args, InferArgumentTypeWithDefault<S, T, T>]>;
+        flags: S, description: string, fn: (value: string, previous: T) => T, defaultValue: T): Command<[...Args, InferArgument<S, T, T>]>;
     argument<S extends string>(
-        usage: S, description?: string): Command<[...Args, InferArgumentType<S, string>]>;
+        usage: S, description?: string): Command<[...Args, InferArgument<S, undefined>]>;
     argument<S extends string, DefaultT>(
-        usage: S, description: string, defaultValue: DefaultT): Command<[...Args, InferArgumentTypeWithDefault<S, string, DefaultT>]>;
+        usage: S, description: string, defaultValue: DefaultT): Command<[...Args, InferArgument<S, DefaultT>]>;
     
     /**
      * Define argument syntax for command, adding a prepared argument.
@@ -528,7 +530,7 @@ export class CommanderError extends Error {
      *
      * @returns `this` command for chaining
      */
-    arguments<Names extends string>(args: Names): Command<[...Args, ...StringToArgumentsList<Names>]>;
+    arguments<Names extends string>(args: Names): Command<[...Args, ...InferArguments<Names>]>;
 
   
     /**

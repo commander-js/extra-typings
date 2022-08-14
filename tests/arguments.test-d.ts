@@ -96,7 +96,6 @@ program
     expectType<OptionValues>(options);
   });
 
-// TEST FAILING, early work on args not as complete as later work on options!
 program
   .argument('[height...]', 'description', myParseInts, [])
   .action((h, options) => {
@@ -222,6 +221,14 @@ program
     expectAssignable<typeof foo>(undefined);
     expectType<OptionValues>(options);
   });
+
+program
+  .addArgument(new Argument('<foo...>').argParser(myParseInts))
+  .action((foo, options) => {
+    expectType<number[]>(foo);
+    expectType<OptionValues>(options);
+  });
+
 
 /** 
  * ToDo: command-arguments from .command('name <ARGS>')
