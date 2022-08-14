@@ -4,7 +4,8 @@
   "description": "Infer strong typings for commander options and action handlers",
   "main": "index.js",
   "scripts": {
-    "test": "tsd"
+    "test": "tsd",
+    "prepublish": "tsd"
   },
   "repository": {
     "type": "git",
