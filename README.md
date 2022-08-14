@@ -18,5 +18,4 @@ Usage
 
 The runtime is supplied by commander. This package is all about the typings.
 
-Credit: this builds on work by @PaperStrike in https://github.com/tj/commander.js/pull/1758
-
+Credit: this builds on work by @PaperStrike in <https://github.com/tj/commander.js/pull/1758>
