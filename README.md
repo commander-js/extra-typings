@@ -29,7 +29,7 @@ program.command('print')
   .argument('<file>')
   .option('--double-sided')
   .action((targetFile, options) => {
-    // targetFile and options are fully typed
+    // command-arguments and options are fully typed
   });
 ```
 
