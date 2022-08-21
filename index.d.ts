@@ -14,9 +14,11 @@ type CamelCase<S extends string> = S extends `${infer W}-${infer Rest}`
 // - https://effectivetypescript.com/2022/02/25/gentips-4-display/
 type Resolve<T> = T extends infer O ? { [K in keyof O]: O[K] } : never;
 
+// Side note: not trying to represent arrays as non-empty, keep it simple.
+// https://stackoverflow.com/a/56006703/1082434
 type InferVariadic<S extends string, ArgT> =
   S extends `${string}...`
-    ? [ArgT, ...ArgT[]] // non-empty array
+    ? ArgT[]
     : ArgT;
 
 type InferArgumentType<Value extends string, DefaultT, CoerceT> =
@@ -24,11 +26,17 @@ type InferArgumentType<Value extends string, DefaultT, CoerceT> =
     ? InferVariadic<Value, string> | DefaultT
     : CoerceT | DefaultT;
 
+// Special handling for optional variadic argument, won't be undefined as implementation returns [].
+type InferArgumentOptionalType<Value extends string, DefaultT, CoerceT> =
+  Value extends `${string}...`
+    ? InferArgumentType<Value, [DefaultT] extends [undefined] ? never : DefaultT, CoerceT>
+    : InferArgumentType<Value, DefaultT, CoerceT>
+  
 type InferArgument<S extends string, DefaultT = undefined, CoerceT = undefined> =
   S extends `<${infer Value}>`
     ? InferArgumentType<Value, never, CoerceT>
     : S extends `[${infer Value}]`
-      ? InferArgumentType<Value, DefaultT, CoerceT>
+      ? InferArgumentOptionalType<Value, DefaultT, CoerceT>
       : InferArgumentType<S, never, CoerceT>; // the implementation fallback is treat as <required>
 
 type InferArguments<S extends string> =

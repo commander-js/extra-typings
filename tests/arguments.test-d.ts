@@ -4,9 +4,6 @@ import { Command, Argument, OptionValues } from '..';
 // Reusing same program variable through tests for convenience.
 const program = new Command();
 
-// Non-empty array, but may dumb it down to string[] as minor benefits.
-type VaridicStrings = [string, ...string[]];
-
 /**
  * Check when no command-arguments.
  */
@@ -53,21 +50,22 @@ program
 program
   .argument('<mult...>')
   .action((m, options) => {
-    expectType<VaridicStrings>(m);
+    expectType<string[]>(m);
     expectAssignable<OptionValues>(options);
   });
 
 program
   .argument('[mult...]')
   .action((m, options) => {
-    expectType<VaridicStrings | undefined>(m);
+    expectType<string[]>(m);
     expectAssignable<OptionValues>(options);
   });
 
 program
-  .argument('[mult...]', 'description', ['a'])
+  .argument('[mult...]', 'description', [])
   .action((m, options) => {
-    expectType<VaridicStrings | string[]>(m);
+    // The wild looking never[] is how TypeScript represents the type of the untyped empty array passed as default.
+    expectType<string[] | never[]>(m);
     expectAssignable<OptionValues>(options);
   });
 
@@ -131,7 +129,7 @@ program
   .action((foo1, foo2, mult, options) => {
     expectType<string>(foo1);
     expectType<string>(foo2);
-    expectType<VaridicStrings | undefined>(mult);
+    expectType<string[]>(mult);
     expectAssignable<OptionValues>(options);
   });
 
@@ -165,7 +163,7 @@ program
 program
   .addArgument(new Argument('<foo...>'))
   .action((foo, options) => {
-    expectType<VaridicStrings>(foo);
+    expectType<string[]>(foo);
     expectAssignable<OptionValues>(options);
   });
 
