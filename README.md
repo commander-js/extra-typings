@@ -25,6 +25,8 @@ Credit: this builds on work by @PaperStrike in <https://github.com/tj/commander.
 The types are built up as the options and arguments are defined. The usage pattern for action handlers is easy. Just chain the action handler after the options and arguments.
 
 ```js
+import { program } from '@commander-js/extra-typings';
+
 program.command('print')
   .argument('<file>')
   .option('--double-sided')
@@ -36,6 +38,8 @@ program.command('print')
 For working with a single command without an action handler, the configuration need to be done at the same time as the variable is declared.
 
 ```js
+import { Command } from '@commander-js/extra-typings';
+
 // broken pattern
 const program = new Command(); // program type does not include options or arguments
 program.option('-d, --debug'); // adding option does not change type of program
@@ -43,6 +47,8 @@ const options = program.opts(); // dumb type
 ```
 
 ```js
+import { Command } from '@commander-js/extra-typings';
+
 // working pattern
 const program = new Command()
   .option('-d, --debug'); // program type includes chained options and arguments
