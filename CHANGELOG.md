@@ -8,6 +8,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 <!-- markdownlint-disable MD024 -->
 <!-- markdownlint-disable MD004 -->
 
+## [Unreleased] (future release)
+
+## [0.2.0] (2022-08-23)
+
+## Fixed
+
+- a missing variadic command-line argument should be `[]` not `undefined`
+
+## Changed
+
+- use simple array type rather than fancy non-empty tuple, like `string[]` rather than `[string, ...string[]]`
+
 ## 0.1.0 (2022-08-16)
 
 ### Added
@@ -21,3 +33,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - `.addOption()`
 - inferred types for `.action()`
 - inferred types for `.opts()`
+
+[Unreleased]: https://github.com/commander-js/extra-typings/compare/main...develop
+[0.2.0]: https://github.com/commander-js/extra-typings/compare/v0.1.0...v0.2.0
