@@ -1,9 +1,6 @@
 import { expectType, expectAssignable } from 'tsd';
 import { Command, Option, OptionValues } from '..';
 
-// Non-empty array, but may dumb it down to string[] as minor benefits.
-type VaridicStrings = [string, ...string[]];
-
 function myParseInt(arg: string, previous: number): number {
   return parseInt(arg);
 }
@@ -32,12 +29,12 @@ expectType<{ o?: string | true }>(o3);
 const o4 = program
   .option('--debug <value...>')
   .opts();
-expectType<{ debug?: [string, ...string[]] }>(o4);
+expectType<{ debug?: string[] }>(o4);
 
 const o5 = program
   .option('--debug [value...]')
   .opts();
-expectType<{ debug?: [string, ...string[]] | true }>(o5);
+expectType<{ debug?: string[] | true }>(o5);
 if (o5.debug !== true && o5.debug !== undefined) o5.debug[0] = 'a'; // check expecting non-empty
 
 // with default
@@ -60,12 +57,12 @@ expectType<{ debug: string | true }>(o8);
 const o9 = program
   .option('--debug <value...>', 'description', [])
   .opts();
-expectType<{ debug: VaridicStrings | [] }>(o9);
+expectType<{ debug: [] | string[] }>(o9);
 
 const o10 = program
   .option('--debug [value...]', 'description', [])
   .opts();
-expectType<{ debug: VaridicStrings | true | [] }>(o10);
+expectType<{ debug: string[] | true | [] }>(o10);
 
 // Coerce/custom, w/wo defaults
 
