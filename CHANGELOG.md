@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Fixed
 
-- a missing variadic command-line argument should be `[]` not `undefined`
+- a missing variadic optional command-line argument should be `[]` not `undefined`
 
 ## Changed
 
