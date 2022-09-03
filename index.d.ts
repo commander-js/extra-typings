@@ -80,10 +80,10 @@ type ConvertFlagToName<Flag extends string> =
             ? CamelCase<Name>
             : never;
 
-type CombineOptions<Options extends OptionValues, B extends OptionValues> =
-    keyof B extends keyof Options
-        ? { [K in keyof Options]: K extends keyof B ? Options[K] | B[keyof B] : Options[K] }
-        : Resolve<Options & B>;
+type CombineOptions<Options, O> =
+    keyof O extends keyof Options
+        ? { [K in keyof Options]: K extends keyof O ? Options[K] | O[keyof O] : Options[K] }
+        : Options & O;
 
 type IsAlwaysDefined<DefaulT, Mandatory extends boolean> =
     Mandatory extends true
@@ -430,7 +430,7 @@ export class CommanderError extends Error {
     [key: string]: any;
   }
   
-  export class Command<Args extends any[] = [], Opts = {}> {
+  export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
     args: string[];
     processedArgs: any[];
     commands: Command[];
