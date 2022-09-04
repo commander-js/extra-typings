@@ -424,7 +424,7 @@ export class CommanderError extends Error {
   export type AddHelpTextPosition = 'beforeAll' | 'before' | 'after' | 'afterAll';
   export type HookEvent = 'preSubcommand' | 'preAction' | 'postAction';
   // The source is a string so author can define their own too.
-  export type OptionValueSource = LiteralUnion<'default' | 'implied' | 'config' | 'env' | 'cli', string> | undefined;
+  export type OptionValueSource = LiteralUnion<'default' | 'config' | 'env' | 'cli' | 'implied', string> | undefined;
 
   export interface OptionValues {
     [key: string]: any;
