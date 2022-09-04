@@ -752,17 +752,20 @@ export class CommanderError extends Error {
     /**
      * Store option value.
      */
-    setOptionValue(key: string, value: unknown): this;
+     setOptionValue<K extends keyof Opts>(key: K, value: unknown): this;
+     setOptionValue(key: string, value: unknown): this;
   
     /**
      * Store option value and where the value came from.
      */
-    setOptionValueWithSource(key: string, value: unknown, source: OptionValueSource): this;
+     setOptionValueWithSource<K extends keyof Opts>(key: K, value: unknown, source: OptionValueSource): this;
+     setOptionValueWithSource(key: string, value: unknown, source: OptionValueSource): this;
   
     /**
      * Retrieve option value source.
      */
-    getOptionValueSource(key: string): OptionValueSource;
+     getOptionValueSource<K extends keyof Opts>(key: K): OptionValueSource;
+     getOptionValueSource(key: string): OptionValueSource;
   
     /**
      * Alter parsing of short flags with optional values.
