@@ -749,7 +749,7 @@ export class CommanderError extends Error {
     /**
      * Retrieve option value.
      */
-     getOptionValue<K extends string>(key: K): TypeFromKey<K, Opts>;
+    getOptionValue<K extends string>(key: K): TypeFromKey<K, Opts>;
   
     /**
      * Store option value.
