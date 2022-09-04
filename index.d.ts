@@ -426,8 +426,8 @@ export class CommanderError extends Error {
   export class Command<Args extends any[] = [], Opts = {}> {
     args: string[];
     processedArgs: any[];
-    commands: Command[];
-    parent: Command | null;
+    commands: CommandWeakOpts[];
+    parent: CommandWeakOpts | null;
   
     constructor(name?: string);
   
@@ -497,7 +497,7 @@ export class CommanderError extends Error {
      *
      * @returns `this` command for chaining
      */
-    addCommand(cmd: Command, opts?: CommandOptions): this;
+    addCommand(cmd: CommandWeakOpts, opts?: CommandOptions): this;
   
     /**
      * Factory routine to create a new unattached argument.
@@ -621,7 +621,7 @@ export class CommanderError extends Error {
      *
      * (Used internally when adding a command using `.command()` so subcommands inherit parent settings.)
      */
-    copyInheritedSettings(sourceCommand: Command): this;
+    copyInheritedSettings(sourceCommand: CommandWeakOpts): this;
   
     /**
      * Display the help or a custom message after an error occurs.
