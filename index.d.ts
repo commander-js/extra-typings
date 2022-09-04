@@ -148,6 +148,8 @@ type InferOptions<Options, Usage extends string, DefaultT, CoerceT, Mandatory ex
       ? InferOptionsFlag<Options, Flags, Value, string, PresetT, DefaultT, CoerceT, Mandatory>
       : InferOptionsFlag<Options, Usage, '', never, PresetT, DefaultT, CoerceT, Mandatory>;
 
+export type CommandWeakOpts = Command<never, OptionValues>;
+
 // ----- full copy of normal commander typings from here down, with extra type inference -----
 
 // Using method rather than property for method-signature-style, to document method overloads separately. Allow either.
@@ -418,7 +420,7 @@ export class CommanderError extends Error {
   export type OptionValueSource = 'default' | 'env' | 'config' | 'cli';
   
   export interface OptionValues {
-    [key: string]: any;
+    [key: string]: unknown;
   }
   
   export class Command<Args extends any[] = [], Opts = {}> {
@@ -568,7 +570,7 @@ export class CommanderError extends Error {
     /**
      * Add hook for life cycle event.
      */
-    hook(event: HookEvent, listener: (thisCommand: Command, actionCommand: Command) => void | Promise<void>): this;
+    hook(event: HookEvent, listener: (thisCommand: this, actionCommand: CommandWeakOpts) => void | Promise<void>): this;
   
     /**
      * Register callback to use as replacement for calling process.exit.
