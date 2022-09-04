@@ -21,9 +21,6 @@ type InferVariadic<S extends string, ArgT> =
     ? ArgT[]
     : ArgT;
 
-type TypeFromKey<K extends string, T> =
-    K extends keyof T ? T[K] : unknown;
-
 type InferArgumentType<Value extends string, DefaultT, CoerceT> =
   [CoerceT] extends [undefined]
     ? InferVariadic<Value, string> | DefaultT
@@ -749,7 +746,8 @@ export class CommanderError extends Error {
     /**
      * Retrieve option value.
      */
-    getOptionValue<K extends string>(key: K): TypeFromKey<K, Opts>;
+    getOptionValue<K extends keyof Opts>(key: K): Opts[K];
+    getOptionValue(key: string): unknown;
   
     /**
      * Store option value.
