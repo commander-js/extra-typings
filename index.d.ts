@@ -764,8 +764,8 @@ export class CommanderError extends Error {
     /**
      * Retrieve option value source.
      */
-     getOptionValueSource<K extends keyof Opts>(key: K): OptionValueSource;
-     getOptionValueSource(key: string): OptionValueSource;
+     getOptionValueSource<K extends keyof Opts>(key: K): OptionValueSource | undefined;
+     getOptionValueSource(key: string): OptionValueSource | undefined;
   
     /**
      * Alter parsing of short flags with optional values.
