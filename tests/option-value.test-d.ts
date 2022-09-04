@@ -1,7 +1,7 @@
 import { expectType } from 'tsd';
 import { Command } from '..';
 
-if ('getOptionValue is unknown when key is unknown') {
+if ('when getOptionValue is unknown then key is unknown') {
   const program = new Command()
     .option('-f, --foo');
   
@@ -9,7 +9,7 @@ if ('getOptionValue is unknown when key is unknown') {
   expectType<unknown>(v);
 }
 
-if ('getOptionValue result is typed when key is known') {
+if ('when getOptionValue result is typed then key is known') {
   const program = new Command()
     .option('-f, --foo');
   const v = program.getOptionValue('foo');
