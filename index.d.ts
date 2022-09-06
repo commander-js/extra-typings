@@ -14,6 +14,14 @@ type CamelCase<S extends string> = S extends `${infer W}-${infer Rest}`
 // - https://effectivetypescript.com/2022/02/25/gentips-4-display/
 type Resolve<T> = T extends infer O ? { [K in keyof O]: O[K] } : never;
 
+// This is a trick to encourage editor to suggest the known literals while still
+// allowing any BaseType value.
+// References:
+// - https://github.com/microsoft/TypeScript/issues/29729
+// - https://github.com/sindresorhus/type-fest/blob/main/source/literal-union.d.ts
+// - https://github.com/sindresorhus/type-fest/blob/main/source/primitive.d.ts
+type LiteralUnion<LiteralType, BaseType extends string | number> = LiteralType | (BaseType & Record<never, never>);
+
 // Side note: not trying to represent arrays as non-empty, keep it simple.
 // https://stackoverflow.com/a/56006703/1082434
 type InferVariadic<S extends string, ArgT> =
@@ -72,10 +80,10 @@ type ConvertFlagToName<Flag extends string> =
             ? CamelCase<Name>
             : never;
 
-type CombineOptions<Options extends Record<string, any>, B extends Record<string, any>> =
-    keyof B extends keyof Options
-        ? { [K in keyof Options]: K extends keyof B ? Options[K] | B[keyof B] : Options[K] }
-        : Resolve<Options & B>;
+type CombineOptions<Options, O> =
+    keyof O extends keyof Options
+        ? { [K in keyof Options]: K extends keyof O ? Options[K] | O[keyof O] : Options[K] }
+        : Options & O;
 
 type IsAlwaysDefined<DefaulT, Mandatory extends boolean> =
     Mandatory extends true
@@ -415,13 +423,14 @@ export class CommanderError extends Error {
   
   export type AddHelpTextPosition = 'beforeAll' | 'before' | 'after' | 'afterAll';
   export type HookEvent = 'preSubcommand' | 'preAction' | 'postAction';
-  export type OptionValueSource = 'default' | 'env' | 'config' | 'cli';
-  
+  // The source is a string so author can define their own too.
+  export type OptionValueSource = LiteralUnion<'default' | 'config' | 'env' | 'cli' | 'implied', string> | undefined;
+
   export interface OptionValues {
     [key: string]: any;
   }
   
-  export class Command<Args extends any[] = [], Opts = {}> {
+  export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
     args: string[];
     processedArgs: any[];
     commands: Command[];
