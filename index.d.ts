@@ -156,6 +156,8 @@ type InferOptions<Options, Usage extends string, DefaultT, CoerceT, Mandatory ex
       ? InferOptionsFlag<Options, Flags, Value, string, PresetT, DefaultT, CoerceT, Mandatory>
       : InferOptionsFlag<Options, Usage, '', never, PresetT, DefaultT, CoerceT, Mandatory>;
 
+export type CommandUnknownOpts = Command<unknown[], OptionValues>;
+
 // ----- full copy of normal commander typings from here down, with extra type inference -----
 
 // Using method rather than property for method-signature-style, to document method overloads separately. Allow either.
@@ -358,9 +360,9 @@ export class CommanderError extends Error {
     constructor();
   
     /** Get the command term to show in the list of subcommands. */
-    subcommandTerm(cmd: Command): string;
+    subcommandTerm(cmd: CommandUnknownOpts): string;
     /** Get the command summary to show in the list of subcommands. */
-    subcommandDescription(cmd: Command): string;
+    subcommandDescription(cmd: CommandUnknownOpts): string;
     /** Get the option term to show in the list of options. */
     optionTerm(option: Option): string;
     /** Get the option description to show in the list of options. */
@@ -371,25 +373,25 @@ export class CommanderError extends Error {
     argumentDescription(argument: Argument): string;
   
     /** Get the command usage to be displayed at the top of the built-in help. */
-    commandUsage(cmd: Command): string;
+    commandUsage(cmd: CommandUnknownOpts): string;
     /** Get the description for the command. */
-    commandDescription(cmd: Command): string;
+    commandDescription(cmd: CommandUnknownOpts): string;
   
     /** Get an array of the visible subcommands. Includes a placeholder for the implicit help command, if there is one. */
-    visibleCommands(cmd: Command): Command[];
+    visibleCommands(cmd: CommandUnknownOpts): CommandUnknownOpts[];
     /** Get an array of the visible options. Includes a placeholder for the implicit help option, if there is one. */
-    visibleOptions(cmd: Command): Option[];
+    visibleOptions(cmd: CommandUnknownOpts): Option[];
     /** Get an array of the arguments which have descriptions. */
-    visibleArguments(cmd: Command): Argument[];
+    visibleArguments(cmd: CommandUnknownOpts): Argument[];
   
     /** Get the longest command term length. */
-    longestSubcommandTermLength(cmd: Command, helper: Help): number;
+    longestSubcommandTermLength(cmd: CommandUnknownOpts, helper: Help): number;
     /** Get the longest option term length. */
-    longestOptionTermLength(cmd: Command, helper: Help): number;
+    longestOptionTermLength(cmd: CommandUnknownOpts, helper: Help): number;
     /** Get the longest argument term length. */
-    longestArgumentTermLength(cmd: Command, helper: Help): number;
+    longestArgumentTermLength(cmd: CommandUnknownOpts, helper: Help): number;
     /** Calculate the pad width from the maximum term length. */
-    padWidth(cmd: Command, helper: Help): number;
+    padWidth(cmd: CommandUnknownOpts, helper: Help): number;
   
     /**
      * Wrap the given string to width characters per line, with lines after the first indented.
@@ -398,7 +400,7 @@ export class CommanderError extends Error {
     wrap(str: string, width: number, indent: number, minColumnWidth?: number): string;
   
     /** Generate the built-in help text. */
-    formatHelp(cmd: Command, helper: Help): string;
+    formatHelp(cmd: CommandUnknownOpts, helper: Help): string;
   }
   export type HelpConfiguration = Partial<Help>;
   
@@ -427,14 +429,14 @@ export class CommanderError extends Error {
   export type OptionValueSource = LiteralUnion<'default' | 'config' | 'env' | 'cli' | 'implied', string> | undefined;
 
   export interface OptionValues {
-    [key: string]: any;
+    [key: string]: unknown;
   }
   
   export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
     args: string[];
     processedArgs: any[];
-    commands: Command[];
-    parent: Command | null;
+    commands: CommandUnknownOpts[];
+    parent: CommandUnknownOpts | null;
   
     constructor(name?: string);
   
@@ -504,7 +506,7 @@ export class CommanderError extends Error {
      *
      * @returns `this` command for chaining
      */
-    addCommand(cmd: Command, opts?: CommandOptions): this;
+    addCommand(cmd: CommandUnknownOpts, opts?: CommandOptions): this;
   
     /**
      * Factory routine to create a new unattached argument.
@@ -577,7 +579,7 @@ export class CommanderError extends Error {
     /**
      * Add hook for life cycle event.
      */
-    hook(event: HookEvent, listener: (thisCommand: Command, actionCommand: Command) => void | Promise<void>): this;
+    hook(event: HookEvent, listener: (thisCommand: this, actionCommand: CommandUnknownOpts) => void | Promise<void>): this;
   
     /**
      * Register callback to use as replacement for calling process.exit.
@@ -628,7 +630,7 @@ export class CommanderError extends Error {
      *
      * (Used internally when adding a command using `.command()` so subcommands inherit parent settings.)
      */
-    copyInheritedSettings(sourceCommand: Command): this;
+    copyInheritedSettings(sourceCommand: CommandUnknownOpts): this;
   
     /**
      * Display the help or a custom message after an error occurs.
