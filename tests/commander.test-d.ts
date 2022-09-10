@@ -230,7 +230,7 @@ expectType<{operands: string[]; unknown: string[]}>(program.parseOptions(['node'
 
 // opts
 const opts = program.opts();
-expectType<commander.OptionValues>(opts);
+expectAssignable<commander.OptionValues>(opts);
 // Breaking change: unknown  properties are now an error
 // expectType(opts.foo);
 // expectType(opts.bar);
