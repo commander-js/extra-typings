@@ -7,8 +7,11 @@ This package offers experimental TypeScript typings for `commander` which infer 
 
 Limitations
 
-- subclassing is not directly supported for `Command`, `Argument`, or `Option`
 - the generics lead to some noisy types visible in editor and errors
+- some code changes for subclasses of `Command`, `Argument`, or `Option` (see [subclass.test-d.ts](./tests/subclass.test-d.ts))
+  - chaining methods which do type inference return base class rather than `this`
+  - subclass of `Command` returns base class not subclass from `.command(name)`
+  - type parameter needed for class declaration of subclass of `Option` and `Argument`
 
 Usage
 

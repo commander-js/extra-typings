@@ -52,7 +52,7 @@ type InferArguments<S extends string> =
         ? [InferArgument<First>, ...InferArguments<TrimLeft<Rest>>]
         : [InferArgument<S>];
 
-type InferCommmandArguments<S extends string> =
+export type InferCommmandArguments<S extends string> =
   S extends `${string} ${infer Args}`
       ? InferArguments<TrimLeft<Args>>
       : [];
