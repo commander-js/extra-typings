@@ -5,6 +5,11 @@ import { expectType, expectAssignable } from 'tsd';
 // what changes are required, and find out what breaks in a wide
 // range of usage examples.
 
+// Search for "breaking change" to find tests that were commented out due to changed behaviour.
+// In addition, all of the chaining tests on Command changed to use expectChainedCommand so
+// can change as needed, and weaker test that extends CommandUnknownOpts doesn't fail due to
+// generic typing of options and arguments.
+
 function expectChainedCommand<T extends commander.CommandUnknownOpts>(cmd: T) {
 }
 
@@ -226,8 +231,9 @@ expectType<{operands: string[]; unknown: string[]}>(program.parseOptions(['node'
 // opts
 const opts = program.opts();
 expectType<commander.OptionValues>(opts);
-expectType(opts.foo);
-expectType(opts.bar);
+// Breaking change: unknown  properties are now an error
+// expectType(opts.foo);
+// expectType(opts.bar);
 
 // opts with generics
 // Breaking change: user supplied type no longer supported this way
@@ -335,7 +341,8 @@ class MyCommand extends commander.Command {
   }
 }
 const myProgram = new MyCommand();
-expectType<MyCommand>(myProgram.command('sub'));
+// Breaking change: not getting back subclass type
+// expectType<MyCommand>(myProgram.command('sub'));
 
 // configureHelp
 expectType<commander.Help>(program.createHelp());
@@ -388,7 +395,7 @@ expectType<string>(helper.optionDescription(helperOption));
 expectType<string>(helper.argumentTerm(helperArgument));
 expectType<string>(helper.argumentDescription(helperArgument));
 
-expectType<commander.Command[]>(helper.visibleCommands(helperCommand));
+expectType<commander.CommandUnknownOpts[]>(helper.visibleCommands(helperCommand));
 expectType<commander.Option[]>(helper.visibleOptions(helperCommand));
 expectType<commander.Argument[]>(helper.visibleArguments(helperCommand));
 

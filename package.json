@@ -39,6 +39,7 @@
     "commander": "9.x"
   },
   "devDependencies": {
+    "@types/node": "^18.7.16",
     "tsd": "^0.22.0",
     "typescript": "^4.7.4"
   }
