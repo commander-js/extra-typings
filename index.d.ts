@@ -736,7 +736,7 @@ export class CommanderError extends Error {
      * create the option. You can override createOption to return a custom option.
      */
   
-    createOption(flags: string, description?: string): Option;
+    createOption<Usage extends string>(flags: Usage, description?: string): Option<Usage>;
   
     /**
      * Add a prepared Option.
