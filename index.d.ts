@@ -1056,7 +1056,7 @@ export class CommanderError extends Error {
   }
   
   export function createCommand(name?: string): Command;
-  export function createOption(flags: string, description?: string): Option;
+  export function createOption<Usage extends string>(flags: Usage, description?: string): Option<Usage>;
   export function createArgument(name: string, description?: string): Argument;
   
   export const program: Command;
