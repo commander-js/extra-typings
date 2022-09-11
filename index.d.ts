@@ -436,7 +436,7 @@ export class CommanderError extends Error {
   
   export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
     args: string[];
-    processedArgs: any[];
+    processedArgs: Args;
     commands: CommandUnknownOpts[];
     parent: CommandUnknownOpts | null;
   
