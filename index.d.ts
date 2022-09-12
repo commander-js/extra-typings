@@ -736,7 +736,7 @@ export class CommanderError extends Error {
      * create the option. You can override createOption to return a custom option.
      */
   
-    createOption(flags: string, description?: string): Option;
+    createOption<Usage extends string>(flags: Usage, description?: string): Option<Usage>;
   
     /**
      * Add a prepared Option.
@@ -1056,7 +1056,7 @@ export class CommanderError extends Error {
   }
   
   export function createCommand(name?: string): Command;
-  export function createOption(flags: string, description?: string): Option;
+  export function createOption<Usage extends string>(flags: Usage, description?: string): Option<Usage>;
   export function createArgument<Usage extends string>(name: Usage, description?: string): Argument<Usage>;
   
   export const program: Command;
