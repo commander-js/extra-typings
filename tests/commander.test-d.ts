@@ -39,7 +39,7 @@ expectType<commander.Argument>(commander.createArgument('<foo>'));
 // Command properties
 expectType<string[]>(program.args);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-expectType<any[]>(program.processedArgs);
+expectType<[]>(program.processedArgs);
 expectType<commander.CommandUnknownOpts[]>(program.commands);
 expectType<commander.CommandUnknownOpts | null>(program.parent);
 

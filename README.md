@@ -1,17 +1,14 @@
 # extra-typings for commander
 
+[![NPM Version](http://img.shields.io/npm/v/@commander-js/extra-typings.svg?style=flat)](https://www.npmjs.org/package/@commander-js/extra-typings)
+[![NPM Downloads](https://img.shields.io/npm/dm/@commander-js/extra-typings.svg?style=flat)](https://npmcharts.com/compare/@commander-js/extra-typings?minimal=true)
+
 This package offers experimental TypeScript typings for `commander` which infer strong types for:
 
 - all the parameters of the action handler, including the options
 - options returned by `.opts()`
 
-Limitations
-
-- the generics lead to some noisy types visible in editor and errors
-- some code changes for subclasses of `Command`, `Argument`, or `Option` (see [subclass.test-d.ts](./tests/subclass.test-d.ts))
-  - chaining methods which do type inference return base class rather than `this`
-  - subclass of `Command` returns base class not subclass from `.command(name)`
-  - type parameter needed for class declaration of subclass of `Option` and `Argument`
+The runtime is supplied by commander. This package is all about the typings.
 
 Usage
 
@@ -19,9 +16,17 @@ Usage
 - install `commander`, if not already installed (peer dependency)
 - in code import from `@commander-js/extra-typings` instead of `commander`
 
-The runtime is supplied by commander. This package is all about the typings.
+The installed version of this package should match the major and minor version numbers of the installed commander package, but the patch version number is independent (following pattern used by [Definitely Typed](https://github.com/DefinitelyTyped/DefinitelyTyped#how-do-definitely-typed-package-versions-relate-to-versions-of-the-corresponding-library)).
 
 Credit: this builds on work by @PaperStrike in <https://github.com/tj/commander.js/pull/1758>
+
+## Limitations
+
+- the generics lead to some noisy types visible in editor and errors
+- some minor code changes required for subclasses of `Command`, `Argument`, or `Option` (see [subclass.test-d.ts](./tests/subclass.test-d.ts))
+  - chaining methods which do type inference return base class rather than `this`
+  - subclass of `Command` returns base class not subclass from `.command(name)`
+  - type parameter needed for class declaration of subclass of `Option` and `Argument`
 
 ## Usage tips
 
@@ -57,4 +62,3 @@ const program = new Command()
   .option('-d, --debug'); // program type includes chained options and arguments
 const options = program.opts(); // smart type
 ```
-
