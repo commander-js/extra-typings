@@ -8,7 +8,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 <!-- markdownlint-disable MD024 -->
 <!-- markdownlint-disable MD004 -->
 
-## [Unreleased] (future release)
+## [9.4.0] (2022-10-28)
+
+## Added
+
+- type `processedArgs`
+- infer types from `.createOption()`
+- infer types from `.createArgument()`
+
+## Changed
+
+- update `peerDependencies` to `commander@9.4.x`
 
 ## [0.3.0] (2022-09-07)
 
@@ -51,5 +61,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - inferred types for `.opts()`
 
 [Unreleased]: https://github.com/commander-js/extra-typings/compare/main...develop
+[9.4.0]: https://github.com/commander-js/extra-typings/compare/v0.3.0...v9.4.0
 [0.3.0]: https://github.com/commander-js/extra-typings/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/commander-js/extra-typings/compare/v0.1.0...v0.2.0
