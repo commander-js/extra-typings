@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased] (date goes here)
 
+## [9.4.1] (2022-11-01)
+
+## Fixed
+
+- added `esm.mjs` to package ([#16])
+
 ## [9.4.0] (2022-10-28)
 
 ## Added
@@ -63,6 +69,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - inferred types for `.opts()`
 
 [Unreleased]: https://github.com/commander-js/extra-typings/compare/main...develop
+[9.4.1]: https://github.com/commander-js/extra-typings/compare/v9.4.0...v9.4.1
 [9.4.0]: https://github.com/commander-js/extra-typings/compare/v0.3.0...v9.4.0
 [0.3.0]: https://github.com/commander-js/extra-typings/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/commander-js/extra-typings/compare/v0.1.0...v0.2.0
+
+[#16]: https://github.com/commander-js/extra-typings/pull/16
