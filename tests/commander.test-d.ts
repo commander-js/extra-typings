@@ -189,6 +189,9 @@ expectChainedCommand(program.setOptionValueWithSource('example', [], 'cli'));
 // getOptionValueSource
 expectType<commander.OptionValueSource | undefined>(program.getOptionValueSource('example'));
 
+// getOptionValueSourceWithGlobals
+expectType<commander.OptionValueSource | undefined>(program.getOptionValueSourceWithGlobals('example'));
+
 // combineFlagAndOptionalValue
 expectChainedCommand(program.combineFlagAndOptionalValue());
 expectChainedCommand(program.combineFlagAndOptionalValue(false));
