@@ -775,11 +775,17 @@ export class CommanderError extends Error {
      setOptionValueWithSource(key: string, value: unknown, source: OptionValueSource): this;
   
     /**
-     * Retrieve option value source.
+     * Get source of option value.
      */
      getOptionValueSource<K extends keyof Opts>(key: K): OptionValueSource | undefined;
      getOptionValueSource(key: string): OptionValueSource | undefined;
   
+    /**
+     * Get source of option value. See also .optsWithGlobals().
+     */
+    getOptionValueSourceWithGlobals<K extends keyof Opts>(key: K): OptionValueSource | undefined;
+    getOptionValueSourceWithGlobals(key: string): OptionValueSource | undefined;
+
     /**
      * Alter parsing of short flags with optional values.
      *
