@@ -358,7 +358,8 @@ export class CommanderError extends Error {
     helpWidth?: number;
     sortSubcommands: boolean;
     sortOptions: boolean;
-  
+    showGlobalOptions: boolean;
+
     constructor();
   
     /** Get the command term to show in the list of subcommands. */
@@ -383,6 +384,8 @@ export class CommanderError extends Error {
     visibleCommands(cmd: CommandUnknownOpts): CommandUnknownOpts[];
     /** Get an array of the visible options. Includes a placeholder for the implicit help option, if there is one. */
     visibleOptions(cmd: CommandUnknownOpts): Option[];
+    /** Get an array of the visible global options. (Not including help.) */
+    visibleGlobalOptions(cmd: CommandUnknownOpts): Option[];
     /** Get an array of the arguments which have descriptions. */
     visibleArguments(cmd: CommandUnknownOpts): Argument[];
   
@@ -390,6 +393,8 @@ export class CommanderError extends Error {
     longestSubcommandTermLength(cmd: CommandUnknownOpts, helper: Help): number;
     /** Get the longest option term length. */
     longestOptionTermLength(cmd: CommandUnknownOpts, helper: Help): number;
+    /** Get the longest global option term length. */
+    longestGlobalOptionTermLength(cmd: CommandUnknownOpts, helper: Help): number;
     /** Get the longest argument term length. */
     longestArgumentTermLength(cmd: CommandUnknownOpts, helper: Help): number;
     /** Calculate the pad width from the maximum term length. */
