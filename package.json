@@ -37,7 +37,7 @@
   },
   "homepage": "https://github.com/commander-js/extra-typings#readme",
   "peerDependencies": {
-    "commander": "9.4.x"
+    "commander": "9.5.x"
   },
   "devDependencies": {
     "@types/node": "^18.7.16",

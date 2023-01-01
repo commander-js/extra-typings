@@ -8,7 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 <!-- markdownlint-disable MD024 -->
 <!-- markdownlint-disable MD004 -->
 
-## [Unreleased] (date goes here)
+## [9.5.0] (2023-01-07)
+
+### Added
+
+- `.getOptionValueSourceWithGlobals()` ([#18])
+- `showGlobalOptions` for `.configureHelp{}` and `Help` ([#19])
 
 ## [9.4.1] (2022-11-01)
 
@@ -68,10 +73,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - inferred types for `.action()`
 - inferred types for `.opts()`
 
-[Unreleased]: https://github.com/commander-js/extra-typings/compare/main...develop
+[9.5.0]: https://github.com/commander-js/extra-typings/compare/v9.4.1...v9.5.0
 [9.4.1]: https://github.com/commander-js/extra-typings/compare/v9.4.0...v9.4.1
 [9.4.0]: https://github.com/commander-js/extra-typings/compare/v0.3.0...v9.4.0
 [0.3.0]: https://github.com/commander-js/extra-typings/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/commander-js/extra-typings/compare/v0.1.0...v0.2.0
 
 [#16]: https://github.com/commander-js/extra-typings/pull/16
+[#18]: https://github.com/commander-js/extra-typings/pull/18
+[#19]: https://github.com/commander-js/extra-typings/pull/19
