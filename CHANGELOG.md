@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `.getOptionValueSourceWithGlobals()` ([#18])
 - `showGlobalOptions` for `.configureHelp{}` and `Help` ([#19])
 
+## Changed
+
+- update `peerDependencies` to `commander@9.5.x`
+
 ## [9.4.1] (2022-11-01)
 
 ## Fixed
