@@ -1,6 +1,6 @@
 {
   "name": "@commander-js/extra-typings",
-  "version": "9.5.0",
+  "version": "10.0.0",
   "description": "Infer strong typings for commander options and action handlers",
   "main": "index.js",
   "scripts": {
@@ -37,7 +37,7 @@
   },
   "homepage": "https://github.com/commander-js/extra-typings#readme",
   "peerDependencies": {
-    "commander": "9.5.x"
+    "commander": "10.0.x"
   },
   "devDependencies": {
     "@types/node": "^18.7.16",
