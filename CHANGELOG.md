@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 <!-- markdownlint-disable MD024 -->
 <!-- markdownlint-disable MD004 -->
 
+## [10.0.0] (2023-01-14)
+
+## Changed
+
+- update `peerDependencies` to `commander@10.0.x`, which requires Node.js v14 or higher
+
 ## [9.5.0] (2023-01-07)
 
 ### Added
@@ -77,6 +83,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - inferred types for `.action()`
 - inferred types for `.opts()`
 
+[10.0.0]: https://github.com/commander-js/extra-typings/compare/v9.5.0...v10.0.0
 [9.5.0]: https://github.com/commander-js/extra-typings/compare/v9.4.1...v9.5.0
 [9.4.1]: https://github.com/commander-js/extra-typings/compare/v9.4.0...v9.4.1
 [9.4.0]: https://github.com/commander-js/extra-typings/compare/v0.3.0...v9.4.0
