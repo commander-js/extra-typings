@@ -1,4 +1,4 @@
-import commander from './index.js';
+import extraTypingsCommander from './index.js';
 
 // wrapper to provide named exports for ESM.
 export const {
@@ -13,4 +13,4 @@ export const {
   Argument,
   Option,
   Help
-} = commander;
+} = extraTypingsCommander;
