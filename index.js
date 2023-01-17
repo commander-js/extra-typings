@@ -20,6 +20,9 @@ exports.InvalidArgumentError = commander.InvalidArgumentError;
 exports.InvalidOptionArgumentError = commander.InvalidArgumentError; // Deprecated
 exports.Option = commander.Option;
 
-exports.createArgument = () => new commander.Argument();
-exports.createCommand = () => new commander.Command();
-exports.createOption = () => new commander.Option();
+// In Commander, the create routines end up being aliases for the matching
+// methods on the global program due to the (deprecated) legacy default export.
+// Here we roll our own, the way Commander might in future.
+exports.createArgument = (name) => new commander.Argument(name);
+exports.createCommand = (flags, description) => new commander.Command(flags, description);
+exports.createOption = (name) => new commander.Option(name, description);
