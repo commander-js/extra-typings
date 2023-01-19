@@ -23,6 +23,6 @@ exports.Option = commander.Option;
 // In Commander, the create routines end up being aliases for the matching
 // methods on the global program due to the (deprecated) legacy default export.
 // Here we roll our own, the way Commander might in future.
-exports.createArgument = (name) => new commander.Argument(name);
-exports.createCommand = (flags, description) => new commander.Command(flags, description);
-exports.createOption = (name) => new commander.Option(name, description);
+exports.createCommand = (name) => new commander.Command(name);
+exports.createOption = (flags, description) => new commander.Option(flags, description);
+exports.createArgument = (name, description) => new commander.Argument(name, description);
