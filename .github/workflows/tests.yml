@@ -25,5 +25,7 @@ jobs:
     # Use separate run commands so command status handled correctly on Windows
     - name: npm install
       run: npm ci
+    - name: npm install commander for old npm
+      run: npm install commander@10.0
     - name: npm test
       run: npm test
