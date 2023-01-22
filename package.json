@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "tsd && jest",
-    "prepublish": "tsd && jest"
+    "prepublish": "npm run --silent test"
   },
   "repository": {
     "type": "git",
