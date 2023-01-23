@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 <!-- markdownlint-disable MD024 -->
 <!-- markdownlint-disable MD004 -->
 
+## [10.0.2] (2023-01-24)
+
+### Fixed
+
+- `createOption` passes through both arguments into object constructor. ([#25])
+
 ## [10.0.1] (2023-01-17)
 
 ### Fixed
@@ -89,6 +95,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - inferred types for `.action()`
 - inferred types for `.opts()`
 
+[10.0.2]: https://github.com/commander-js/extra-typings/compare/v10.0.1...v10.0.2
 [10.0.1]: https://github.com/commander-js/extra-typings/compare/v10.0.0...v10.0.1
 [10.0.0]: https://github.com/commander-js/extra-typings/compare/v9.5.0...v10.0.0
 [9.5.0]: https://github.com/commander-js/extra-typings/compare/v9.4.1...v9.5.0
@@ -101,3 +108,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 [#18]: https://github.com/commander-js/extra-typings/pull/18
 [#19]: https://github.com/commander-js/extra-typings/pull/19
 [#23]: https://github.com/commander-js/extra-typings/pull/23
+[#25]: https://github.com/commander-js/extra-typings/pull/25
