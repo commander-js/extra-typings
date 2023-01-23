@@ -8,11 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 <!-- markdownlint-disable MD024 -->
 <!-- markdownlint-disable MD004 -->
 
-## [10.0.2] (2023-01-24)
+## [10.0.2] (2023-01-27)
 
 ### Fixed
 
-- `createOption` passes through both arguments into object constructor. ([#25])
+- `createOption` passes through description into object constructor. ([#25])
 
 ## [10.0.1] (2023-01-17)
 
