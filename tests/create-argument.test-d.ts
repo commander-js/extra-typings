@@ -56,3 +56,12 @@ if ('when global createArgument with variadic then type is string[]') {
       expectType<string[]>(arg)
     });
 }
+
+if ('when global createArgument with const choices then type is string union') {
+  const program = new Command();
+  program
+    .addArgument(createArgument('<value>').choices(['A', 'B', 'C'] as const))
+    .action(arg => {
+      expectType<'A' | 'B' | 'C'>(arg)
+    })
+}

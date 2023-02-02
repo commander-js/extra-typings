@@ -56,3 +56,12 @@ if ('when global createOption with optional option-argument then type is string|
     .foo;
   expectType<string | true | undefined>(foo);
 }
+
+if ('when global createOption with const choices then type is string union') {
+  const program = new Command();
+  const foo = program
+    .addOption(createOption('-f, --foo <value>', 'description').choices(['A', 'B', 'C'] as const))
+    .opts()
+    .foo;
+  expectType<'A' | 'B' | 'C' | undefined>(foo);
+}

@@ -227,7 +227,7 @@ export class CommanderError extends Error {
     /**
      * Only allow argument value to be one of choices.
      */
-    choices(values: readonly string[]): this;
+    choices<T extends readonly string[]>(values: T): Argument<string, T[number]>;
   
     /**
      * Make argument required.
@@ -332,7 +332,7 @@ export class CommanderError extends Error {
     /**
      * Only allow option value to be one of choices.
      */
-    choices(values: readonly string[]): this;
+    choices<T extends readonly string[]>(values: T): Option<Usage, PresetT, DefaultT, T[number], Mandatory>;
   
     /**
      * Return option name.
