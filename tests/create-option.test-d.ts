@@ -65,3 +65,12 @@ if ('when global createOption with const choices then type is string union') {
     .foo;
   expectType<'A' | 'B' | 'C' | undefined>(foo);
 }
+
+if ('when global createOption with variadic and const choices then type is string union array') {
+  const program = new Command();
+  const foo = program
+    .addOption(createOption('-f, --foo <value...>', 'description').choices(['A', 'B', 'C'] as const).makeOptionMandatory())
+    .opts()
+    .foo;
+  expectType<('A' | 'B' | 'C')[]>(foo);
+}

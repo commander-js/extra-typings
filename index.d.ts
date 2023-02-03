@@ -138,23 +138,23 @@ type InferOptionsNegateCombo<Options, Flag extends string, Name extends string, 
 
 // Recalc values taking into account negated option.
 // Fill in appropriate PresetT value if undefined.
-type InferOptionTypes<Options, Flag extends string, Value extends string, ValueT, PresetT, DefaultT, CoerceT, Mandatory extends boolean> =
+type InferOptionTypes<Options, Flag extends string, Value extends string, ValueT, PresetT, DefaultT, CoerceT, Mandatory extends boolean, ChoicesT> =
   InferOptionsNegateCombo<Options, Flag, ConvertFlagToName<Flag>,
-  CoerceValueType<CoerceT, InferVariadic<Value, ValueT>>,
+  CoerceValueType<CoerceT, [ChoicesT] extends [undefined] ? InferVariadic<Value, ValueT> : InferVariadic<Value, ChoicesT>>,
   NegatePresetType<Flag, CoercePresetType<CoerceT, PresetT>>,
   NegateDefaultType<Flag, DefaultT>,
   IsAlwaysDefined<DefaultT, Mandatory>>;
 
-type InferOptionsFlag<Options, Flags extends string, Value extends string, ValueT, PresetT, DefaultT, CoerceT, Mandatory extends boolean> =
-  InferOptionTypes<Options, FlagsToFlag<Trim<Flags>>, Trim<Value>, ValueT, PresetT, DefaultT, CoerceT, Mandatory>;
+type InferOptionsFlag<Options, Flags extends string, Value extends string, ValueT, PresetT, DefaultT, CoerceT, Mandatory extends boolean, ChoicesT> =
+  InferOptionTypes<Options, FlagsToFlag<Trim<Flags>>, Trim<Value>, ValueT, PresetT, DefaultT, CoerceT, Mandatory, ChoicesT>;
 
 // Split up Usage into Flags and Value
-type InferOptions<Options, Usage extends string, DefaultT, CoerceT, Mandatory extends boolean, PresetT = undefined> =
+type InferOptions<Options, Usage extends string, DefaultT, CoerceT, Mandatory extends boolean, PresetT = undefined, ChoicesT = undefined> =
   Usage extends `${infer Flags} <${infer Value}>`
-    ? InferOptionsFlag<Options, Flags, Value, string, never, DefaultT, CoerceT, Mandatory>
+    ? InferOptionsFlag<Options, Flags, Value, string, never, DefaultT, CoerceT, Mandatory, ChoicesT>
     : Usage extends `${infer Flags} [${infer Value}]`
-      ? InferOptionsFlag<Options, Flags, Value, string, PresetT, DefaultT, CoerceT, Mandatory>
-      : InferOptionsFlag<Options, Usage, '', never, PresetT, DefaultT, CoerceT, Mandatory>;
+      ? InferOptionsFlag<Options, Flags, Value, string, PresetT, DefaultT, CoerceT, Mandatory, ChoicesT>
+      : InferOptionsFlag<Options, Usage, '', never, PresetT, DefaultT, CoerceT, Mandatory, ChoicesT>;
 
 export type CommandUnknownOpts = Command<unknown[], OptionValues>;
 
@@ -240,7 +240,7 @@ export class CommanderError extends Error {
     argOptional(): Argument<string, ArgType | undefined>;
   }
   
-  export class Option<Usage extends string = '', PresetT = undefined, DefaultT = undefined, CoerceT = undefined, Mandatory extends boolean = false> {
+  export class Option<Usage extends string = '', PresetT = undefined, DefaultT = undefined, CoerceT = undefined, Mandatory extends boolean = false, ChoicesT = undefined> {
     flags: string;
     description: string;
   
@@ -263,7 +263,7 @@ export class CommanderError extends Error {
     /**
      * Set the default value, and optionally supply the description to be displayed in the help.
      */
-    default<T>(value: T, description?: string): Option<Usage, PresetT, T, CoerceT, Mandatory>;
+    default<T>(value: T, description?: string): Option<Usage, PresetT, T, CoerceT, Mandatory, ChoicesT>;
   
     /**
      * Preset to use when option used without option-argument, especially optional but also boolean and negated.
@@ -275,7 +275,7 @@ export class CommanderError extends Error {
      * new Option('--donate [amount]').preset('20').argParser(parseFloat);
      * ```
      */
-    preset<T>(arg: T): Option<Usage, T, DefaultT, CoerceT, Mandatory>;
+    preset<T>(arg: T): Option<Usage, T, DefaultT, CoerceT, Mandatory, ChoicesT>;
   
     /**
      * Add option name(s) that conflict with this option.
@@ -317,12 +317,12 @@ export class CommanderError extends Error {
     /**
      * Set the custom handler for processing CLI option arguments into option values.
      */
-    argParser<T>(fn: (value: string, previous: T) => T): Option<Usage, PresetT, DefaultT, T, Mandatory>;
+    argParser<T>(fn: (value: string, previous: T) => T): Option<Usage, PresetT, DefaultT, T, Mandatory, ChoicesT>;
   
     /**
      * Whether the option is mandatory and must have a value after parsing.
      */
-    makeOptionMandatory<M extends boolean = true>(mandatory?: M): Option<Usage, PresetT, DefaultT, CoerceT, M>;
+    makeOptionMandatory<M extends boolean = true>(mandatory?: M): Option<Usage, PresetT, DefaultT, CoerceT, M, ChoicesT>;
   
     /**
      * Hide option in help.
@@ -332,7 +332,7 @@ export class CommanderError extends Error {
     /**
      * Only allow option value to be one of choices.
      */
-    choices<T extends readonly string[]>(values: T): Option<Usage, PresetT, DefaultT, T[number], Mandatory>;
+    choices<T extends readonly string[]>(values: T): Option<Usage, PresetT, DefaultT, undefined, Mandatory, T[number]>; // setting CoerceT to undefined becuase choices overrides argParser
   
     /**
      * Return option name.
@@ -748,8 +748,8 @@ export class CommanderError extends Error {
      *
      * See .option() and .requiredOption() for creating and attaching an option in a single call.
      */
-    addOption<Usage extends string, PresetT, DefaultT, CoerceT, Mandatory extends boolean>(
-        option: Option<Usage, PresetT, DefaultT, CoerceT, Mandatory>): Command<Args, InferOptions<Opts, Usage, DefaultT, CoerceT, Mandatory, PresetT>>;
+    addOption<Usage extends string, PresetT, DefaultT, CoerceT, Mandatory extends boolean, ChoicesT>(
+        option: Option<Usage, PresetT, DefaultT, CoerceT, Mandatory, ChoicesT>): Command<Args, InferOptions<Opts, Usage, DefaultT, CoerceT, Mandatory, PresetT, ChoicesT>>;
      
     /**
      * Whether to store option values as properties on command object,
