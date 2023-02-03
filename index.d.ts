@@ -29,23 +29,25 @@ type InferVariadic<S extends string, ArgT> =
     ? ArgT[]
     : ArgT;
 
-type InferArgumentType<Value extends string, DefaultT, CoerceT> =
+type InferArgumentType<Value extends string, DefaultT, CoerceT, ChoicesT> =
   [CoerceT] extends [undefined]
-    ? InferVariadic<Value, string> | DefaultT
-    : InferVariadic<Value, CoerceT> | DefaultT;
+    ? InferVariadic<Value, [ChoicesT] extends [undefined] ? string : ChoicesT> | DefaultT
+    : CoerceT | DefaultT;
+    //     : InferVariadic<Value, CoerceT> | DefaultT;
+
 
 // Special handling for optional variadic argument, won't be undefined as implementation returns [].
-type InferArgumentOptionalType<Value extends string, DefaultT, CoerceT> =
+type InferArgumentOptionalType<Value extends string, DefaultT, CoerceT, ChoicesT> =
   Value extends `${string}...`
-    ? InferArgumentType<Value, [DefaultT] extends [undefined] ? never : DefaultT, CoerceT>
-    : InferArgumentType<Value, DefaultT, CoerceT>
+    ? InferArgumentType<Value, [DefaultT] extends [undefined] ? never : DefaultT, CoerceT, ChoicesT>
+    : InferArgumentType<Value, DefaultT, CoerceT, ChoicesT>
   
-type InferArgument<S extends string, DefaultT = undefined, CoerceT = undefined> =
+type InferArgument<S extends string, DefaultT = undefined, CoerceT = undefined, ChoicesT = undefined> =
   S extends `<${infer Value}>`
-    ? InferArgumentType<Value, never, CoerceT>
+    ? InferArgumentType<Value, never, CoerceT, ChoicesT>
     : S extends `[${infer Value}]`
-      ? InferArgumentOptionalType<Value, DefaultT, CoerceT>
-      : InferArgumentType<S, never, CoerceT>; // the implementation fallback is treat as <required>
+      ? InferArgumentOptionalType<Value, DefaultT, CoerceT, ChoicesT>
+      : InferArgumentType<S, never, CoerceT, ChoicesT>; // the implementation fallback is treat as <required>
 
 type InferArguments<S extends string> =
     S extends `${infer First} ${infer Rest}`
@@ -227,7 +229,7 @@ export class CommanderError extends Error {
     /**
      * Only allow argument value to be one of choices.
      */
-    choices<T extends readonly string[]>(values: T): Argument<string, InferArgument<Usage, undefined, T[number]>>;
+    choices<T extends readonly string[]>(values: T): Argument<string, InferArgument<Usage, undefined, undefined, T[number]>>;
   
     /**
      * Make argument required.
