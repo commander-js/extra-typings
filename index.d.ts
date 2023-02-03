@@ -32,7 +32,7 @@ type InferVariadic<S extends string, ArgT> =
 type InferArgumentType<Value extends string, DefaultT, CoerceT> =
   [CoerceT] extends [undefined]
     ? InferVariadic<Value, string> | DefaultT
-    : CoerceT | DefaultT;
+    : InferVariadic<Value, CoerceT> | DefaultT;
 
 // Special handling for optional variadic argument, won't be undefined as implementation returns [].
 type InferArgumentOptionalType<Value extends string, DefaultT, CoerceT> =
@@ -227,7 +227,7 @@ export class CommanderError extends Error {
     /**
      * Only allow argument value to be one of choices.
      */
-    choices<T extends readonly string[]>(values: T): Argument<string, T[number]>;
+    choices<T extends readonly string[]>(values: T): Argument<string, InferArgument<Usage, undefined, T[number]>>;
   
     /**
      * Make argument required.
