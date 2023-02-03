@@ -65,3 +65,11 @@ if ('when global createArgument with const choices then type is string union') {
       expectType<'A' | 'B' | 'C'>(arg)
     })
 }
+
+if ('when global createArgument with variadic and const choices then type is array of string union') {
+  const program = new Command();
+  program.addArgument(createArgument('<value...>').choices(['A', 'B', 'C'] as const))
+    .action(arg => {
+      expectType<('A' | 'B' | 'C')[]>(arg)
+    })
+}
