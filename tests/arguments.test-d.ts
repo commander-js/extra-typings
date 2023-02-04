@@ -217,6 +217,35 @@ program
     expectAssignable<OptionValues>(options);
   });
 
+// choices
+program
+  .addArgument((new Argument('<foo>')).choices(['A', 'B'] as const))
+  .action((foo, options) => {
+    expectType<'A' | 'B'>(foo);
+    expectAssignable<OptionValues>(options);
+
+  });
+
+program
+  .addArgument((new Argument('[foo]')).choices(['A', 'B'] as const))
+  .action((foo, options) => {
+    expectType<'A' | 'B' | undefined>(foo);
+    expectAssignable<OptionValues>(options);
+  });
+
+program
+  .addArgument((new Argument('<foo...>')).choices(['A', 'B'] as const))
+  .action((foo, options) => {
+    expectType<('A' | 'B')[]>(foo);
+    expectAssignable<OptionValues>(options);
+  });
+
+program
+  .addArgument((new Argument('[foo...]')).choices(['A', 'B'] as const))
+  .action((foo, options) => {
+    expectType<('A' | 'B')[]>(foo);
+    expectAssignable<OptionValues>(options);
+  });
 
 /** 
  * Check command-arguments from .command('name <ARGS>')

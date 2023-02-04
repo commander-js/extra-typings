@@ -243,3 +243,40 @@ const us7 = program
   .addOption(new Option('-d --debug'))
   .opts();
 expectType<{ debug?: true }>(us7);
+
+// choices
+
+const co1 = program
+  .addOption((new Option('-d, --debug <val>')).choices(['A', 'B'] as const))
+  .opts();
+expectType<{debug?: 'A' | 'B'}>(co1);
+
+const co2 = program
+  .addOption((new Option('-d, --debug [val]')).choices(['A', 'B'] as const))
+  .opts();
+expectType<{debug?: 'A' | 'B' | true}>(co2);
+
+const co3 = program
+  .addOption((new Option('-d, --debug <val>')).choices(['A', 'B'] as const).makeOptionMandatory())
+  .opts();
+expectType<{debug: 'A' | 'B'}>(co3)
+
+const co4 = program
+  .addOption((new Option('-d, --debug <val...>')).choices(['A', 'B'] as const))
+  .opts();
+expectType<{debug?: ('A' | 'B')[]}>(co4)
+
+const co5 = program
+  .addOption((new Option('-d, --debug [val...]')).choices(['A', 'B'] as const))
+  .opts();
+expectType<{debug?: ('A' | 'B')[] | true}>(co5)
+
+const co6 = program
+  .addOption((new Option('-d, --debug [val...]')).choices(['A', 'B'] as const).makeOptionMandatory())
+  .opts();
+expectType<{debug: ('A' | 'B')[] | true}>(co6)
+
+const co7 = program
+  .addOption((new Option('-d, --debug <val...>')).choices(['A', 'B'] as const).makeOptionMandatory())
+  .opts();
+expectType<{debug: ('A' | 'B')[]}>(co7)
