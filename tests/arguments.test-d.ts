@@ -167,32 +167,60 @@ program
     expectAssignable<OptionValues>(options);
   });
 
-  program
+program
+  .addArgument(new Argument('[foo...]'))
+  .action((foo, options) => {
+    expectType<string[]>(foo);
+    expectAssignable<OptionValues>(options);
+  });
+
+program
   .addArgument(new Argument('[foo]').default('x'))
   .action((foo, options) => {
     expectType<string>(foo);
     expectAssignable<OptionValues>(options);
   });
 
-// historical behaviour, not core
+// mixed types possible, but unusual
 program
-  .addArgument(new Argument('<foo>').default(3))
+  .addArgument(new Argument('[foo]').default(3))
   .action((foo, options) => {
     expectType<string | number>(foo);
     expectAssignable<OptionValues>(options);
   });
 
 program
-  .addArgument(new Argument('<foo>').argOptional())
+  .addArgument(new Argument('foo'))
+  .action((foo, options) => {
+    expectType<string>(foo);
+    expectAssignable<OptionValues>(options);
+  });
+
+program
+  .addArgument(new Argument('foo').argRequired())
+  .action((foo, options) => {
+    expectType<string>(foo);
+    expectAssignable<OptionValues>(options);
+  });
+
+program
+  .addArgument(new Argument('foo').argOptional())
   .action((foo, options) => {
     expectType<string | undefined>(foo);
     expectAssignable<OptionValues>(options);
   });
 
 program
-  .addArgument(new Argument('[foo]').argRequired())
+  .addArgument(new Argument('foo...').argRequired())
   .action((foo, options) => {
-    expectType<string>(foo);
+    expectType<string[]>(foo);
+    expectAssignable<OptionValues>(options);
+  });
+
+program
+  .addArgument(new Argument('foo...').argOptional())
+  .action((foo, options) => {
+    expectType<string[]>(foo);
     expectAssignable<OptionValues>(options);
   });
 
@@ -217,6 +245,21 @@ program
     expectAssignable<OptionValues>(options);
   });
 
+// Test default then optional play well together.
+program
+  .addArgument(new Argument('foo').default('missing').argOptional())
+  .action((foo, options) => {
+    expectType<string>(foo);
+    expectAssignable<OptionValues>(options);
+  });
+
+// Test optional then default play well together.
+program
+  .addArgument(new Argument('foo').argOptional().default('missing'))
+  .action((foo, options) => {
+    expectType<string>(foo);
+    expectAssignable<OptionValues>(options);
+  });
 
 /** 
  * Check command-arguments from .command('name <ARGS>')

@@ -39,13 +39,27 @@ type InferArgumentOptionalType<Value extends string, DefaultT, CoerceT> =
   Value extends `${string}...`
     ? InferArgumentType<Value, [DefaultT] extends [undefined] ? never : DefaultT, CoerceT>
     : InferArgumentType<Value, DefaultT, CoerceT>
-  
-type InferArgument<S extends string, DefaultT = undefined, CoerceT = undefined> =
-  S extends `<${infer Value}>`
+
+// ArgRequired comes from .argRequired()/.argOptional(), and ArgRequiredFromUsage is implied by usage <required>/[optional]
+type ResolveRequired<ArgRequired extends boolean|undefined, ArgRequiredFromUsage extends boolean> =
+  ArgRequired extends true
+    ? true
+    : ArgRequired extends false
+      ? false
+      : ArgRequiredFromUsage;
+
+type InferArgumentTypeResolvedRequired<Value extends string, DefaultT, CoerceT, ArgRequired extends boolean> =
+  ArgRequired extends true
     ? InferArgumentType<Value, never, CoerceT>
+    : InferArgumentOptionalType<Value, DefaultT, CoerceT>;
+
+// Resolve whether argument required, and strip []/<> from around value.
+type InferArgument<S extends string, DefaultT = undefined, CoerceT = undefined, ArgRequired extends boolean|undefined = undefined> =
+  S extends `<${infer Value}>`
+    ? InferArgumentTypeResolvedRequired<Value, DefaultT, CoerceT, ResolveRequired<ArgRequired, true>>
     : S extends `[${infer Value}]`
-      ? InferArgumentOptionalType<Value, DefaultT, CoerceT>
-      : InferArgumentType<S, never, CoerceT>; // the implementation fallback is treat as <required>
+      ? InferArgumentTypeResolvedRequired<Value, DefaultT, CoerceT, ResolveRequired<ArgRequired, false>>
+      : InferArgumentTypeResolvedRequired<S, DefaultT, CoerceT, ResolveRequired<ArgRequired, true>>; // the implementation fallback is treat as <required>
 
 type InferArguments<S extends string> =
     S extends `${infer First} ${infer Rest}`
@@ -56,11 +70,6 @@ type InferCommmandArguments<S extends string> =
   S extends `${string} ${infer Args}`
       ? InferArguments<TrimLeft<Args>>
       : [];
-
-type NullableCopy<T, U> =
-    U extends undefined
-        ? T | undefined
-        : T;
 
 type FlagsToFlag<Flags extends string> =
     Flags extends `${string},${infer LongFlag}`
@@ -140,10 +149,10 @@ type InferOptionsNegateCombo<Options, Flag extends string, Name extends string, 
 // Fill in appropriate PresetT value if undefined.
 type InferOptionTypes<Options, Flag extends string, Value extends string, ValueT, PresetT, DefaultT, CoerceT, Mandatory extends boolean> =
   InferOptionsNegateCombo<Options, Flag, ConvertFlagToName<Flag>,
-  CoerceValueType<CoerceT, InferVariadic<Value, ValueT>>,
-  NegatePresetType<Flag, CoercePresetType<CoerceT, PresetT>>,
-  NegateDefaultType<Flag, DefaultT>,
-  IsAlwaysDefined<DefaultT, Mandatory>>;
+    CoerceValueType<CoerceT, InferVariadic<Value, ValueT>>,
+    NegatePresetType<Flag, CoercePresetType<CoerceT, PresetT>>,
+    NegateDefaultType<Flag, DefaultT>,
+    IsAlwaysDefined<DefaultT, Mandatory>>;
 
 type InferOptionsFlag<Options, Flags extends string, Value extends string, ValueT, PresetT, DefaultT, CoerceT, Mandatory extends boolean> =
   InferOptionTypes<Options, FlagsToFlag<Trim<Flags>>, Trim<Value>, ValueT, PresetT, DefaultT, CoerceT, Mandatory>;
@@ -197,7 +206,7 @@ export class CommanderError extends Error {
     exitCode?: number;
   }
   
-  export class Argument<Usage extends string = '', ArgType = InferArgument<Usage>> {
+  export class Argument<Usage extends string = '', DefaultT = undefined, CoerceT = undefined, ArgRequired extends boolean|undefined = undefined> {
     description: string;
     required: boolean;
     variadic: boolean;
@@ -217,12 +226,12 @@ export class CommanderError extends Error {
     /**
      * Set the default value, and optionally supply the description to be displayed in the help.
      */
-    default<T>(value: T, description?: string): Argument<string, NonNullable<ArgType> | T>;
+    default<T>(value: T, description?: string): Argument<Usage, T, CoerceT, ArgRequired>;
   
     /**
      * Set the custom handler for processing CLI command arguments into argument values.
      */
-    argParser<T>(fn: (value: string, previous: T) => T): Argument<string, NullableCopy<T, ArgType>>;
+    argParser<T>(fn: (value: string, previous: T) => T): Argument<Usage, DefaultT, T, ArgRequired>;
   
     /**
      * Only allow argument value to be one of choices.
@@ -232,12 +241,12 @@ export class CommanderError extends Error {
     /**
      * Make argument required.
      */
-    argRequired(): Argument<string, NonNullable<ArgType>>;
+    argRequired(): Argument<Usage, DefaultT, CoerceT, true>;
   
     /**
      * Make argument optional.
      */
-    argOptional(): Argument<string, ArgType | undefined>;
+    argOptional(): Argument<Usage, DefaultT, CoerceT, false>;
   }
   
   export class Option<Usage extends string = '', PresetT = undefined, DefaultT = undefined, CoerceT = undefined, Mandatory extends boolean = false> {
@@ -551,7 +560,8 @@ export class CommanderError extends Error {
      *
      * @returns `this` command for chaining
      */
-    addArgument<S extends string, ArgType>(arg: Argument<S, ArgType>): Command<[...Args, ArgType]>;
+    addArgument<Usage extends string, DefaultT, CoerceT, ArgRequired extends boolean|undefined>(
+      arg: Argument<Usage, DefaultT, CoerceT, ArgRequired>): Command<[...Args, InferArgument<Usage, DefaultT, CoerceT, ArgRequired>]>;
 
   
     /**
