@@ -42,11 +42,9 @@ type InferArgumentOptionalType<Value extends string, DefaultT, CoerceT> =
 
 // ArgRequired comes from .argRequired()/.argOptional(), and ArgRequiredFromUsage is implied by usage <required>/[optional]
 type ResolveRequired<ArgRequired extends boolean|undefined, ArgRequiredFromUsage extends boolean> =
-  ArgRequired extends true
-    ? true
-    : ArgRequired extends false
-      ? false
-      : ArgRequiredFromUsage;
+  ArgRequired extends undefined
+    ? ArgRequiredFromUsage
+    : ArgRequired;
 
 type InferArgumentTypeResolvedRequired<Value extends string, DefaultT, CoerceT, ArgRequired extends boolean> =
   ArgRequired extends true
