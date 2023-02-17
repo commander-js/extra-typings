@@ -32,8 +32,10 @@ type InferVariadic<S extends string, ArgT> =
 type InferArgumentType<Value extends string, DefaultT, CoerceT, ChoicesT> =
   [CoerceT] extends [undefined]
     ? InferVariadic<Value, [ChoicesT] extends [undefined] ? string : ChoicesT> | DefaultT
-    : CoerceT | DefaultT;
-    //     : InferVariadic<Value, CoerceT> | DefaultT;
+    : ([ChoicesT] extends [undefined]
+      ? CoerceT | DefaultT
+      : CoerceT | DefaultT | ChoicesT
+    )
 
 
 // Special handling for optional variadic argument, won't be undefined as implementation returns [].
@@ -48,18 +50,18 @@ type ResolveRequired<ArgRequired extends boolean|undefined, ArgRequiredFromUsage
     ? ArgRequiredFromUsage
     : ArgRequired;
 
-type InferArgumentTypeResolvedRequired<Value extends string, DefaultT, CoerceT, ArgRequired extends boolean> =
+type InferArgumentTypeResolvedRequired<Value extends string, DefaultT, CoerceT, ArgRequired extends boolean, ChoicesT> =
   ArgRequired extends true
-    ? InferArgumentType<Value, never, CoerceT>
-    : InferArgumentOptionalType<Value, DefaultT, CoerceT>;
+    ? InferArgumentType<Value, never, CoerceT, ChoicesT>
+    : InferArgumentOptionalType<Value, DefaultT, CoerceT, ChoicesT>;
 
 // Resolve whether argument required, and strip []/<> from around value.
-type InferArgument<S extends string, DefaultT = undefined, CoerceT = undefined, ArgRequired extends boolean|undefined = undefined> =
+type InferArgument<S extends string, DefaultT = undefined, CoerceT = undefined, ArgRequired extends boolean|undefined = undefined, ChoicesT = undefined> =
   S extends `<${infer Value}>`
-    ? InferArgumentTypeResolvedRequired<Value, DefaultT, CoerceT, ResolveRequired<ArgRequired, true>>
+    ? InferArgumentTypeResolvedRequired<Value, DefaultT, CoerceT, ResolveRequired<ArgRequired, true>, ChoicesT>
     : S extends `[${infer Value}]`
-      ? InferArgumentTypeResolvedRequired<Value, DefaultT, CoerceT, ResolveRequired<ArgRequired, false>>
-      : InferArgumentTypeResolvedRequired<S, DefaultT, CoerceT, ResolveRequired<ArgRequired, true>>; // the implementation fallback is treat as <required>
+      ? InferArgumentTypeResolvedRequired<Value, DefaultT, CoerceT, ResolveRequired<ArgRequired, false>, ChoicesT>
+      : InferArgumentTypeResolvedRequired<S, DefaultT, CoerceT, ResolveRequired<ArgRequired, true>, ChoicesT>; // the implementation fallback is treat as <required>
 
 type InferArguments<S extends string> =
     S extends `${infer First} ${infer Rest}`
@@ -206,7 +208,7 @@ export class CommanderError extends Error {
     exitCode?: number;
   }
   
-  export class Argument<Usage extends string = '', DefaultT = undefined, CoerceT = undefined, ArgRequired extends boolean|undefined = undefined> {
+  export class Argument<Usage extends string = '', DefaultT = undefined, CoerceT = undefined, ArgRequired extends boolean|undefined = undefined, ChoicesT = undefined> {
     description: string;
     required: boolean;
     variadic: boolean;
@@ -226,27 +228,27 @@ export class CommanderError extends Error {
     /**
      * Set the default value, and optionally supply the description to be displayed in the help.
      */
-    default<T>(value: T, description?: string): Argument<Usage, T, CoerceT, ArgRequired>;
+    default<T>(value: T, description?: string): Argument<Usage, T, CoerceT, ArgRequired, ChoicesT>;
   
     /**
      * Set the custom handler for processing CLI command arguments into argument values.
      */
-    argParser<T>(fn: (value: string, previous: T) => T): Argument<Usage, DefaultT, T, ArgRequired>;
+    argParser<T>(fn: (value: string, previous: T) => T): Argument<Usage, DefaultT, T, ArgRequired, undefined>;
   
     /**
      * Only allow argument value to be one of choices.
      */
-    choices<T extends readonly string[]>(values: T): Argument<string, InferArgument<Usage, undefined, undefined, T[number]>>;
+    choices<T extends readonly string[]>(values: T): Argument<Usage, DefaultT, undefined, ArgRequired, T[number]>; // setting CoerceT to undefined because choices overrides argParser
   
     /**
      * Make argument required.
      */
-    argRequired(): Argument<Usage, DefaultT, CoerceT, true>;
+    argRequired(): Argument<Usage, DefaultT, CoerceT, true, ChoicesT>;
   
     /**
      * Make argument optional.
      */
-    argOptional(): Argument<Usage, DefaultT, CoerceT, false>;
+    argOptional(): Argument<Usage, DefaultT, CoerceT, false, ChoicesT>;
   }
   
   export class Option<Usage extends string = '', PresetT = undefined, DefaultT = undefined, CoerceT = undefined, Mandatory extends boolean = false, ChoicesT = undefined> {
@@ -326,7 +328,7 @@ export class CommanderError extends Error {
     /**
      * Set the custom handler for processing CLI option arguments into option values.
      */
-    argParser<T>(fn: (value: string, previous: T) => T): Option<Usage, PresetT, DefaultT, T, Mandatory, ChoicesT>;
+    argParser<T>(fn: (value: string, previous: T) => T): Option<Usage, PresetT, DefaultT, T, Mandatory, undefined>; // setting ChoicesT to undefined because argParser overrides choices
   
     /**
      * Whether the option is mandatory and must have a value after parsing.
@@ -560,8 +562,8 @@ export class CommanderError extends Error {
      *
      * @returns `this` command for chaining
      */
-    addArgument<Usage extends string, DefaultT, CoerceT, ArgRequired extends boolean|undefined>(
-      arg: Argument<Usage, DefaultT, CoerceT, ArgRequired>): Command<[...Args, InferArgument<Usage, DefaultT, CoerceT, ArgRequired>]>;
+    addArgument<Usage extends string, DefaultT, CoerceT, ArgRequired extends boolean|undefined, ChoicesT>(
+      arg: Argument<Usage, DefaultT, CoerceT, ArgRequired, ChoicesT>): Command<[...Args, InferArgument<Usage, DefaultT, CoerceT, ArgRequired, ChoicesT>]>;
 
   
     /**

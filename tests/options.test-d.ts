@@ -246,37 +246,62 @@ expectType<{ debug?: true }>(us7);
 
 // choices
 
+// narrows required value to given choices
 const co1 = program
-  .addOption((new Option('-d, --debug <val>')).choices(['A', 'B'] as const))
+  .addOption(new Option('-d, --debug <val>').choices(['A', 'B'] as const))
   .opts();
 expectType<{debug?: 'A' | 'B'}>(co1);
 
+// narrows optional value to union of given choices and true
 const co2 = program
-  .addOption((new Option('-d, --debug [val]')).choices(['A', 'B'] as const))
+  .addOption(new Option('-d, --debug [val]').choices(['A', 'B'] as const))
   .opts();
 expectType<{debug?: 'A' | 'B' | true}>(co2);
 
+// narrows required option to given choices
 const co3 = program
-  .addOption((new Option('-d, --debug <val>')).choices(['A', 'B'] as const).makeOptionMandatory())
+  .addOption(new Option('-d, --debug <val>').choices(['A', 'B'] as const).makeOptionMandatory())
   .opts();
 expectType<{debug: 'A' | 'B'}>(co3)
 
+// narrows variadic value to choices array
 const co4 = program
-  .addOption((new Option('-d, --debug <val...>')).choices(['A', 'B'] as const))
+  .addOption(new Option('-d, --debug <val...>').choices(['A', 'B'] as const))
   .opts();
 expectType<{debug?: ('A' | 'B')[]}>(co4)
 
+// narrows optional variadic value to choices | true array
 const co5 = program
-  .addOption((new Option('-d, --debug [val...]')).choices(['A', 'B'] as const))
+  .addOption(new Option('-d, --debug [val...]').choices(['A', 'B'] as const))
   .opts();
 expectType<{debug?: ('A' | 'B')[] | true}>(co5)
 
+// narrows required option with optional variadic value
 const co6 = program
-  .addOption((new Option('-d, --debug [val...]')).choices(['A', 'B'] as const).makeOptionMandatory())
+  .addOption(new Option('-d, --debug [val...]').choices(['A', 'B'] as const).makeOptionMandatory())
   .opts();
 expectType<{debug: ('A' | 'B')[] | true}>(co6)
 
+// narrows required option with required variadic value
 const co7 = program
-  .addOption((new Option('-d, --debug <val...>')).choices(['A', 'B'] as const).makeOptionMandatory())
+  .addOption(new Option('-d, --debug <val...>').choices(['A', 'B'] as const).makeOptionMandatory())
   .opts();
 expectType<{debug: ('A' | 'B')[]}>(co7)
+
+// default before choices creates union type
+const co8 = program
+  .addOption(new Option('--foo <val>').default('D' as const).choices(['C'] as const))
+  .opts();
+expectType<{foo: 'C' | 'D'}>(co8);
+  
+// default after choices creates union type
+const co9 = program
+  .addOption(new Option('--foo <val>').choices(['C'] as const).default('D' as const))
+  .opts();
+expectType<{foo: 'C' | 'D'}>(co9);
+  
+// make mandatory before choices makes option mandatory
+const c10 = program
+  .addOption(new Option('--foo <val>').makeOptionMandatory().choices(['C'] as const))
+  .opts();
+expectType<{foo: 'C'}>(c10);
