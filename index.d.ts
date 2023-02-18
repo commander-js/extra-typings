@@ -233,7 +233,7 @@ export class CommanderError extends Error {
     /**
      * Set the custom handler for processing CLI command arguments into argument values.
      */
-    argParser<T>(fn: (value: string, previous: T) => T): Argument<Usage, DefaultT, T, ArgRequired, undefined>;
+    argParser<T>(fn: (value: string, previous: T) => T): Argument<Usage, DefaultT, T, ArgRequired, undefined>; // setting ChoicesT to undefined because argParser overwrites choices
   
     /**
      * Only allow argument value to be one of choices.
