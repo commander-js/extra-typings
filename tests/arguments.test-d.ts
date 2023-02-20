@@ -370,7 +370,7 @@ expectType<('C' | undefined)>(
     .processedArgs[0]
 )
 
-// argParser after choices overrices choice type
+// argParser after choices overrides choice type
 expectType<(number)>(
   program
     .addArgument(new Argument('<foo>').choices(['C'] as const).argParser((val: string, prev: number) => prev + Number.parseInt(val)))
