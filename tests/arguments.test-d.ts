@@ -284,3 +284,104 @@ program
     expectType<string | undefined>(bar);
     expectAssignable<OptionValues>(options);
   });
+
+// choices
+program
+  .addArgument(new Argument("<foo>").choices(["A", "B"] as const))
+  .action((foo, options) => {
+    expectType<"A" | "B">(foo);
+    expectAssignable<OptionValues>(options);
+  });
+
+program
+  .addArgument(new Argument("[foo]").choices(["A", "B"] as const))
+  .action((foo, options) => {
+    expectType<"A" | "B" | undefined>(foo);
+    expectAssignable<OptionValues>(options);
+  });
+
+program
+  .addArgument(new Argument("<foo...>").choices(["A", "B"] as const))
+  .action((foo, options) => {
+    expectType<("A" | "B")[]>(foo);
+    expectAssignable<OptionValues>(options);
+  });
+
+program
+  .addArgument(new Argument("[foo...]").choices(["A", "B"] as const))
+  .action((foo, options) => {
+    expectType<("A" | "B")[]>(foo);
+    expectAssignable<OptionValues>(options);
+  });
+
+// default type ignored when arg is required
+expectType<('C')>(
+  program
+    .addArgument(new Argument('<foo>').default('D' as const).choices(['C'] as const))
+    .parse()
+    .processedArgs[0]
+)
+
+// default before choices results in union when arg optional
+expectType<('C' | 'D')>(
+  program
+    .addArgument(new Argument('[foo]').default('D' as const).choices(['C'] as const))
+    .parse()
+    .processedArgs[0]
+)
+
+// default after choices is still union type
+expectType<('C' | 'D')>(
+  program
+    .addArgument(new Argument('[foo]').choices(['C'] as const).default('D' as const))
+    .parse()
+    .processedArgs[0]
+)
+
+// argRequired after choices still narrows type
+expectType<('C')>(
+  program
+    .addArgument(new Argument('foo').choices(['C'] as const).argRequired())
+    .parse()
+    .processedArgs[0]
+)
+
+// argRequired before choices still narrows type
+expectType<('C')>(
+  program
+    .addArgument(new Argument('foo').argRequired().choices(['C'] as const))
+    .parse()
+    .processedArgs[0]
+)
+
+// argOptional after choices narrows type and includes undefined
+expectType<('C' | undefined)>(
+  program
+    .addArgument(new Argument('foo').choices(['C'] as const).argOptional())
+    .parse()
+    .processedArgs[0]
+)
+
+// argOptional before choices narrows type and includes undefined
+expectType<('C' | undefined)>(
+  program
+    .addArgument(new Argument('foo').argOptional().choices(['C'] as const))
+    .parse()
+    .processedArgs[0]
+)
+
+// argParser after choices overrides choice type
+expectType<(number)>(
+  program
+    .addArgument(new Argument('<foo>').choices(['C'] as const).argParser((val: string, prev: number) => prev + Number.parseInt(val)))
+    .parse()
+    .processedArgs[0]
+)
+
+// choices after argParser overrides argParser type
+expectType<('C')>(
+  program
+    .addArgument(new Argument('<foo>').argParser((val: string, prev: number) => prev + Number.parseInt(val)).choices(['C'] as const))
+    .parse()
+    .processedArgs[0]
+)
