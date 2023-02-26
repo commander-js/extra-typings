@@ -8,6 +8,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 <!-- markdownlint-disable MD024 -->
 <!-- markdownlint-disable MD004 -->
 
+## [10.0.3] (2023-03-03)
+
+Note: only patch version number despite new feature because major/minor version still match Commander 10.0.x.
+
+### Added
+
+- narrow types based on `.choices()` ([#29])
+
+### Fixed
+
+- improve Option type inferences for certain combinations of configuration ([#31])
+- mark `.action()` callback as allowing promises ([#33])
+
 ## [10.0.2] (2023-01-27)
 
 ### Fixed
@@ -95,6 +108,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - inferred types for `.action()`
 - inferred types for `.opts()`
 
+[10.0.3]: https://github.com/commander-js/extra-typings/compare/v10.0.2...v10.0.3
 [10.0.2]: https://github.com/commander-js/extra-typings/compare/v10.0.1...v10.0.2
 [10.0.1]: https://github.com/commander-js/extra-typings/compare/v10.0.0...v10.0.1
 [10.0.0]: https://github.com/commander-js/extra-typings/compare/v9.5.0...v10.0.0
@@ -109,3 +123,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 [#19]: https://github.com/commander-js/extra-typings/pull/19
 [#23]: https://github.com/commander-js/extra-typings/pull/23
 [#25]: https://github.com/commander-js/extra-typings/pull/25
+[#29]: https://github.com/commander-js/extra-typings/pull/29
+[#31]: https://github.com/commander-js/extra-typings/pull/31
+[#33]: https://github.com/commander-js/extra-typings/pull/33
