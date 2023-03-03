@@ -32,7 +32,7 @@ Credit: this builds on work by @PaperStrike in <https://github.com/tj/commander.
 
 The types are built up as the options and arguments are defined. The usage pattern for action handlers is easy. Just chain the action handler after the options and arguments.
 
-```js
+```typescript
 import { program } from '@commander-js/extra-typings';
 
 program.command('print')
@@ -45,7 +45,7 @@ program.command('print')
 
 For working with a single command without an action handler, the configuration need to be done at the same time as the variable is declared.
 
-```js
+```typescript
 import { Command } from '@commander-js/extra-typings';
 
 // broken pattern
@@ -54,11 +54,20 @@ program.option('-d, --debug'); // adding option does not change type of program
 const options = program.opts(); // dumb type
 ```
 
-```js
+```typescript
 import { Command } from '@commander-js/extra-typings';
 
 // working pattern
 const program = new Command()
   .option('-d, --debug'); // program type includes chained options and arguments
 const options = program.opts(); // smart type
+```
+
+Use a "const assertion" on the choices to narrow the option type from `string` :
+
+```typescript
+const program = new Command()
+  .addOption(new Option('--drink-size <size>').choices(['small', 'medium', 'large'] as const))
+  .parse();
+const drinkSize = program.opts().drinkSize; // "small" | "medium" | "large" | undefined
 ```
