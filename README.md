@@ -63,7 +63,7 @@ const program = new Command()
 const options = program.opts(); // smart type
 ```
 
-Use a "const assertion" on the choices to narrow the option type from `string` :
+Use a "const assertion" on the choices to narrow the option type from `string`:
 
 ```typescript
 const program = new Command()
