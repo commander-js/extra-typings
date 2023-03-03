@@ -2,11 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
-and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
+
+The version numbering does not follow semantic versioning but instead aligns with the `commander` version number. The installed version of this package should match the major and minor version numbers of the installed commander package, but the patch version number is independent (following pattern used by [Definitely Typed](https://github.com/DefinitelyTyped/DefinitelyTyped#how-do-definitely-typed-package-versions-relate-to-versions-of-the-corresponding-library)).
 
 <!-- markdownlint-disable MD024 -->
 <!-- markdownlint-disable MD004 -->
+
+## [10.0.3] (2023-03-03)
+
+### Added
+
+- narrow types based on `.choices()` ([#29])
+
+### Fixed
+
+- improve Option type inferences for certain combinations of configuration ([#31])
+- mark `.action()` callback as allowing promises ([#33])
 
 ## [10.0.2] (2023-01-27)
 
@@ -95,6 +107,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - inferred types for `.action()`
 - inferred types for `.opts()`
 
+[10.0.3]: https://github.com/commander-js/extra-typings/compare/v10.0.2...v10.0.3
 [10.0.2]: https://github.com/commander-js/extra-typings/compare/v10.0.1...v10.0.2
 [10.0.1]: https://github.com/commander-js/extra-typings/compare/v10.0.0...v10.0.1
 [10.0.0]: https://github.com/commander-js/extra-typings/compare/v9.5.0...v10.0.0
@@ -109,3 +122,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 [#19]: https://github.com/commander-js/extra-typings/pull/19
 [#23]: https://github.com/commander-js/extra-typings/pull/23
 [#25]: https://github.com/commander-js/extra-typings/pull/25
+[#29]: https://github.com/commander-js/extra-typings/pull/29
+[#31]: https://github.com/commander-js/extra-typings/pull/31
+[#33]: https://github.com/commander-js/extra-typings/pull/33
