@@ -13,17 +13,16 @@
   },
   "files": [
     "esm.mjs",
+    "esm.d.mts",
     "index.js",
     "index.d.ts"
   ],
   "type": "commonjs",
   "exports": {
     ".": {
-      "types": "./index.d.ts",
       "require": "./index.js",
       "import": "./esm.mjs"
-    },
-    "./esm.mjs": "./esm.mjs"
+    }
   },
   "types": "index.d.ts",
   "tsd": {
