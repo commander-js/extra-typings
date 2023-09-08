@@ -453,7 +453,8 @@ export class CommanderError extends Error {
   export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
     args: string[];
     processedArgs: Args;
-    commands: CommandUnknownOpts[];
+    readonly commands: readonly CommandUnknownOpts[];
+    readonly options: readonly Option[];
     parent: CommandUnknownOpts | null;
   
     constructor(name?: string);
