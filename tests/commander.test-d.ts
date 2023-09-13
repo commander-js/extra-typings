@@ -40,7 +40,8 @@ expectType<commander.Argument>(commander.createArgument('<foo>'));
 expectType<string[]>(program.args);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 expectType<[]>(program.processedArgs);
-expectType<commander.CommandUnknownOpts[]>(program.commands);
+expectType<readonly commander.CommandUnknownOpts[]>(program.commands);
+expectType<readonly commander.Option[]>(program.options);
 expectType<commander.CommandUnknownOpts | null>(program.parent);
 
 // version
