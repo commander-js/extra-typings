@@ -212,7 +212,10 @@ export class CommanderError extends Error {
     description: string;
     required: boolean;
     variadic: boolean;
-  
+    defaultValue?: any;
+    defaultValueDescription?: string;
+    argChoices?: string[];
+
     /**
      * Initialize a new command argument with the given name and description.
      * The default is that the argument is required, and you can explicitly
@@ -265,6 +268,8 @@ export class CommanderError extends Error {
     negate: boolean;
     defaultValue?: any;
     defaultValueDescription?: string;
+    presetArg?: unknown;
+    envVar?: string;
     parseArg?: <T>(value: string, previous: T) => T;
     hidden: boolean;
     argChoices?: string[];
@@ -453,7 +458,9 @@ export class CommanderError extends Error {
   export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
     args: string[];
     processedArgs: Args;
-    commands: CommandUnknownOpts[];
+    readonly commands: readonly CommandUnknownOpts[];
+    // readonly options: readonly Option[];
+    // readonly registeredArguments: readonly Argument[];
     parent: CommandUnknownOpts | null;
   
     constructor(name?: string);
@@ -467,7 +474,10 @@ export class CommanderError extends Error {
      * You can optionally supply the  flags and description to override the defaults.
      */
     version(str: string, flags?: string, description?: string): this;
-  
+    /**
+     * Get the program version.
+     */
+    version(): string | undefined;
     /**
      * Define a command, implemented using an action handler.
      *
@@ -1015,7 +1025,7 @@ export class CommanderError extends Error {
     /**
      * Get the executable search directory.
      */
-    executableDir(): string;
+    executableDir(): string | null;
   
     /**
      * Output help information for this command.

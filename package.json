@@ -1,6 +1,6 @@
 {
   "name": "@commander-js/extra-typings",
-  "version": "11.0.0",
+  "version": "11.1.0",
   "description": "Infer strong typings for commander options and action handlers",
   "main": "index.js",
   "scripts": {
@@ -45,7 +45,7 @@
     ]
   },
   "peerDependencies": {
-    "commander": "11.0.x"
+    "commander": "11.1.x"
   },
   "devDependencies": {
     "@types/jest": "^29.2.6",
