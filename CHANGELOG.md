@@ -13,8 +13,6 @@ The version numbering does not follow semantic versioning but instead aligns wit
 
 ### Added
 
-- `options` property on `Command` with the array of defined `'Option` ([#48])
-- `registeredArguments` property on `Command` with the array of defined `Argument` (like `Command.options` for `Option`) ([#48])
 - TypeScript declarations for Option properties: `envVar`, `presetArg` ([#48])
 - TypeScript declarations for Argument properties: `argChoices`, `defaultValue`, `defaultValueDescription` ([#48])
 
