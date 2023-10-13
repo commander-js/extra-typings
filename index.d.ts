@@ -450,7 +450,7 @@ export class CommanderError extends Error {
   // The source is a string so author can define their own too.
   export type OptionValueSource = LiteralUnion<'default' | 'config' | 'env' | 'cli' | 'implied', string> | undefined;
 
-  export type OptionValues = Record<string, any>;
+  export type OptionValues = Record<string, unknown>;
   
   export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
     args: string[];
