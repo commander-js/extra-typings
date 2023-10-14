@@ -168,8 +168,6 @@ type InferOptions<Options, Usage extends string, DefaultT, CoerceT, Mandatory ex
       : InferOptionsFlag<Options, Usage, '', never, PresetT, DefaultT, CoerceT, Mandatory, ChoicesT>;
 
 export type CommandUnknownOpts = Command<unknown[], OptionValues>;
-// export type OptionUnknown = Option<'', unknown, unknown, unknown, boolean, unknown>;
-// export type ArgumentUnknown = Argument<'', unknown, unknown, boolean, unknown>;
 
 // ----- full copy of normal commander typings from here down, with extra type inference -----
 
