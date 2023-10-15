@@ -456,8 +456,8 @@ export class CommanderError extends Error {
     args: string[];
     processedArgs: Args;
     readonly commands: readonly CommandUnknownOpts[];
-    // readonly options: readonly Option[];
-    // readonly registeredArguments: readonly Argument[];
+    readonly options: readonly Option[];
+    readonly registeredArguments: readonly Argument[];
     parent: CommandUnknownOpts | null;
   
     constructor(name?: string);
@@ -556,13 +556,13 @@ export class CommanderError extends Error {
      * @returns `this` command for chaining
      */
     argument<S extends string, T>(
-        flags: S, description: string, fn: (value: string, previous: T) => T): Command<[...Args, InferArgument<S, undefined, T>]>;
+        flags: S, description: string, fn: (value: string, previous: T) => T): Command<[...Args, InferArgument<S, undefined, T>], Opts>;
     argument<S extends string, T>(
-        flags: S, description: string, fn: (value: string, previous: T) => T, defaultValue: T): Command<[...Args, InferArgument<S, T, T>]>;
+        flags: S, description: string, fn: (value: string, previous: T) => T, defaultValue: T): Command<[...Args, InferArgument<S, T, T>], Opts>;
     argument<S extends string>(
-        usage: S, description?: string): Command<[...Args, InferArgument<S, undefined>]>;
+        usage: S, description?: string): Command<[...Args, InferArgument<S, undefined>], Opts>;
     argument<S extends string, DefaultT>(
-        usage: S, description: string, defaultValue: DefaultT): Command<[...Args, InferArgument<S, DefaultT>]>;
+        usage: S, description: string, defaultValue: DefaultT): Command<[...Args, InferArgument<S, DefaultT>], Opts>;
     
     /**
      * Define argument syntax for command, adding a prepared argument.
@@ -570,7 +570,7 @@ export class CommanderError extends Error {
      * @returns `this` command for chaining
      */
     addArgument<Usage extends string, DefaultT, CoerceT, ArgRequired extends boolean|undefined, ChoicesT>(
-      arg: Argument<Usage, DefaultT, CoerceT, ArgRequired, ChoicesT>): Command<[...Args, InferArgument<Usage, DefaultT, CoerceT, ArgRequired, ChoicesT>]>;
+      arg: Argument<Usage, DefaultT, CoerceT, ArgRequired, ChoicesT>): Command<[...Args, InferArgument<Usage, DefaultT, CoerceT, ArgRequired, ChoicesT>], Opts>;
 
   
     /**
@@ -585,7 +585,7 @@ export class CommanderError extends Error {
      *
      * @returns `this` command for chaining
      */
-    arguments<Names extends string>(args: Names): Command<[...Args, ...InferArguments<Names>]>;
+    arguments<Names extends string>(args: Names): Command<[...Args, ...InferArguments<Names>], Opts>;
 
   
     /**
