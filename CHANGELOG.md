@@ -9,12 +9,13 @@ The version numbering does not follow semantic versioning but instead aligns wit
 <!-- markdownlint-disable MD024 -->
 <!-- markdownlint-disable MD004 -->
 
-## [11.1.0] (2023-10-14)
+## [11.1.0] (2023-10-15)
 
 ### Added
 
-- TypeScript declarations for Option properties: `envVar`, `presetArg` ([#48])
-- TypeScript declarations for Argument properties: `argChoices`, `defaultValue`, `defaultValueDescription` ([#48])
+- `Option` properties: `envVar`, `presetArg` ([#48])
+- `Argument` properties: `argChoices`, `defaultValue`, `defaultValueDescription` ([#48])
+- `Command` properties: `options`, `registeredArguments` ([#50])
 
 ### Changed
 
@@ -26,6 +27,7 @@ The version numbering does not follow semantic versioning but instead aligns wit
 - remove unused `Option.optionFlags` property ([#48])
 - add that `Command.version()` can also be used as getter ([#48])
 - add null return type to `Commands.executableDir()`, for when not configured ([#48])
+- preserve option typings when adding arguments to `Command` ([#49])
 
 ## [11.0.0] (2023-06-16)
 
@@ -152,4 +154,5 @@ The version numbering does not follow semantic versioning but instead aligns wit
 [#31]: https://github.com/commander-js/extra-typings/pull/31
 [#33]: https://github.com/commander-js/extra-typings/pull/33
 [#48]: https://github.com/commander-js/extra-typings/pull/48
-
+[#49]: https://github.com/commander-js/extra-typings/pull/49
+[#50]: https://github.com/commander-js/extra-typings/pull/50
