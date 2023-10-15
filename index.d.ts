@@ -454,6 +454,8 @@ export class CommanderError extends Error {
     args: string[];
     processedArgs: Args;
     commands: CommandUnknownOpts[];
+    readonly options: readonly Option[];
+    readonly registeredArguments: readonly Argument[];
     parent: CommandUnknownOpts | null;
   
     constructor(name?: string);

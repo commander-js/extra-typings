@@ -41,6 +41,8 @@ expectType<string[]>(program.args);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 expectType<[]>(program.processedArgs);
 expectType<commander.CommandUnknownOpts[]>(program.commands);
+expectType<readonly commander.Option[]>(program.options);
+expectType<readonly commander.Argument[]>(program.registeredArguments);
 expectType<commander.CommandUnknownOpts | null>(program.parent);
 
 // version
