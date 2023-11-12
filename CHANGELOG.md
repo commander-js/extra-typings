@@ -9,11 +9,31 @@ The version numbering does not follow semantic versioning but instead aligns wit
 <!-- markdownlint-disable MD024 -->
 <!-- markdownlint-disable MD004 -->
 
-## [12.0.0-0] (2023-11-11)
+## [12.0.0-0] (2023-11-12)
 
 ### Changed
 
 - update `peerDependencies` to `commander@12.0.x`, which requires Node.js v18 or higher
+
+## [11.1.0] (2023-10-15)
+
+### Added
+
+- `Option` properties: `envVar`, `presetArg` ([#48])
+- `Argument` properties: `argChoices`, `defaultValue`, `defaultValueDescription` ([#48])
+- `Command` properties: `options`, `registeredArguments` ([#50])
+
+### Changed
+
+- `commands` property of `Command` is now readonly ([#48])
+- update `peerDependencies` to `commander@11.1.x` ([#48])
+
+### Fixed
+
+- remove unused `Option.optionFlags` property ([#48])
+- add that `Command.version()` can also be used as getter ([#48])
+- add null return type to `Commands.executableDir()`, for when not configured ([#48])
+- preserve option typings when adding arguments to `Command` ([#49])
 
 ## [11.0.0] (2023-06-16)
 
@@ -119,7 +139,8 @@ The version numbering does not follow semantic versioning but instead aligns wit
 - inferred types for `.action()`
 - inferred types for `.opts()`
 
-[12.0.0-0]: https://github.com/commander-js/extra-typings/compare/v11.0.0...v12.0.0-0
+[12.0.0-0]: https://github.com/commander-js/extra-typings/compare/v11.1.0...v12.0.0-0
+[11.1.0]: https://github.com/commander-js/extra-typings/compare/v11.0.0...v11.1.0
 [11.0.0]: https://github.com/commander-js/extra-typings/compare/v10.0.3...v11.0.0
 [10.0.3]: https://github.com/commander-js/extra-typings/compare/v10.0.2...v10.0.3
 [10.0.2]: https://github.com/commander-js/extra-typings/compare/v10.0.1...v10.0.2
@@ -139,3 +160,6 @@ The version numbering does not follow semantic versioning but instead aligns wit
 [#29]: https://github.com/commander-js/extra-typings/pull/29
 [#31]: https://github.com/commander-js/extra-typings/pull/31
 [#33]: https://github.com/commander-js/extra-typings/pull/33
+[#48]: https://github.com/commander-js/extra-typings/pull/48
+[#49]: https://github.com/commander-js/extra-typings/pull/49
+[#50]: https://github.com/commander-js/extra-typings/pull/50

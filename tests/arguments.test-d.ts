@@ -385,3 +385,28 @@ expectType<('C')>(
     .parse()
     .processedArgs[0]
 )
+
+// adding argument preserves options
+expectType<({ example?: true })>(
+  program
+    .option('--example')
+    .argument('<arg>', 'arg description')
+    .parse()
+    .opts()
+)
+
+expectType<({ example?: true })>(
+  program
+    .option('--example')
+    .arguments('<arg1> [arg2]')
+    .parse()
+    .opts()
+)
+
+expectType<({ example?: true })>(
+  program
+    .option('--example')
+    .addArgument(new Argument('<arg>'))
+    .parse()
+    .opts()
+)
