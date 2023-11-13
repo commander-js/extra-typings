@@ -45,7 +45,7 @@
     ]
   },
   "peerDependencies": {
-    "commander": "12.0.x"
+    "commander": "12.0.0-0"
   },
   "devDependencies": {
     "@types/jest": "^29.2.6",
