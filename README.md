@@ -3,7 +3,7 @@
 [![NPM Version](http://img.shields.io/npm/v/@commander-js/extra-typings.svg?style=flat)](https://www.npmjs.org/package/@commander-js/extra-typings)
 [![NPM Downloads](https://img.shields.io/npm/dm/@commander-js/extra-typings.svg?style=flat)](https://npmcharts.com/compare/@commander-js/extra-typings?minimal=true)
 
-This package offers experimental TypeScript typings for `commander` which infer strong types for:
+This package offers TypeScript typings for `commander` which infer strong types for:
 
 - all the parameters of the action handler, including the options
 - options returned by `.opts()`
