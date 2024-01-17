@@ -72,11 +72,19 @@ expectChainedCommand(program.argument('[value]', 'description', parseFloat, 1.23
 expectChainedCommand(program.arguments('<cmd> [env]'));
 
 // addHelpCommand
-expectChainedCommand(program.addHelpCommand());
-expectChainedCommand(program.addHelpCommand(false));
-expectChainedCommand(program.addHelpCommand(true));
-expectChainedCommand(program.addHelpCommand('compress <file>'));
-expectChainedCommand(program.addHelpCommand('compress <file>', 'compress target file'));
+expectType<commander.Command>(program.addHelpCommand(new commander.Command('assist')));
+// Deprecated uses
+expectType<commander.Command>(program.addHelpCommand());
+expectType<commander.Command>(program.addHelpCommand(false));
+expectType<commander.Command>(program.addHelpCommand(true));
+expectType<commander.Command>(program.addHelpCommand('assist [cmd]'));
+expectType<commander.Command>(program.addHelpCommand('assist [file]', 'display help'));
+
+// helpCommand
+expectType<commander.Command>(program.helpCommand(false));
+expectType<commander.Command>(program.helpCommand(true));
+expectType<commander.Command>(program.helpCommand('assist [cmd]'));
+expectType<commander.Command>(program.helpCommand('assist [file]', 'display help'));
 
 // exitOverride
 expectChainedCommand(program.exitOverride());
