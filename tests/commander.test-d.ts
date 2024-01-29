@@ -328,6 +328,9 @@ expectChainedCommand(program.helpOption('-h,--help', 'custom description'));
 expectChainedCommand(program.helpOption(undefined, 'custom description'));
 expectChainedCommand(program.helpOption(false));
 
+// addHelpOption
+expectType<commander.Command>(program.addHelpOption(new commander.Option('-h,--help')));
+
 // addHelpText
 expectChainedCommand(program.addHelpText('after', 'text'));
 expectChainedCommand(program.addHelpText('afterAll', 'text'));

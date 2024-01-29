@@ -603,16 +603,13 @@ export class CommanderError extends Error {
 
     /**
      * Add prepared custom help command.
-     *
-     * @returns `this` command for chaining
      */
-    addHelpCommand(enableOrNameAndArgs?: string | boolean, description?: string): this;
     addHelpCommand(cmd: Command): this;
     /** @deprecated since v12, instead use helpCommand */
     addHelpCommand(nameAndArgs: string, description?: string): this;
     /** @deprecated since v12, instead use helpCommand */
     addHelpCommand(enable?: boolean): this;
-    
+
     /**
      * Add hook for life cycle event.
      */
@@ -1033,6 +1030,12 @@ export class CommanderError extends Error {
      */
     helpOption(flags?: string | boolean, description?: string): this;
   
+    /**
+     * Supply your own option to use for the built-in help option.
+     * This is an alternative to using helpOption() to customise the flags and description etc.
+     */
+    addHelpOption(option: Option): this;
+
     /**
      * Output help information and exit.
      *
