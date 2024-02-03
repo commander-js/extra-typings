@@ -9,6 +9,12 @@ The version numbering does not follow semantic versioning but instead aligns wit
 <!-- markdownlint-disable MD024 -->
 <!-- markdownlint-disable MD004 -->
 
+## [12.0.0] (2023-02-04)
+
+### Changed
+
+- update `peerDependencies` to `commander@12.0.x`, which requires Node.js v18 or higher
+
 ## [12.0.0-1] (2023-11-13)
 
 ### Fixed
@@ -145,6 +151,7 @@ The version numbering does not follow semantic versioning but instead aligns wit
 - inferred types for `.action()`
 - inferred types for `.opts()`
 
+[12.0.0]: https://github.com/commander-js/extra-typings/compare/v12.0.0...v11.0.0
 [12.0.0-1]: https://github.com/commander-js/extra-typings/compare/v12.0.0-0...v12.0.0-1
 [12.0.0-0]: https://github.com/commander-js/extra-typings/compare/v11.1.0...v12.0.0-0
 [11.1.0]: https://github.com/commander-js/extra-typings/compare/v11.0.0...v11.1.0
