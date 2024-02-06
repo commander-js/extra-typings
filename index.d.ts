@@ -108,13 +108,13 @@ type NegatePresetType<Flag extends string, PresetT> =
     Flag extends `--no-${string}`
         ? undefined extends PresetT ? false : PresetT
         : undefined extends PresetT ? true : PresetT;
-          
+
 // Modify DefaultT to take into account negated.
 type NegateDefaultType<Flag extends string, DefaultT> =
     Flag extends `--no-${string}`
         ? [undefined] extends [DefaultT] ? true : DefaultT
         : [undefined] extends [DefaultT] ? never : DefaultT; // don't add undefined, will make property optional later
-    
+
 // Modify ValueT to take into account coerce function.
 type CoerceValueType<CoerceT, ValueT> =
     [ValueT] extends [never]
@@ -122,7 +122,7 @@ type CoerceValueType<CoerceT, ValueT> =
         : [CoerceT] extends [undefined]
             ? ValueT
             : CoerceT;
-      
+
 // Modify PresetT to take into account coerce function.
 type CoercePresetType<CoerceT, PresetT> =
     [PresetT] extends [never]
@@ -131,7 +131,7 @@ type CoercePresetType<CoerceT, PresetT> =
             ? PresetT
             : undefined extends PresetT ? undefined : CoerceT;
 
-type BuildOptionProperty<Name extends string, FullValueT, AlwaysDefined extends boolean> =  
+type BuildOptionProperty<Name extends string, FullValueT, AlwaysDefined extends boolean> =
   AlwaysDefined extends true
       ? { [K in Name]: FullValueT }
       : { [K in Name]?: FullValueT };
@@ -180,7 +180,7 @@ export class CommanderError extends Error {
     exitCode: number;
     message: string;
     nestedError?: string;
-  
+
     /**
      * Constructs the CommanderError class
      * @param exitCode - suggested exit code which could be used with process.exit
@@ -190,7 +190,7 @@ export class CommanderError extends Error {
      */
     constructor(exitCode: number, code: string, message: string);
   }
-  
+
   export class InvalidArgumentError extends CommanderError {
     /**
      * Constructs the InvalidArgumentError class
@@ -200,14 +200,14 @@ export class CommanderError extends Error {
     constructor(message: string);
   }
   export { InvalidArgumentError as InvalidOptionArgumentError }; // deprecated old name
-  
+
   export interface ErrorOptions { // optional parameter for error()
     /** an id string representing the error */
     code?: string;
     /** suggested exit code which could be used with process.exit */
     exitCode?: number;
   }
-  
+
   export class Argument<Usage extends string = '', DefaultT = undefined, CoerceT = undefined, ArgRequired extends boolean|undefined = undefined, ChoicesT = undefined> {
     description: string;
     required: boolean;
@@ -222,42 +222,42 @@ export class CommanderError extends Error {
      * indicate this with <> around the name. Put [] around the name for an optional argument.
      */
     constructor(arg: Usage, description?: string);
-  
+
     /**
      * Return argument name.
      */
     name(): string;
-  
+
     /**
      * Set the default value, and optionally supply the description to be displayed in the help.
      */
     default<T>(value: T, description?: string): Argument<Usage, T, CoerceT, ArgRequired, ChoicesT>;
-  
+
     /**
      * Set the custom handler for processing CLI command arguments into argument values.
      */
     argParser<T>(fn: (value: string, previous: T) => T): Argument<Usage, DefaultT, T, ArgRequired, undefined>; // setting ChoicesT to undefined because argParser overwrites choices
-  
+
     /**
      * Only allow argument value to be one of choices.
      */
     choices<T extends readonly string[]>(values: T): Argument<Usage, DefaultT, undefined, ArgRequired, T[number]>; // setting CoerceT to undefined because choices overrides argParser
-  
+
     /**
      * Make argument required.
      */
     argRequired(): Argument<Usage, DefaultT, CoerceT, true, ChoicesT>;
-  
+
     /**
      * Make argument optional.
      */
     argOptional(): Argument<Usage, DefaultT, CoerceT, false, ChoicesT>;
   }
-  
+
   export class Option<Usage extends string = '', PresetT = undefined, DefaultT = undefined, CoerceT = undefined, Mandatory extends boolean = false, ChoicesT = undefined> {
     flags: string;
     description: string;
-  
+
     required: boolean; // A value must be supplied when the option is specified.
     optional: boolean; // A value is optional when the option is specified.
     variadic: boolean;
@@ -272,14 +272,14 @@ export class CommanderError extends Error {
     parseArg?: <T>(value: string, previous: T) => T;
     hidden: boolean;
     argChoices?: string[];
-  
+
     constructor(flags: Usage, description?: string);
-  
+
     /**
      * Set the default value, and optionally supply the description to be displayed in the help.
      */
     default<T>(value: T, description?: string): Option<Usage, PresetT, T, CoerceT, Mandatory, ChoicesT>;
-  
+
     /**
      * Preset to use when option used without option-argument, especially optional but also boolean and negated.
      * The custom processing (parseArg) is called.
@@ -291,7 +291,7 @@ export class CommanderError extends Error {
      * ```
      */
     preset<T>(arg: T): Option<Usage, T, DefaultT, CoerceT, Mandatory, ChoicesT>;
-  
+
     /**
      * Add option name(s) that conflict with this option.
      * An error will be displayed if conflicting options are found during parsing.
@@ -303,7 +303,7 @@ export class CommanderError extends Error {
      * ```
      */
     conflicts(names: string | string[]): this;
-  
+
     /**
      * Specify implied option values for when this option is set and the implied options are not.
      *
@@ -315,7 +315,7 @@ export class CommanderError extends Error {
      *   .addOption(new Option('--trace', 'log extra details').implies({ log: 'trace.txt' }));
      */
     implies(optionValues: OptionValues): this;
-  
+
     /**
      * Set environment variable to check for option value.
      *
@@ -323,43 +323,43 @@ export class CommanderError extends Error {
      * undefined, or the source of the current value is 'default' or 'config' or 'env'.
      */
     env(name: string): this;
-  
+
     /**
      * Calculate the full description, including defaultValue etc.
      */
     fullDescription(): string;
-  
+
     /**
      * Set the custom handler for processing CLI option arguments into option values.
      */
     argParser<T>(fn: (value: string, previous: T) => T): Option<Usage, PresetT, DefaultT, T, Mandatory, undefined>; // setting ChoicesT to undefined because argParser overrides choices
-  
+
     /**
      * Whether the option is mandatory and must have a value after parsing.
      */
     makeOptionMandatory<M extends boolean = true>(mandatory?: M): Option<Usage, PresetT, DefaultT, CoerceT, M, ChoicesT>;
-  
+
     /**
      * Hide option in help.
      */
     hideHelp(hide?: boolean): this;
-  
+
     /**
      * Only allow option value to be one of choices.
      */
     choices<T extends readonly string[]>(values: T): Option<Usage, PresetT, DefaultT, undefined, Mandatory, T[number]>; // setting CoerceT to undefined becuase choices overrides argParser
-  
+
     /**
      * Return option name.
      */
     name(): string;
-  
+
     /**
      * Return option name, in a camelcase format that can be used
      * as a object attribute key.
      */
     attributeName(): string;
-  
+
     /**
      * Return whether a boolean option.
      *
@@ -367,7 +367,7 @@ export class CommanderError extends Error {
      */
     isBoolean(): boolean;
   }
-  
+
   export class Help {
     /** output helpWidth, long lines are wrapped to fit */
     helpWidth?: number;
@@ -376,7 +376,7 @@ export class CommanderError extends Error {
     showGlobalOptions: boolean;
 
     constructor();
-  
+
     /** Get the command term to show in the list of subcommands. */
     subcommandTerm(cmd: CommandUnknownOpts): string;
     /** Get the command summary to show in the list of subcommands. */
@@ -389,12 +389,12 @@ export class CommanderError extends Error {
     argumentTerm(argument: Argument): string;
     /** Get the argument description to show in the list of arguments. */
     argumentDescription(argument: Argument): string;
-  
+
     /** Get the command usage to be displayed at the top of the built-in help. */
     commandUsage(cmd: CommandUnknownOpts): string;
     /** Get the description for the command. */
     commandDescription(cmd: CommandUnknownOpts): string;
-  
+
     /** Get an array of the visible subcommands. Includes a placeholder for the implicit help command, if there is one. */
     visibleCommands(cmd: CommandUnknownOpts): CommandUnknownOpts[];
     /** Get an array of the visible options. Includes a placeholder for the implicit help option, if there is one. */
@@ -403,7 +403,7 @@ export class CommanderError extends Error {
     visibleGlobalOptions(cmd: CommandUnknownOpts): Option[];
     /** Get an array of the arguments which have descriptions. */
     visibleArguments(cmd: CommandUnknownOpts): Argument[];
-  
+
     /** Get the longest command term length. */
     longestSubcommandTermLength(cmd: CommandUnknownOpts, helper: Help): number;
     /** Get the longest option term length. */
@@ -414,18 +414,18 @@ export class CommanderError extends Error {
     longestArgumentTermLength(cmd: CommandUnknownOpts, helper: Help): number;
     /** Calculate the pad width from the maximum term length. */
     padWidth(cmd: CommandUnknownOpts, helper: Help): number;
-  
+
     /**
      * Wrap the given string to width characters per line, with lines after the first indented.
      * Do not wrap if insufficient room for wrapping (minColumnWidth), or string is manually formatted.
      */
     wrap(str: string, width: number, indent: number, minColumnWidth?: number): string;
-  
+
     /** Generate the built-in help text. */
     formatHelp(cmd: CommandUnknownOpts, helper: Help): string;
   }
   export type HelpConfiguration = Partial<Help>;
-  
+
   export interface ParseOptions {
     from: 'node' | 'electron' | 'user';
   }
@@ -442,16 +442,16 @@ export class CommanderError extends Error {
     getOutHelpWidth?(): number;
     getErrHelpWidth?(): number;
     outputError?(str: string, write: (str: string) => void): void;
-  
+
   }
-  
+
   export type AddHelpTextPosition = 'beforeAll' | 'before' | 'after' | 'afterAll';
   export type HookEvent = 'preSubcommand' | 'preAction' | 'postAction';
   // The source is a string so author can define their own too.
   export type OptionValueSource = LiteralUnion<'default' | 'config' | 'env' | 'cli' | 'implied', string> | undefined;
 
   export type OptionValues = Record<string, unknown>;
-  
+
   export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
     args: string[];
     processedArgs: Args;
@@ -459,9 +459,9 @@ export class CommanderError extends Error {
     readonly options: readonly Option[];
     readonly registeredArguments: readonly Argument[];
     parent: CommandUnknownOpts | null;
-  
+
     constructor(name?: string);
-  
+
     /**
      * Set the program version to `str`.
      *
@@ -515,7 +515,7 @@ export class CommanderError extends Error {
      * @returns `this` command for chaining
      */
     command(nameAndArgs: string, description: string, opts?: ExecutableCommandOptions): this;
-  
+
     /**
      * Factory routine to create a new unattached command.
      *
@@ -523,7 +523,7 @@ export class CommanderError extends Error {
      * create the command. You can override createCommand to customise subcommands.
      */
     createCommand(name?: string): Command;
-  
+
     /**
      * Add a prepared subcommand.
      *
@@ -532,7 +532,7 @@ export class CommanderError extends Error {
      * @returns `this` command for chaining
      */
     addCommand(cmd: CommandUnknownOpts, opts?: CommandOptions): this;
-  
+
     /**
      * Factory routine to create a new unattached argument.
      *
@@ -540,7 +540,7 @@ export class CommanderError extends Error {
      * create the argument. You can override createArgument to return a custom argument.
      */
     createArgument<Usage extends string>(name: Usage, description?: string): Argument<Usage>;
-  
+
     /**
      * Define argument syntax for command.
      *
@@ -563,7 +563,7 @@ export class CommanderError extends Error {
         usage: S, description?: string): Command<[...Args, InferArgument<S, undefined>], Opts>;
     argument<S extends string, DefaultT>(
         usage: S, description: string, defaultValue: DefaultT): Command<[...Args, InferArgument<S, DefaultT>], Opts>;
-    
+
     /**
      * Define argument syntax for command, adding a prepared argument.
      *
@@ -572,7 +572,7 @@ export class CommanderError extends Error {
     addArgument<Usage extends string, DefaultT, CoerceT, ArgRequired extends boolean|undefined, ChoicesT>(
       arg: Argument<Usage, DefaultT, CoerceT, ArgRequired, ChoicesT>): Command<[...Args, InferArgument<Usage, DefaultT, CoerceT, ArgRequired, ChoicesT>], Opts>;
 
-  
+
     /**
      * Define argument syntax for command, adding multiple at once (without descriptions).
      *
@@ -586,7 +586,7 @@ export class CommanderError extends Error {
      * @returns `this` command for chaining
      */
     arguments<Names extends string>(args: Names): Command<[...Args, ...InferArguments<Names>], Opts>;
-  
+
     /**
      * Customise or override default help command. By default a help command is automatically added if your command has subcommands.
      *
@@ -614,23 +614,23 @@ export class CommanderError extends Error {
      * Add hook for life cycle event.
      */
     hook(event: HookEvent, listener: (thisCommand: this, actionCommand: CommandUnknownOpts) => void | Promise<void>): this;
-  
+
     /**
      * Register callback to use as replacement for calling process.exit.
      */
     exitOverride(callback?: (err: CommanderError) => never | void): this;
-  
+
     /**
      * Display error message and exit (or call exitOverride).
      */
     error(message: string, errorOptions?: ErrorOptions): never;
-  
+
     /**
      * You can customise the help with a subclass of Help by overriding createHelp,
      * or by overriding Help properties using configureHelp().
      */
     createHelp(): Help;
-  
+
     /**
      * You can customise the help by overriding Help properties using configureHelp(),
      * or with a subclass of Help by overriding createHelp().
@@ -638,7 +638,7 @@ export class CommanderError extends Error {
     configureHelp(configuration: HelpConfiguration): this;
     /** Get configuration */
     configureHelp(): HelpConfiguration;
-  
+
     /**
      * The default output goes to stdout and stderr. You can customise this for special
      * applications. You can also customise the display of errors by overriding outputError.
@@ -658,24 +658,24 @@ export class CommanderError extends Error {
     configureOutput(configuration: OutputConfiguration): this;
     /** Get configuration */
     configureOutput(): OutputConfiguration;
-  
+
     /**
      * Copy settings that are useful to have in common across root command and subcommands.
      *
      * (Used internally when adding a command using `.command()` so subcommands inherit parent settings.)
      */
     copyInheritedSettings(sourceCommand: CommandUnknownOpts): this;
-  
+
     /**
      * Display the help or a custom message after an error occurs.
      */
     showHelpAfterError(displayHelp?: boolean | string): this;
-  
+
     /**
      * Display suggestion of similar commands for unknown commands, or options for unknown options.
      */
     showSuggestionAfterError(displaySuggestion?: boolean): this;
-  
+
     /**
      * Register callback `fn` for the command.
      *
@@ -691,7 +691,7 @@ export class CommanderError extends Error {
      *
      * @returns `this` command for chaining
      */
-    action(fn: (...args: [...Args, Opts, this]) => void | Promise<void>): this;
+    action(fn: (this: this, ...args: [...Args, Opts, this]) => void | Promise<void>): this;
 
     /**
      * Define option with `flags`, `description`, and optional argument parsing function or `defaultValue` or both.
@@ -721,7 +721,7 @@ export class CommanderError extends Error {
         usage: S, description: string, parseArg: (value: string, previous: T) => T): Command<Args, InferOptions<Opts, S, undefined, T, false>>;
     option<S extends string, T>(
         usage: S, description: string, parseArg: (value: string, previous: T) => T, defaultValue?: T): Command<Args, InferOptions<Opts, S, T, T, false>>;
-      
+
     /**
      * Define a required option, which must have a value after parsing. This usually means
      * the option must be specified on the command line. (Otherwise the same as .option().)
@@ -736,16 +736,16 @@ export class CommanderError extends Error {
         usage: S, description: string, parseArg: (value: string, previous: T) => T): Command<Args, InferOptions<Opts, S, undefined, T, true>>;
     requiredOption<S extends string, T, D extends T>(
         usage: S, description: string, parseArg: (value: string, previous: T) => T, defaultValue?: D): Command<Args, InferOptions<Opts, S, D, T, true>>;
-      
+
     /**
      * Factory routine to create a new unattached option.
      *
      * See .option() for creating an attached option, which uses this routine to
      * create the option. You can override createOption to return a custom option.
      */
-  
+
     createOption<Usage extends string>(flags: Usage, description?: string): Option<Usage>;
-  
+
     /**
      * Add a prepared Option.
      *
@@ -753,7 +753,7 @@ export class CommanderError extends Error {
      */
     addOption<Usage extends string, PresetT, DefaultT, CoerceT, Mandatory extends boolean, ChoicesT>(
         option: Option<Usage, PresetT, DefaultT, CoerceT, Mandatory, ChoicesT>): Command<Args, InferOptions<Opts, Usage, DefaultT, CoerceT, Mandatory, PresetT, ChoicesT>>;
-     
+
     /**
      * Whether to store option values as properties on command object,
      * or store separately (specify false). In both cases the option values can be accessed using .opts().
@@ -763,31 +763,31 @@ export class CommanderError extends Error {
     storeOptionsAsProperties<T extends OptionValues>(): this & T;
     storeOptionsAsProperties<T extends OptionValues>(storeAsProperties: true): this & T;
     storeOptionsAsProperties(storeAsProperties?: boolean): this;
-  
+
     /**
      * Retrieve option value.
      */
     getOptionValue<K extends keyof Opts>(key: K): Opts[K];
     getOptionValue(key: string): unknown;
-  
+
     /**
      * Store option value.
      */
      setOptionValue<K extends keyof Opts>(key: K, value: unknown): this;
      setOptionValue(key: string, value: unknown): this;
-  
+
     /**
      * Store option value and where the value came from.
      */
      setOptionValueWithSource<K extends keyof Opts>(key: K, value: unknown, source: OptionValueSource): this;
      setOptionValueWithSource(key: string, value: unknown, source: OptionValueSource): this;
-  
+
     /**
      * Get source of option value.
      */
      getOptionValueSource<K extends keyof Opts>(key: K): OptionValueSource | undefined;
      getOptionValueSource(key: string): OptionValueSource | undefined;
-  
+
     /**
      * Get source of option value. See also .optsWithGlobals().
      */
@@ -807,21 +807,21 @@ export class CommanderError extends Error {
      * @returns `this` command for chaining
      */
     combineFlagAndOptionalValue(combine?: boolean): this;
-  
+
     /**
      * Allow unknown options on the command line.
      *
      * @returns `this` command for chaining
      */
     allowUnknownOption(allowUnknown?: boolean): this;
-  
+
     /**
      * Allow excess command-arguments on the command line. Pass false to make excess arguments an error.
      *
      * @returns `this` command for chaining
      */
     allowExcessArguments(allowExcess?: boolean): this;
-  
+
     /**
      * Enable positional options. Positional means global options are specified before subcommands which lets
      * subcommands reuse the same option names, and also enables subcommands to turn on passThroughOptions.
@@ -831,7 +831,7 @@ export class CommanderError extends Error {
      * @returns `this` command for chaining
      */
     enablePositionalOptions(positional?: boolean): this;
-  
+
     /**
      * Pass through options that come after command-arguments rather than treat them as command-options,
      * so actual command-options come before command-arguments. Turning this on for a subcommand requires
@@ -842,7 +842,7 @@ export class CommanderError extends Error {
      * @returns `this` command for chaining
      */
     passThroughOptions(passThrough?: boolean): this;
-  
+
     /**
      * Parse `argv`, setting options and invoking commands when defined.
      *
@@ -859,7 +859,7 @@ export class CommanderError extends Error {
      * @returns `this` command for chaining
      */
     parse(argv?: readonly string[], options?: ParseOptions): this;
-  
+
     /**
      * Parse `argv`, setting options and invoking commands when defined.
      *
@@ -878,7 +878,7 @@ export class CommanderError extends Error {
      * @returns Promise
      */
     parseAsync(argv?: readonly string[], options?: ParseOptions): Promise<this>;
-  
+
     /**
      * Parse options from `argv` removing known options,
      * and return argv split into operands and unknown arguments.
@@ -890,23 +890,23 @@ export class CommanderError extends Error {
      *     sub -- --unknown uuu op => [sub --unknown uuu op], []
      */
     parseOptions(argv: string[]): ParseOptionsResult;
-  
+
     /**
      * Return an object containing local option values as key-value pairs
      */
     opts(): Opts;
-  
+
     /**
      * Return an object containing merged local and global option values as key-value pairs.
      */
     optsWithGlobals<T extends OptionValues>(): T;
-  
+
     /**
      * Set the description.
      *
      * @returns `this` command for chaining
      */
-  
+
     description(str: string): this;
     /** @deprecated since v8, instead use .argument to add command argument with description */
     description(str: string, argsDescription: Record<string, string>): this;
@@ -914,19 +914,19 @@ export class CommanderError extends Error {
      * Get the description.
      */
     description(): string;
-  
+
     /**
      * Set the summary. Used when listed as subcommand of parent.
      *
      * @returns `this` command for chaining
      */
-  
+
     summary(str: string): this;
     /**
      * Get the summary.
      */
     summary(): string;
-  
+
     /**
      * Set an alias for the command.
      *
@@ -939,7 +939,7 @@ export class CommanderError extends Error {
      * Get alias for the command.
      */
     alias(): string;
-  
+
     /**
      * Set aliases for the command.
      *
@@ -952,7 +952,7 @@ export class CommanderError extends Error {
      * Get aliases for the command.
      */
     aliases(): string[];
-  
+
     /**
      * Set the command usage.
      *
@@ -963,7 +963,7 @@ export class CommanderError extends Error {
      * Get the command usage.
      */
     usage(): string;
-  
+
     /**
      * Set the name of the command.
      *
@@ -974,7 +974,7 @@ export class CommanderError extends Error {
      * Get the name of the command.
      */
     name(): string;
-  
+
     /**
      * Set the name of the command from script filename, such as process.argv[1],
      * or require.main.filename, or __filename.
@@ -989,7 +989,7 @@ export class CommanderError extends Error {
      * @returns `this` command for chaining
      */
     nameFromFilename(filename: string): this;
-  
+
     /**
      * Set the directory for searching for executable subcommands of this command.
      *
@@ -1007,7 +1007,7 @@ export class CommanderError extends Error {
      * Get the executable search directory.
      */
     executableDir(): string | null;
-  
+
     /**
      * Output help information for this command.
      *
@@ -1017,19 +1017,19 @@ export class CommanderError extends Error {
     outputHelp(context?: HelpContext): void;
     /** @deprecated since v7 */
     outputHelp(cb?: (str: string) => string): void;
-  
+
     /**
      * Return command help documentation.
      */
     helpInformation(context?: HelpContext): string;
-  
+
     /**
      * You can pass in flags and a description to override the help
      * flags and help description for your command. Pass in false
      * to disable the built-in help option.
      */
     helpOption(flags?: string | boolean, description?: string): this;
-  
+
     /**
      * Supply your own option to use for the built-in help option.
      * This is an alternative to using helpOption() to customise the flags and description etc.
@@ -1044,7 +1044,7 @@ export class CommanderError extends Error {
     help(context?: HelpContext): never;
     /** @deprecated since v7 */
     help(cb?: (str: string) => string): never;
-  
+
     /**
      * Add additional text to be displayed with the built-in help.
      *
@@ -1053,13 +1053,13 @@ export class CommanderError extends Error {
      */
     addHelpText(position: AddHelpTextPosition, text: string): this;
     addHelpText(position: AddHelpTextPosition, text: (context: AddHelpTextContext) => string): this;
-  
+
     /**
      * Add a listener (callback) for when events occur. (Implemented using EventEmitter.)
      */
     on(event: string | symbol, listener: (...args: any[]) => void): this;
   }
-  
+
   export interface CommandOptions {
     hidden?: boolean;
     isDefault?: boolean;
@@ -1069,15 +1069,15 @@ export class CommanderError extends Error {
   export interface ExecutableCommandOptions extends CommandOptions {
     executableFile?: string;
   }
-  
+
   export interface ParseOptionsResult {
     operands: string[];
     unknown: string[];
   }
-  
+
   export function createCommand(name?: string): Command;
   export function createOption<Usage extends string>(flags: Usage, description?: string): Option<Usage>;
   export function createArgument<Usage extends string>(name: Usage, description?: string): Argument<Usage>;
-  
+
   export const program: Command;
-  
+
