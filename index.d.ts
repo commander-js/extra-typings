@@ -347,7 +347,7 @@ export class CommanderError extends Error {
     /**
      * Only allow option value to be one of choices.
      */
-    choices<T extends readonly string[]>(values: T): Option<Usage, PresetT, DefaultT, undefined, Mandatory, T[number]>; // setting CoerceT to undefined becuase choices overrides argParser
+    choices<const T extends readonly string[]>(values: T): Option<Usage, PresetT, DefaultT, undefined, Mandatory, T[number]>; // setting CoerceT to undefined becuase choices overrides argParser
   
     /**
      * Return option name.
@@ -691,7 +691,7 @@ export class CommanderError extends Error {
      *
      * @returns `this` command for chaining
      */
-    action(fn: (...args: [...Args, Opts, this]) => void | Promise<void>): this;
+    action(fn: (this: this, ...args: [...Args, Opts, this]) => void | Promise<void>): this;
 
     /**
      * Define option with `flags`, `description`, and optional argument parsing function or `defaultValue` or both.
