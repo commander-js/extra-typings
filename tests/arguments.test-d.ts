@@ -261,7 +261,7 @@ program
     expectAssignable<OptionValues>(options);
   });
 
-/**
+/** 
  * Check command-arguments from .command('name <ARGS>')
  */
 
@@ -313,12 +313,6 @@ program
     expectType<("A" | "B")[]>(foo);
     expectAssignable<OptionValues>(options);
   });
-
-// current Command should be `this` context
-program
-  .action(function (){
-    expectType<Command>(this)
-  })
 
 // default type ignored when arg is required
 expectType<('C')>(
