@@ -1,5 +1,5 @@
 import { expectType, expectAssignable } from 'tsd';
-import { Command, Argument, OptionValues } from '..';
+import { Command, Argument, OptionValues, Option } from '..';
 
 // Reusing same program variable through tests for convenience.
 const program = new Command();
@@ -322,6 +322,12 @@ program
   .argument('<second argument>')
   .action(function () {
     expectType<Command<[string, string], { opt?: true, verbose?: true }>>(this)
+  })
+
+program
+  .addOption(new Option('-o, --opt', '').choices(['a', 'b', 'c']))
+  .action(function () {
+    expectType<Command<[], { opt?: true | 'a' | 'b' | 'c' }>>(this)
   })
 
 // default type ignored when arg is required
