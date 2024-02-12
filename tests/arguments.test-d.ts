@@ -314,6 +314,16 @@ program
     expectAssignable<OptionValues>(options);
   });
 
+// `this` should be current Command
+program
+  .option('-o, --opt')
+  .option('-v, --verbose')
+  .argument('<arg>')
+  .argument('<second argument>')
+  .action(function () {
+    expectType<Command<[string, string], { opt?: true, verbose?: true }>>(this)
+  })
+
 // default type ignored when arg is required
 expectType<('C')>(
   program

@@ -691,7 +691,7 @@ export class CommanderError extends Error {
      *
      * @returns `this` command for chaining
      */
-    action(fn: (...args: [...Args, Opts, this]) => void | Promise<void>): this;
+    action(fn: (this: this, ...args: [...Args, Opts, this]) => void | Promise<void>): this;
 
     /**
      * Define option with `flags`, `description`, and optional argument parsing function or `defaultValue` or both.
