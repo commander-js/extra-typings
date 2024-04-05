@@ -4,6 +4,7 @@
         "lib": [
             "es6"
         ],
+        "types": ["node", "jest"],
         "noImplicitAny": true,
         "noImplicitThis": true,
         "strictNullChecks": true,

@@ -452,6 +452,8 @@ export class CommanderError extends Error {
 
   export type OptionValues = Record<string, unknown>;
   
+  // eslint unimpressed with `OptionValues = {}`, but not sure what to use instead.
+  // eslint-disable-next-line @typescript-eslint/ban-types
   export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
     args: string[];
     processedArgs: Args;
