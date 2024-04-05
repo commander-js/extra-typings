@@ -1,7 +1,5 @@
 const commander = require('commander');
 
-// @ts-check
-
 exports = module.exports = {};
 
 // Return a different global program than commander,

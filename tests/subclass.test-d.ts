@@ -25,15 +25,15 @@ if ('when add subcommand to MyCommand then return type is not MyCommand (limitat
   const myProgram = new MyCommand();
   const mySub = myProgram.command('sub');
   // Breaking: lost automatic custom typing of subcommands
-  // @ts-expect-error 
+  // @ts-expect-error because lost subclass and so myFunction unknown
   mySub.myFunction();
 }
 
 if ('when call chaining method using inference on MyCommand then return type not MyCommand (limitation)') {
   new MyCommand().myFunction();
   // Breaking: lost subclass when chain
-  // @ts-expect-error 
-  new MyCommand().opts('-f').myFunction();
+  // @ts-expect-error because lost subclass and so myFunction unknown
+  new MyCommand().option('-f').myFunction();
 }
 
 if ('when add option to MyCommand then option type inferred') {
@@ -53,6 +53,6 @@ if ('when add MyOption to Command then option type inferred') {
 if ('when call chaining method using inference on MyOption then return type not MyOption (limitation)') {
   new MyOption('-f, --foo').myFunction();
   // Breaking: lost subclass when chain
-  // @ts-expect-error 
+  // @ts-expect-error because lost subclass and so myFunction unknown
   new MyOption('-f, --foo').default(3).myFunction();
 }
