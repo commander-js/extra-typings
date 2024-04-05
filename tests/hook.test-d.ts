@@ -54,4 +54,3 @@ if ('when add preSubcommand hook then activeCommand strongly typed') {
       expectType<unknown>(o);
     });
 }
-

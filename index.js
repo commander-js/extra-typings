@@ -22,5 +22,7 @@ exports.Option = commander.Option;
 // methods on the global program due to the (deprecated) legacy default export.
 // Here we roll our own, the way Commander might in future.
 exports.createCommand = (name) => new commander.Command(name);
-exports.createOption = (flags, description) => new commander.Option(flags, description);
-exports.createArgument = (name, description) => new commander.Argument(name, description);
+exports.createOption = (flags, description) =>
+  new commander.Option(flags, description);
+exports.createArgument = (name, description) =>
+  new commander.Argument(name, description);

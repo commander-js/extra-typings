@@ -1,16 +1,14 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "lib": [
-            "es6"
-        ],
-        "types": ["node", "jest"],
-        "noImplicitAny": true,
-        "noImplicitThis": true,
-        "strictNullChecks": true,
-        // "exactOptionalPropertyTypes": true,
-        "noEmit": true,
-        "forceConsistentCasingInFileNames": true
-    },
-    "include": ["**/*.ts"],
+  "compilerOptions": {
+    "module": "commonjs",
+    "lib": ["es6"],
+    "types": ["node", "jest"],
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    // "exactOptionalPropertyTypes": true,
+    "noEmit": true,
+    "forceConsistentCasingInFileNames": true,
+  },
+  "include": ["**/*.ts"],
 }

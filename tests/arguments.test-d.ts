@@ -8,28 +8,23 @@ const program = new Command();
  * Check when no command-arguments.
  */
 
-program
-  .action((options) => {
-    expectAssignable<OptionValues>(options);
-  });
+program.action((options) => {
+  expectAssignable<OptionValues>(options);
+});
 
 /**
  * Check command-arguments from .argument
  */
 
-program
-  .argument('<foo>')
-  .action((foo, options) => {
-    expectType<string>(foo);
-    expectAssignable<OptionValues>(options);
-  });
+program.argument('<foo>').action((foo, options) => {
+  expectType<string>(foo);
+  expectAssignable<OptionValues>(options);
+});
 
-program
-  .argument('[bar]')
-  .action((bar, options) => {
-    expectType<string | undefined>(bar);
-    expectAssignable<OptionValues>(options);
-  });
+program.argument('[bar]').action((bar, options) => {
+  expectType<string | undefined>(bar);
+  expectAssignable<OptionValues>(options);
+});
 
 program
   .argument('<foo>')
@@ -47,27 +42,21 @@ program
     expectAssignable<OptionValues>(options);
   });
 
-program
-  .argument('<mult...>')
-  .action((m, options) => {
-    expectType<string[]>(m);
-    expectAssignable<OptionValues>(options);
-  });
+program.argument('<mult...>').action((m, options) => {
+  expectType<string[]>(m);
+  expectAssignable<OptionValues>(options);
+});
 
-program
-  .argument('[mult...]')
-  .action((m, options) => {
-    expectType<string[]>(m);
-    expectAssignable<OptionValues>(options);
-  });
+program.argument('[mult...]').action((m, options) => {
+  expectType<string[]>(m);
+  expectAssignable<OptionValues>(options);
+});
 
-program
-  .argument('[mult...]', 'description', [])
-  .action((m, options) => {
-    // The wild looking never[] is how TypeScript represents the type of the untyped empty array passed as default.
-    expectType<string[] | never[]>(m);
-    expectAssignable<OptionValues>(options);
-  });
+program.argument('[mult...]', 'description', []).action((m, options) => {
+  // The wild looking never[] is how TypeScript represents the type of the untyped empty array passed as default.
+  expectType<string[] | never[]>(m);
+  expectAssignable<OptionValues>(options);
+});
 
 function myParseInt(arg: string, previous: number): number {
   return parseInt(arg);
@@ -76,19 +65,15 @@ function myParseInts(arg: string, previous: number[]): number[] {
   return previous.concat(parseInt(arg));
 }
 
-program
-  .argument('<height>', 'description', myParseInt)
-  .action((h, options) => {
-    expectType<number>(h);
-    expectAssignable<OptionValues>(options);
-  });
+program.argument('<height>', 'description', myParseInt).action((h, options) => {
+  expectType<number>(h);
+  expectAssignable<OptionValues>(options);
+});
 
-program
-  .argument('[height]', 'description', myParseInt)
-  .action((h, options) => {
-    expectType<number | undefined>(h);
-    expectAssignable<OptionValues>(options);
-  });
+program.argument('[height]', 'description', myParseInt).action((h, options) => {
+  expectType<number | undefined>(h);
+  expectAssignable<OptionValues>(options);
+});
 
 program
   .argument('[height...]', 'description', myParseInts, [])
@@ -101,28 +86,21 @@ program
  * Check command-arguments from .arguments()
  */
 
-program
-  .arguments('<foo>')
-  .action((foo, options) => {
-    expectType<string>(foo);
-    expectAssignable<OptionValues>(options);
-  });
+program.arguments('<foo>').action((foo, options) => {
+  expectType<string>(foo);
+  expectAssignable<OptionValues>(options);
+});
 
-program
-  .arguments('[bar]')
-  .action((bar, options) => {
-    expectType<string | undefined>(bar);
-    expectAssignable<OptionValues>(options);
-  });
+program.arguments('[bar]').action((bar, options) => {
+  expectType<string | undefined>(bar);
+  expectAssignable<OptionValues>(options);
+});
 
-program
-  .arguments('<foo> [bar]')
-  .action((foo, bar, options) => {
-    expectType<string>(foo);
-    expectType<string | undefined>(bar);
-    expectAssignable<OptionValues>(options);
-  });
-
+program.arguments('<foo> [bar]').action((foo, bar, options) => {
+  expectType<string>(foo);
+  expectType<string | undefined>(bar);
+  expectAssignable<OptionValues>(options);
+});
 
 program
   .arguments('<file> <file> [files...]')
@@ -137,19 +115,15 @@ program
  * Check command-arguments from .addArgument()
  */
 
-program
-  .addArgument(new Argument('<foo>'))
-  .action((foo, options) => {
-    expectType<string>(foo);
-    expectAssignable<OptionValues>(options);
-  });
+program.addArgument(new Argument('<foo>')).action((foo, options) => {
+  expectType<string>(foo);
+  expectAssignable<OptionValues>(options);
+});
 
-program
-  .addArgument(new Argument('[bar]'))
-  .action((bar, options, cmd) => {
-    expectType<string | undefined>(bar);
-    expectAssignable<OptionValues>(options);
-  });
+program.addArgument(new Argument('[bar]')).action((bar, options, cmd) => {
+  expectType<string | undefined>(bar);
+  expectAssignable<OptionValues>(options);
+});
 
 program
   .addArgument(new Argument('<foo>'))
@@ -160,19 +134,15 @@ program
     expectAssignable<OptionValues>(options);
   });
 
-program
-  .addArgument(new Argument('<foo...>'))
-  .action((foo, options) => {
-    expectType<string[]>(foo);
-    expectAssignable<OptionValues>(options);
-  });
+program.addArgument(new Argument('<foo...>')).action((foo, options) => {
+  expectType<string[]>(foo);
+  expectAssignable<OptionValues>(options);
+});
 
-program
-  .addArgument(new Argument('[foo...]'))
-  .action((foo, options) => {
-    expectType<string[]>(foo);
-    expectAssignable<OptionValues>(options);
-  });
+program.addArgument(new Argument('[foo...]')).action((foo, options) => {
+  expectType<string[]>(foo);
+  expectAssignable<OptionValues>(options);
+});
 
 program
   .addArgument(new Argument('[foo]').default('x'))
@@ -182,19 +152,15 @@ program
   });
 
 // mixed types possible, but unusual
-program
-  .addArgument(new Argument('[foo]').default(3))
-  .action((foo, options) => {
-    expectType<string | number>(foo);
-    expectAssignable<OptionValues>(options);
-  });
+program.addArgument(new Argument('[foo]').default(3)).action((foo, options) => {
+  expectType<string | number>(foo);
+  expectAssignable<OptionValues>(options);
+});
 
-program
-  .addArgument(new Argument('foo'))
-  .action((foo, options) => {
-    expectType<string>(foo);
-    expectAssignable<OptionValues>(options);
-  });
+program.addArgument(new Argument('foo')).action((foo, options) => {
+  expectType<string>(foo);
+  expectAssignable<OptionValues>(options);
+});
 
 program
   .addArgument(new Argument('foo').argRequired())
@@ -261,56 +227,50 @@ program
     expectAssignable<OptionValues>(options);
   });
 
-/** 
+/**
  * Check command-arguments from .command('name <ARGS>')
  */
 
-program
-  .command('sub1')
-  .action((options) => {
-    expectAssignable<OptionValues>(options);
-  });
+program.command('sub1').action((options) => {
+  expectAssignable<OptionValues>(options);
+});
 
-program
-  .command('sub2 <foo>')
-  .action((foo, options) => {
-    expectType<string>(foo);
-    expectAssignable<OptionValues>(options);
-  });
+program.command('sub2 <foo>').action((foo, options) => {
+  expectType<string>(foo);
+  expectAssignable<OptionValues>(options);
+});
 
-program
-  .command('sub3 [bar]')
-  .action((bar, options) => {
-    expectType<string | undefined>(bar);
-    expectAssignable<OptionValues>(options);
-  });
+program.command('sub3 [bar]').action((bar, options) => {
+  expectType<string | undefined>(bar);
+  expectAssignable<OptionValues>(options);
+});
 
 // choices
 program
-  .addArgument(new Argument("<foo>").choices(["A", "B"] as const))
+  .addArgument(new Argument('<foo>').choices(['A', 'B'] as const))
   .action((foo, options) => {
-    expectType<"A" | "B">(foo);
+    expectType<'A' | 'B'>(foo);
     expectAssignable<OptionValues>(options);
   });
 
 program
-  .addArgument(new Argument("[foo]").choices(["A", "B"] as const))
+  .addArgument(new Argument('[foo]').choices(['A', 'B'] as const))
   .action((foo, options) => {
-    expectType<"A" | "B" | undefined>(foo);
+    expectType<'A' | 'B' | undefined>(foo);
     expectAssignable<OptionValues>(options);
   });
 
 program
-  .addArgument(new Argument("<foo...>").choices(["A", "B"] as const))
+  .addArgument(new Argument('<foo...>').choices(['A', 'B'] as const))
   .action((foo, options) => {
-    expectType<("A" | "B")[]>(foo);
+    expectType<('A' | 'B')[]>(foo);
     expectAssignable<OptionValues>(options);
   });
 
 program
-  .addArgument(new Argument("[foo...]").choices(["A", "B"] as const))
+  .addArgument(new Argument('[foo...]').choices(['A', 'B'] as const))
   .action((foo, options) => {
-    expectType<("A" | "B")[]>(foo);
+    expectType<('A' | 'B')[]>(foo);
     expectAssignable<OptionValues>(options);
   });
 
@@ -321,102 +281,99 @@ program
   .argument('<arg>')
   .argument('<second argument>')
   .action(function () {
-    expectType<Command<[string, string], { opt?: true, verbose?: true }>>(this)
-  })
+    expectType<Command<[string, string], { opt?: true; verbose?: true }>>(this);
+  });
 
 // default type ignored when arg is required
-expectType<('C')>(
+expectType<'C'>(
   program
-    .addArgument(new Argument('<foo>').default('D' as const).choices(['C'] as const))
-    .parse()
-    .processedArgs[0]
-)
+    .addArgument(
+      new Argument('<foo>').default('D' as const).choices(['C'] as const),
+    )
+    .parse().processedArgs[0],
+);
 
 // default before choices results in union when arg optional
-expectType<('C' | 'D')>(
+expectType<'C' | 'D'>(
   program
-    .addArgument(new Argument('[foo]').default('D' as const).choices(['C'] as const))
-    .parse()
-    .processedArgs[0]
-)
+    .addArgument(
+      new Argument('[foo]').default('D' as const).choices(['C'] as const),
+    )
+    .parse().processedArgs[0],
+);
 
 // default after choices is still union type
-expectType<('C' | 'D')>(
+expectType<'C' | 'D'>(
   program
-    .addArgument(new Argument('[foo]').choices(['C'] as const).default('D' as const))
-    .parse()
-    .processedArgs[0]
-)
+    .addArgument(
+      new Argument('[foo]').choices(['C'] as const).default('D' as const),
+    )
+    .parse().processedArgs[0],
+);
 
 // argRequired after choices still narrows type
-expectType<('C')>(
+expectType<'C'>(
   program
     .addArgument(new Argument('foo').choices(['C'] as const).argRequired())
-    .parse()
-    .processedArgs[0]
-)
+    .parse().processedArgs[0],
+);
 
 // argRequired before choices still narrows type
-expectType<('C')>(
+expectType<'C'>(
   program
     .addArgument(new Argument('foo').argRequired().choices(['C'] as const))
-    .parse()
-    .processedArgs[0]
-)
+    .parse().processedArgs[0],
+);
 
 // argOptional after choices narrows type and includes undefined
-expectType<('C' | undefined)>(
+expectType<'C' | undefined>(
   program
     .addArgument(new Argument('foo').choices(['C'] as const).argOptional())
-    .parse()
-    .processedArgs[0]
-)
+    .parse().processedArgs[0],
+);
 
 // argOptional before choices narrows type and includes undefined
-expectType<('C' | undefined)>(
+expectType<'C' | undefined>(
   program
     .addArgument(new Argument('foo').argOptional().choices(['C'] as const))
-    .parse()
-    .processedArgs[0]
-)
+    .parse().processedArgs[0],
+);
 
 // argParser after choices overrides choice type
-expectType<(number)>(
+expectType<number>(
   program
-    .addArgument(new Argument('<foo>').choices(['C'] as const).argParser((val: string, prev: number) => prev + Number.parseInt(val)))
-    .parse()
-    .processedArgs[0]
-)
+    .addArgument(
+      new Argument('<foo>')
+        .choices(['C'] as const)
+        .argParser((val: string, prev: number) => prev + Number.parseInt(val)),
+    )
+    .parse().processedArgs[0],
+);
 
 // choices after argParser overrides argParser type
-expectType<('C')>(
+expectType<'C'>(
   program
-    .addArgument(new Argument('<foo>').argParser((val: string, prev: number) => prev + Number.parseInt(val)).choices(['C'] as const))
-    .parse()
-    .processedArgs[0]
-)
+    .addArgument(
+      new Argument('<foo>')
+        .argParser((val: string, prev: number) => prev + Number.parseInt(val))
+        .choices(['C'] as const),
+    )
+    .parse().processedArgs[0],
+);
 
 // adding argument preserves options
-expectType<({ example?: true })>(
+expectType<{ example?: true }>(
   program
     .option('--example')
     .argument('<arg>', 'arg description')
     .parse()
-    .opts()
-)
+    .opts(),
+);
 
-expectType<({ example?: true })>(
-  program
-    .option('--example')
-    .arguments('<arg1> [arg2]')
-    .parse()
-    .opts()
-)
+expectType<{ example?: true }>(
+  program.option('--example').arguments('<arg1> [arg2]').parse().opts(),
+);
 
-expectType<({ example?: true })>(
-  program
-    .option('--example')
-    .addArgument(new Argument('<arg>'))
-    .parse()
-    .opts()
-)
+expectType<{ example?: true }>(
+  program.option('--example').addArgument(new Argument('<arg>')).parse().opts(),
+);
