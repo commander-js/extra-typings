@@ -11,64 +11,42 @@ function myParseInts(arg: string, previous: number[]): number[] {
 // Reusing same program variable through tests for convenience.
 const program = new Command();
 
-const o1 = program
-  .option('-d, --debug')
-  .opts();
+const o1 = program.option('-d, --debug').opts();
 expectType<{ debug?: true }>(o1);
 
-const o2 = program
-  .option('--debug <value>')
-  .opts();
+const o2 = program.option('--debug <value>').opts();
 expectType<{ debug?: string }>(o2);
 
-const o3 = program
-  .option('-o [optional]')
-  .opts();
+const o3 = program.option('-o [optional]').opts();
 expectType<{ o?: string | true }>(o3);
 
-const o4 = program
-  .option('--debug <value...>')
-  .opts();
+const o4 = program.option('--debug <value...>').opts();
 expectType<{ debug?: string[] }>(o4);
 
-const o5 = program
-  .option('--debug [value...]')
-  .opts();
+const o5 = program.option('--debug [value...]').opts();
 expectType<{ debug?: string[] | true }>(o5);
 if (o5.debug !== true && o5.debug !== undefined) o5.debug[0] = 'a'; // check expecting non-empty
 
 // with default
 
-const o6 = program
-  .option('--debug', 'description', false)
-  .opts();
+const o6 = program.option('--debug', 'description', false).opts();
 expectType<{ debug: boolean }>(o6);
 
-const o7 = program
-  .option('--debug <value>', 'description', 'default')
-  .opts();
+const o7 = program.option('--debug <value>', 'description', 'default').opts();
 expectType<{ debug: string }>(o7);
 
-const o8 = program
-  .option('--debug [value]', 'description', 'default')
-  .opts();
+const o8 = program.option('--debug [value]', 'description', 'default').opts();
 expectType<{ debug: string | true }>(o8);
 
-const o9 = program
-  .option('--debug <value...>', 'description', [])
-  .opts();
+const o9 = program.option('--debug <value...>', 'description', []).opts();
 expectType<{ debug: [] | string[] }>(o9);
 
-const o10 = program
-  .option('--debug [value...]', 'description', [])
-  .opts();
+const o10 = program.option('--debug [value...]', 'description', []).opts();
 expectType<{ debug: string[] | true | [] }>(o10);
 
 // Coerce/custom, w/wo defaults
 
-const o11 = program
-  .option('--debug <value>', 'description', myParseInt)
-  .opts();
+const o11 = program.option('--debug <value>', 'description', myParseInt).opts();
 expectType<{ debug?: number }>(o11);
 
 const o12 = program
@@ -88,21 +66,15 @@ expectType<{ debug: true | number[] }>(o14);
 
 // requiredOption
 
-const o15 = program
-  .requiredOption('--debug <value>', 'description')
-  .opts();
+const o15 = program.requiredOption('--debug <value>', 'description').opts();
 expectType<{ debug: string }>(o15);
 
-const o16 = program
-  .requiredOption('--debug [value]', 'description')
-  .opts();
+const o16 = program.requiredOption('--debug [value]', 'description').opts();
 expectType<{ debug: string | true }>(o16);
 
 // negated
 
-const o17 = program
-  .option('--C, --no-colour')
-  .opts();
+const o17 = program.option('--C, --no-colour').opts();
 expectType<{ colour: boolean }>(o17);
 
 const o18 = program
@@ -130,23 +102,17 @@ const m1 = program
   .option('--two <req>')
   .option('--three [opt]');
 const m2 = m1.opts();
-expectType<{ one?: true; two?: string; three?: string | true}>(m2);
+expectType<{ one?: true; two?: string; three?: string | true }>(m2);
 
 // addOption
 
-const ao1 = program
-  .addOption(new Option('-de, --debug'))
-  .opts();
+const ao1 = program.addOption(new Option('-de, --debug')).opts();
 expectType<{ debug?: true }>(ao1);
 
-const ao2 = program
-  .addOption(new Option('-de, --debug <value>'))
-  .opts();
+const ao2 = program.addOption(new Option('-de, --debug <value>')).opts();
 expectType<{ debug?: string }>(ao2);
 
-const ao9 = program
-  .addOption(new Option('-de, --debug [value]'))
-  .opts();
+const ao9 = program.addOption(new Option('-de, --debug [value]')).opts();
 expectType<{ debug?: string | true }>(ao9);
 
 const ao3 = program
@@ -181,67 +147,47 @@ program
   .option('-d, --debug')
   .option('--required <r>')
   .option('--optional [o]')
-  .action(options => {
-    expectType<{ debug?: true, required?: string, optional?: true | string }>(options);
+  .action((options) => {
+    expectType<{ debug?: true; required?: string; optional?: true | string }>(
+      options,
+    );
   });
 
 // option names
 
-const on1 = program
-  .addOption(new Option('-d, --debug'))
-  .opts();
+const on1 = program.addOption(new Option('-d, --debug')).opts();
 expectType<{ debug?: true }>(on1);
 
-const on2 = program
-  .addOption(new Option('-C, --no-colour'))
-  .opts();
+const on2 = program.addOption(new Option('-C, --no-colour')).opts();
 expectType<{ colour: boolean }>(on2);
 
-const on3 = program
-  .addOption(new Option('--camel-case'))
-  .opts();
+const on3 = program.addOption(new Option('--camel-case')).opts();
 expectType<{ camelCase?: true }>(on3);
 
-const on4 = program
-  .addOption(new Option('--no-camel-case'))
-  .opts();
+const on4 = program.addOption(new Option('--no-camel-case')).opts();
 expectType<{ camelCase: boolean }>(on4);
 
 // usage styles
 
-const us1 = program
-  .addOption(new Option('-d, --debug'))
-  .opts();
+const us1 = program.addOption(new Option('-d, --debug')).opts();
 expectType<{ debug?: true }>(us1);
 
-const us2 = program
-  .addOption(new Option('-d'))
-  .opts();
+const us2 = program.addOption(new Option('-d')).opts();
 expectType<{ d?: true }>(us2);
 
-const us3 = program
-  .addOption(new Option('--debug'))
-  .opts();
+const us3 = program.addOption(new Option('--debug')).opts();
 expectType<{ debug?: true }>(us3);
 
-const us4 = program
-  .addOption(new Option('-d,--debug'))
-  .opts();
+const us4 = program.addOption(new Option('-d,--debug')).opts();
 expectType<{ debug?: true }>(us4);
 
-const us5 = program
-  .addOption(new Option('-d|--debug'))
-  .opts();
+const us5 = program.addOption(new Option('-d|--debug')).opts();
 expectType<{ debug?: true }>(us5);
 
-const us6 = program
-  .addOption(new Option('-d | --debug'))
-  .opts();
+const us6 = program.addOption(new Option('-d | --debug')).opts();
 expectType<{ debug?: true }>(us6);
 
-const us7 = program
-  .addOption(new Option('-d --debug'))
-  .opts();
+const us7 = program.addOption(new Option('-d --debug')).opts();
 expectType<{ debug?: true }>(us7);
 
 // choices
@@ -250,58 +196,76 @@ expectType<{ debug?: true }>(us7);
 const co1 = program
   .addOption(new Option('-d, --debug <val>').choices(['A', 'B'] as const))
   .opts();
-expectType<{debug?: 'A' | 'B'}>(co1);
+expectType<{ debug?: 'A' | 'B' }>(co1);
 
 // narrows optional value to union of given choices and true
 const co2 = program
   .addOption(new Option('-d, --debug [val]').choices(['A', 'B'] as const))
   .opts();
-expectType<{debug?: 'A' | 'B' | true}>(co2);
+expectType<{ debug?: 'A' | 'B' | true }>(co2);
 
 // narrows required option to given choices
 const co3 = program
-  .addOption(new Option('-d, --debug <val>').choices(['A', 'B'] as const).makeOptionMandatory())
+  .addOption(
+    new Option('-d, --debug <val>')
+      .choices(['A', 'B'] as const)
+      .makeOptionMandatory(),
+  )
   .opts();
-expectType<{debug: 'A' | 'B'}>(co3)
+expectType<{ debug: 'A' | 'B' }>(co3);
 
 // narrows variadic value to choices array
 const co4 = program
   .addOption(new Option('-d, --debug <val...>').choices(['A', 'B'] as const))
   .opts();
-expectType<{debug?: ('A' | 'B')[]}>(co4)
+expectType<{ debug?: ('A' | 'B')[] }>(co4);
 
 // narrows optional variadic value to choices | true array
 const co5 = program
   .addOption(new Option('-d, --debug [val...]').choices(['A', 'B'] as const))
   .opts();
-expectType<{debug?: ('A' | 'B')[] | true}>(co5)
+expectType<{ debug?: ('A' | 'B')[] | true }>(co5);
 
 // narrows required option with optional variadic value
 const co6 = program
-  .addOption(new Option('-d, --debug [val...]').choices(['A', 'B'] as const).makeOptionMandatory())
+  .addOption(
+    new Option('-d, --debug [val...]')
+      .choices(['A', 'B'] as const)
+      .makeOptionMandatory(),
+  )
   .opts();
-expectType<{debug: ('A' | 'B')[] | true}>(co6)
+expectType<{ debug: ('A' | 'B')[] | true }>(co6);
 
 // narrows required option with required variadic value
 const co7 = program
-  .addOption(new Option('-d, --debug <val...>').choices(['A', 'B'] as const).makeOptionMandatory())
+  .addOption(
+    new Option('-d, --debug <val...>')
+      .choices(['A', 'B'] as const)
+      .makeOptionMandatory(),
+  )
   .opts();
-expectType<{debug: ('A' | 'B')[]}>(co7)
+expectType<{ debug: ('A' | 'B')[] }>(co7);
 
 // default before choices creates union type
 const co8 = program
-  .addOption(new Option('--foo <val>').default('D' as const).choices(['C'] as const))
+  .addOption(
+    new Option('--foo <val>').default('D' as const).choices(['C'] as const),
+  )
   .opts();
-expectType<{foo: 'C' | 'D'}>(co8);
-  
+expectType<{ foo: 'C' | 'D' }>(co8);
+
 // default after choices creates union type
 const co9 = program
-  .addOption(new Option('--foo <val>').choices(['C'] as const).default('D' as const))
+  .addOption(
+    new Option('--foo <val>').choices(['C'] as const).default('D' as const),
+  )
   .opts();
-expectType<{foo: 'C' | 'D'}>(co9);
-  
+expectType<{ foo: 'C' | 'D' }>(co9);
+
 // make mandatory before choices makes option mandatory
 const c10 = program
-  .addOption(new Option('--foo <val>').makeOptionMandatory().choices(['C'] as const))
+  .addOption(
+    new Option('--foo <val>').makeOptionMandatory().choices(['C'] as const),
+  )
   .opts();
-expectType<{foo: 'C'}>(c10);
+expectType<{ foo: 'C' }>(c10);

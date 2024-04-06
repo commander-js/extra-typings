@@ -1,4 +1,3 @@
-
 import { createArgument } from '..';
 
 test('when createArgument without description then argument has name', () => {

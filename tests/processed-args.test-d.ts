@@ -5,36 +5,25 @@ import { Command } from '..';
 
 if ('when no arguments then empty array') {
   const program = new Command();
-  const args = program
-    .parse()
-    .processedArgs;
+  const args = program.parse().processedArgs;
   expectType<[]>(args);
 }
 
 if ('when required argument then string element') {
   const program = new Command();
-  const args = program
-    .argument('<value>')
-    .parse()
-    .processedArgs;
+  const args = program.argument('<value>').parse().processedArgs;
   expectType<[string]>(args);
 }
 
 if ('when optional argument then string|undefined element') {
   const program = new Command();
-  const args = program
-    .argument('[value]')
-    .parse()
-    .processedArgs;
-  expectType<[string| undefined]>(args);
+  const args = program.argument('[value]').parse().processedArgs;
+  expectType<[string | undefined]>(args);
 }
 
 if ('when variadic argument then string[] element') {
   const program = new Command();
-  const args = program
-    .argument('<value...>')
-    .parse()
-    .processedArgs;
+  const args = program.argument('<value...>').parse().processedArgs;
   expectType<[string[]]>(args);
 }
 
@@ -43,8 +32,7 @@ if ('when multiple arguments then multiple elements') {
   const args = program
     .argument('<value>')
     .argument('[value]')
-    .parse()
-    .processedArgs;
+    .parse().processedArgs;
   expectType<[string, string | undefined]>(args);
 }
 
@@ -52,7 +40,6 @@ if ('when custom argument processing then custom type') {
   const program = new Command();
   const args = program
     .argument('<value>', 'description', parseFloat)
-    .parse()
-    .processedArgs;
+    .parse().processedArgs;
   expectType<[number]>(args);
 }

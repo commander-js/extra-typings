@@ -1,4 +1,3 @@
-
 import { expectAssignable, expectNotAssignable } from 'tsd';
 import { Command, CommandUnknownOpts, Option } from '..';
 
