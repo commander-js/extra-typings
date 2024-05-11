@@ -9,6 +9,18 @@ The version numbering does not follow semantic versioning but instead aligns wit
 <!-- markdownlint-disable MD024 -->
 <!-- markdownlint-disable MD004 -->
 
+## [12.1.0] (2024-05-18)
+
+### Changed
+
+- use ESLint for linting ([#65])
+- format source files with Prettier ([#66])
+
+### Removed
+
+- removed unimplemented Option.fullDescription from TypeScript definition ([#70])
+
+
 ## [12.0.1] (2023-03-02)
 
 ### Changed
@@ -157,6 +169,7 @@ The version numbering does not follow semantic versioning but instead aligns wit
 - inferred types for `.action()`
 - inferred types for `.opts()`
 
+[12.1.0]: https://github.com/commander-js/extra-typings/compare/v12.0.1...v12.1.0
 [12.0.1]: https://github.com/commander-js/extra-typings/compare/v12.0.0...v12.0.1
 [12.0.0]: https://github.com/commander-js/extra-typings/compare/v11.0.0...v12.0.0
 [12.0.0-1]: https://github.com/commander-js/extra-typings/compare/v12.0.0-0...v12.0.0-1
@@ -185,3 +198,7 @@ The version numbering does not follow semantic versioning but instead aligns wit
 [#49]: https://github.com/commander-js/extra-typings/pull/49
 [#50]: https://github.com/commander-js/extra-typings/pull/50
 [#59]: https://github.com/commander-js/extra-typings/pull/59
+
+[#65]: https://github.com/commander-js/extra-typings/pull/65
+[#66]: https://github.com/commander-js/extra-typings/pull/66
+[#70]: https://github.com/commander-js/extra-typings/pull/70
