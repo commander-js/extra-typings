@@ -20,7 +20,6 @@ The version numbering does not follow semantic versioning but instead aligns wit
 
 - removed unimplemented Option.fullDescription from TypeScript definition ([#70])
 
-
 ## [12.0.1] (2023-03-02)
 
 ### Changed
