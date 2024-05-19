@@ -1,6 +1,6 @@
 {
   "name": "@commander-js/extra-typings",
-  "version": "12.0.1",
+  "version": "12.1.0",
   "description": "Infer strong typings for commander options and action handlers",
   "main": "index.js",
   "scripts": {
@@ -43,12 +43,12 @@
   },
   "homepage": "https://github.com/commander-js/extra-typings#readme",
   "peerDependencies": {
-    "commander": "~12.0.0"
+    "commander": "~12.1.0"
   },
   "devDependencies": {
     "@types/jest": "^29.2.6",
     "@types/node": "^20.11.7",
-    "commander": "~12.0.0",
+    "commander": "~12.1.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jest": "^27.9.0",
