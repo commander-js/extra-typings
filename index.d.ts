@@ -105,7 +105,7 @@ type InferArguments<S extends string> = S extends `${infer First} ${infer Rest}`
   ? [InferArgument<First>, ...InferArguments<TrimLeft<Rest>>]
   : [InferArgument<S>];
 
-type InferCommmandArguments<S extends string> =
+type InferCommandArguments<S extends string> =
   S extends `${string} ${infer Args}` ? InferArguments<TrimLeft<Args>> : [];
 
 type FlagsToFlag<Flags extends string> =
