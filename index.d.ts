@@ -679,7 +679,7 @@ export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
   command<Usage extends string>(
     nameAndArgs: Usage,
     opts?: CommandOptions,
-  ): Command<[...InferCommmandArguments<Usage>]>;
+  ): Command<[...InferCommandArguments<Usage>]>;
   /**
    * Define a command, implemented in a separate executable file.
    *
