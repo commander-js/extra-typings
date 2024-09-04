@@ -1,6 +1,8 @@
+/** @type {import('jest').Config} */
 const config = {
-  testEnvironment: 'node',
   collectCoverage: true,
+  injectGlobals: true,
+  testEnvironment: 'node',
   transform: {
     '^.+\\.tsx?$': ['ts-jest'],
   },
