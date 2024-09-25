@@ -2,7 +2,7 @@
   "compilerOptions": {
     "module": "commonjs",
     "lib": ["es6"],
-    "types": ["node", "jest"],
+    "types": ["node"],
     "noImplicitAny": true,
     "noImplicitThis": true,
     "strictNullChecks": true,
