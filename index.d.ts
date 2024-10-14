@@ -1176,7 +1176,7 @@ export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
   /**
    * Return an object containing merged local and global option values as key-value pairs.
    */
-  optsWithGlobals<T extends OptionValues>(): T;
+  optsWithGlobals<T extends OptionValues>(): T & Opts;
 
   /**
    * Set the description.
