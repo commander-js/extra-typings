@@ -384,9 +384,18 @@ expectAssignable<commander.OptionValues>(opts);
 
 // optsWithGlobals
 const optsWithGlobals = program.optsWithGlobals();
-expectType<commander.OptionValues>(optsWithGlobals);
-expectType(optsWithGlobals.foo);
-expectType(optsWithGlobals.bar);
+{
+  const rootCommand = new commander.Command().option('-b');
+  const subCommand = rootCommand.command('sub').option('-s <value>');
+  const optsWithGlobals = subCommand.optsWithGlobals();
+  expectType<{ s?: string; b?: true }>(optsWithGlobals);
+  // nested subcommands
+  const nestedSubCommand = subCommand.command('subsub').option('-o [value]');
+  const nestedOptsWithGlobals = nestedSubCommand.optsWithGlobals();
+  expectType<{ s?: string; b?: true; o?: string | true }>(
+    nestedOptsWithGlobals,
+  );
+}
 
 // optsWithGlobals with generics
 // Breaking change: user supplied type no longer supported this way
