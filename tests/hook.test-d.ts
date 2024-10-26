@@ -1,7 +1,8 @@
 import { expectType } from 'tsd';
 import { Command } from '..';
 
-if ('when add preAction hook then thisCommand strongly typed') {
+// 'when add preAction hook then thisCommand strongly typed'
+{
   const program = new Command()
     .option('-f, --foo <value>')
     .hook('preAction', (thisCommand, actionCommand) => {
@@ -10,7 +11,8 @@ if ('when add preAction hook then thisCommand strongly typed') {
     });
 }
 
-if ('when add preAction hook then activeCommand strongly typed') {
+// 'when add preAction hook then activeCommand strongly typed'
+{
   const program = new Command()
     .option('-f, --foo <value>')
     .hook('preAction', (thisCommand, activeCommand) => {
@@ -19,7 +21,8 @@ if ('when add preAction hook then activeCommand strongly typed') {
     });
 }
 
-if ('when add postAction hook then thisCommand strongly typed') {
+// 'when add postAction hook then thisCommand strongly typed'
+{
   const program = new Command()
     .option('-f, --foo <value>')
     .hook('postAction', (thisCommand, actionCommand) => {
@@ -28,7 +31,8 @@ if ('when add postAction hook then thisCommand strongly typed') {
     });
 }
 
-if ('when add postAction hook then activeCommand strongly typed') {
+// 'when add postAction hook then activeCommand strongly typed'
+{
   const program = new Command()
     .option('-f, --foo <value>')
     .hook('postAction', (thisCommand, activeCommand) => {
@@ -37,7 +41,8 @@ if ('when add postAction hook then activeCommand strongly typed') {
     });
 }
 
-if ('when add preSubcommand hook then thisCommand strongly typed') {
+// 'when add preSubcommand hook then thisCommand strongly typed'
+{
   const program = new Command()
     .option('-f, --foo <value>')
     .hook('preSubcommand', (thisCommand, actionCommand) => {
@@ -46,7 +51,8 @@ if ('when add preSubcommand hook then thisCommand strongly typed') {
     });
 }
 
-if ('when add preSubcommand hook then activeCommand strongly typed') {
+// 'when add preSubcommand hook then activeCommand strongly typed'
+{
   const program = new Command()
     .option('-f, --foo <value>')
     .hook('preSubcommand', (thisCommand, activeCommand) => {

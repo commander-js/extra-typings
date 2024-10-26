@@ -21,9 +21,8 @@ class MyCommand extends Command {
   }
 }
 
-if (
-  'when add subcommand to MyCommand then return type is not MyCommand (limitation)'
-) {
+// 'when add subcommand to MyCommand then return type is not MyCommand (limitation)'
+{
   const myProgram = new MyCommand();
   const mySub = myProgram.command('sub');
   // Breaking: lost automatic custom typing of subcommands
@@ -31,22 +30,23 @@ if (
   mySub.myFunction();
 }
 
-if (
-  'when call chaining method using inference on MyCommand then return type not MyCommand (limitation)'
-) {
+// 'when call chaining method using inference on MyCommand then return type not MyCommand (limitation)'
+{
   new MyCommand().myFunction();
   // Breaking: lost subclass when chain
   // @ts-expect-error because lost subclass and so myFunction unknown
   new MyCommand().option('-f').myFunction();
 }
 
-if ('when add option to MyCommand then option type inferred') {
+// 'when add option to MyCommand then option type inferred'
+{
   const program = new MyCommand().option('-f, --foo', 'foo description');
   const foo = program.opts().foo;
   expectType<true | undefined>(foo);
 }
 
-if ('when add MyOption to Command then option type inferred') {
+// 'when add MyOption to Command then option type inferred'
+{
   const program = new Command().addOption(
     new MyOption('-f, --foo <value>', 'foo description').makeOptionMandatory(),
   );
@@ -54,9 +54,8 @@ if ('when add MyOption to Command then option type inferred') {
   expectType<string>(foo);
 }
 
-if (
-  'when call chaining method using inference on MyOption then return type not MyOption (limitation)'
-) {
+// 'when call chaining method using inference on MyOption then return type not MyOption (limitation)'
+{
   new MyOption('-f, --foo').myFunction();
   // Breaking: lost subclass when chain
   // @ts-expect-error because lost subclass and so myFunction unknown
