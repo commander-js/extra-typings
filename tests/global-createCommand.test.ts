@@ -1,3 +1,4 @@
+import { expect, test } from '@jest/globals';
 import { createCommand } from '..';
 
 test('when createCommand without name then command has empty name', () => {

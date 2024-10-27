@@ -3,7 +3,8 @@ import { Command, createOption } from '..';
 
 // Doing end-to-end test, rather than checking created Option directly.
 
-if ('when cmd.createOption with boolean then type is boolean') {
+// 'when cmd.createOption with boolean then type is boolean'
+{
   const program = new Command();
   const foo = program
     .addOption(program.createOption('-f, --foo', 'decription'))
@@ -11,7 +12,8 @@ if ('when cmd.createOption with boolean then type is boolean') {
   expectType<true | undefined>(foo);
 }
 
-if ('when cmd.createOption with required option-argument then type is string') {
+// 'when cmd.createOption with required option-argument then type is string'
+{
   const program = new Command();
   const foo = program
     .addOption(program.createOption('-f, --foo <value>', 'decription'))
@@ -19,9 +21,8 @@ if ('when cmd.createOption with required option-argument then type is string') {
   expectType<string | undefined>(foo);
 }
 
-if (
-  'when cmd.createOption with optional option-argument then type is string|true'
-) {
+// 'when cmd.createOption with optional option-argument then type is string|true'
+{
   const program = new Command();
   const foo = program
     .addOption(program.createOption('-f, --foo [value]', 'decription'))
@@ -29,7 +30,8 @@ if (
   expectType<string | true | undefined>(foo);
 }
 
-if ('when global createOption with boolean then type is boolean') {
+// 'when global createOption with boolean then type is boolean'
+{
   const program = new Command();
   const foo = program
     .addOption(createOption('-f, --foo', 'decription'))
@@ -37,9 +39,8 @@ if ('when global createOption with boolean then type is boolean') {
   expectType<true | undefined>(foo);
 }
 
-if (
-  'when global createOption with required option-argument then type is string'
-) {
+// 'when global createOption with required option-argument then type is string'
+{
   const program = new Command();
   const foo = program
     .addOption(createOption('-f, --foo <value>', 'decription'))
@@ -47,9 +48,8 @@ if (
   expectType<string | undefined>(foo);
 }
 
-if (
-  'when global createOption with optional option-argument then type is string|true'
-) {
+// 'when global createOption with optional option-argument then type is string|true'
+{
   const program = new Command();
   const foo = program
     .addOption(createOption('-f, --foo [value]', 'decription'))
@@ -57,7 +57,8 @@ if (
   expectType<string | true | undefined>(foo);
 }
 
-if ('when global createOption with const choices then type is string union') {
+// 'when global createOption with const choices then type is string union'
+{
   const program = new Command();
   const foo = program
     .addOption(
@@ -71,9 +72,8 @@ if ('when global createOption with const choices then type is string union') {
   expectType<'A' | 'B' | 'C' | undefined>(foo);
 }
 
-if (
-  'when global createOption with variadic and const choices then type is string union array'
-) {
+// 'when global createOption with variadic and const choices then type is string union array'
+{
   const program = new Command();
   const foo = program
     .addOption(

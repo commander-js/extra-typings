@@ -1,3 +1,4 @@
+import { expect, test } from '@jest/globals';
 import { createOption } from '..';
 
 test('when createOption without description then option has flags', () => {

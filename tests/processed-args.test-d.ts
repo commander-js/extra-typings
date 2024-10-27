@@ -3,31 +3,36 @@ import { Command } from '..';
 
 // Doing a subset of the full tests in arguments.test-d.ts
 
-if ('when no arguments then empty array') {
+// 'when no arguments then empty array'
+{
   const program = new Command();
   const args = program.parse().processedArgs;
   expectType<[]>(args);
 }
 
-if ('when required argument then string element') {
+// 'when required argument then string element'
+{
   const program = new Command();
   const args = program.argument('<value>').parse().processedArgs;
   expectType<[string]>(args);
 }
 
-if ('when optional argument then string|undefined element') {
+// 'when optional argument then string|undefined element'
+{
   const program = new Command();
   const args = program.argument('[value]').parse().processedArgs;
   expectType<[string | undefined]>(args);
 }
 
-if ('when variadic argument then string[] element') {
+// 'when variadic argument then string[] element'
+{
   const program = new Command();
   const args = program.argument('<value...>').parse().processedArgs;
   expectType<[string[]]>(args);
 }
 
-if ('when multiple arguments then multiple elements') {
+// 'when multiple arguments then multiple elements'
+{
   const program = new Command();
   const args = program
     .argument('<value>')
@@ -36,7 +41,8 @@ if ('when multiple arguments then multiple elements') {
   expectType<[string, string | undefined]>(args);
 }
 
-if ('when custom argument processing then custom type') {
+// 'when custom argument processing then custom type'
+{
   const program = new Command();
   const args = program
     .argument('<value>', 'description', parseFloat)
