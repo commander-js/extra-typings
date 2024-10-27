@@ -1089,7 +1089,7 @@ export class Command<
   /**
    * Get source of option value. See also .optsWithGlobals().
    */
-  getOptionValueSourceWithGlobals<K extends keyof Opts>(
+  getOptionValueSourceWithGlobals<K extends keyof (Opts & GlobalOpts)>(
     key: K,
   ): OptionValueSource | undefined;
   getOptionValueSourceWithGlobals(key: string): OptionValueSource | undefined;
