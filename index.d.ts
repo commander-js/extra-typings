@@ -1,3 +1,6 @@
+// eslint complains about {} as a type, but hard to be more accurate.
+/* eslint-disable @typescript-eslint/no-empty-object-type */
+
 type TrimRight<S extends string> = S extends `${infer R} ` ? TrimRight<R> : S;
 type TrimLeft<S extends string> = S extends ` ${infer R}` ? TrimLeft<R> : S;
 type Trim<S extends string> = TrimLeft<TrimRight<S>>;
@@ -313,7 +316,7 @@ type InferOptions<
         ChoicesT
       >;
 
-export type CommandUnknownOpts = Command<unknown[], OptionValues>;
+export type CommandUnknownOpts = Command<unknown[], OptionValues, OptionValues>;
 
 // ----- full copy of normal commander typings from here down, with extra type inference -----
 
@@ -631,9 +634,11 @@ export type OptionValueSource =
 
 export type OptionValues = Record<string, unknown>;
 
-// eslint unimpressed with `OptionValues = {}`, but not sure what to use instead.
-// eslint-disable-next-line @typescript-eslint/ban-types
-export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
+export class Command<
+  Args extends any[] = [],
+  Opts extends OptionValues = {},
+  GlobalOpts extends OptionValues = {},
+> {
   args: string[];
   processedArgs: Args;
   readonly commands: readonly CommandUnknownOpts[];
@@ -679,7 +684,7 @@ export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
   command<Usage extends string>(
     nameAndArgs: Usage,
     opts?: CommandOptions,
-  ): Command<[...InferCommandArguments<Usage>]>;
+  ): Command<[...InferCommandArguments<Usage>], {}, Opts & GlobalOpts>;
   /**
    * Define a command, implemented in a separate executable file.
    *
@@ -750,22 +755,22 @@ export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
     flags: S,
     description: string,
     fn: (value: string, previous: T) => T,
-  ): Command<[...Args, InferArgument<S, undefined, T>], Opts>;
+  ): Command<[...Args, InferArgument<S, undefined, T>], Opts, GlobalOpts>;
   argument<S extends string, T>(
     flags: S,
     description: string,
     fn: (value: string, previous: T) => T,
     defaultValue: T,
-  ): Command<[...Args, InferArgument<S, T, T>], Opts>;
+  ): Command<[...Args, InferArgument<S, T, T>], Opts, GlobalOpts>;
   argument<S extends string>(
     usage: S,
     description?: string,
-  ): Command<[...Args, InferArgument<S, undefined>], Opts>;
+  ): Command<[...Args, InferArgument<S, undefined>], Opts, GlobalOpts>;
   argument<S extends string, DefaultT>(
     usage: S,
     description: string,
     defaultValue: DefaultT,
-  ): Command<[...Args, InferArgument<S, DefaultT>], Opts>;
+  ): Command<[...Args, InferArgument<S, DefaultT>], Opts, GlobalOpts>;
 
   /**
    * Define argument syntax for command, adding a prepared argument.
@@ -782,7 +787,8 @@ export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
     arg: Argument<Usage, DefaultT, CoerceT, ArgRequired, ChoicesT>,
   ): Command<
     [...Args, InferArgument<Usage, DefaultT, CoerceT, ArgRequired, ChoicesT>],
-    Opts
+    Opts,
+    GlobalOpts
   >;
 
   /**
@@ -799,7 +805,7 @@ export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
    */
   arguments<Names extends string>(
     args: Names,
-  ): Command<[...Args, ...InferArguments<Names>], Opts>;
+  ): Command<[...Args, ...InferArguments<Names>], Opts, GlobalOpts>;
 
   /**
    * Customise or override default help command. By default a help command is automatically added if your command has subcommands.
@@ -938,23 +944,31 @@ export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
   option<S extends string>(
     usage: S,
     description?: string,
-  ): Command<Args, InferOptions<Opts, S, undefined, undefined, false>>;
+  ): Command<
+    Args,
+    InferOptions<Opts, S, undefined, undefined, false>,
+    GlobalOpts
+  >;
   option<S extends string, DefaultT extends string | boolean | string[] | []>(
     usage: S,
     description?: string,
     defaultValue?: DefaultT,
-  ): Command<Args, InferOptions<Opts, S, DefaultT, undefined, false>>;
+  ): Command<
+    Args,
+    InferOptions<Opts, S, DefaultT, undefined, false>,
+    GlobalOpts
+  >;
   option<S extends string, T>(
     usage: S,
     description: string,
     parseArg: (value: string, previous: T) => T,
-  ): Command<Args, InferOptions<Opts, S, undefined, T, false>>;
+  ): Command<Args, InferOptions<Opts, S, undefined, T, false>, GlobalOpts>;
   option<S extends string, T>(
     usage: S,
     description: string,
     parseArg: (value: string, previous: T) => T,
     defaultValue?: T,
-  ): Command<Args, InferOptions<Opts, S, T, T, false>>;
+  ): Command<Args, InferOptions<Opts, S, T, T, false>, GlobalOpts>;
 
   /**
    * Define a required option, which must have a value after parsing. This usually means
@@ -965,7 +979,11 @@ export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
   requiredOption<S extends string>(
     usage: S,
     description?: string,
-  ): Command<Args, InferOptions<Opts, S, undefined, undefined, true>>;
+  ): Command<
+    Args,
+    InferOptions<Opts, S, undefined, undefined, true>,
+    GlobalOpts
+  >;
   requiredOption<
     S extends string,
     DefaultT extends string | boolean | string[],
@@ -973,18 +991,22 @@ export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
     usage: S,
     description?: string,
     defaultValue?: DefaultT,
-  ): Command<Args, InferOptions<Opts, S, DefaultT, undefined, true>>;
+  ): Command<
+    Args,
+    InferOptions<Opts, S, DefaultT, undefined, true>,
+    GlobalOpts
+  >;
   requiredOption<S extends string, T>(
     usage: S,
     description: string,
     parseArg: (value: string, previous: T) => T,
-  ): Command<Args, InferOptions<Opts, S, undefined, T, true>>;
+  ): Command<Args, InferOptions<Opts, S, undefined, T, true>, GlobalOpts>;
   requiredOption<S extends string, T, D extends T>(
     usage: S,
     description: string,
     parseArg: (value: string, previous: T) => T,
     defaultValue?: D,
-  ): Command<Args, InferOptions<Opts, S, D, T, true>>;
+  ): Command<Args, InferOptions<Opts, S, D, T, true>, GlobalOpts>;
 
   /**
    * Factory routine to create a new unattached option.
@@ -1014,7 +1036,8 @@ export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
     option: Option<Usage, PresetT, DefaultT, CoerceT, Mandatory, ChoicesT>,
   ): Command<
     Args,
-    InferOptions<Opts, Usage, DefaultT, CoerceT, Mandatory, PresetT, ChoicesT>
+    InferOptions<Opts, Usage, DefaultT, CoerceT, Mandatory, PresetT, ChoicesT>,
+    GlobalOpts
   >;
 
   /**
@@ -1066,7 +1089,7 @@ export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
   /**
    * Get source of option value. See also .optsWithGlobals().
    */
-  getOptionValueSourceWithGlobals<K extends keyof Opts>(
+  getOptionValueSourceWithGlobals<K extends keyof (Opts & GlobalOpts)>(
     key: K,
   ): OptionValueSource | undefined;
   getOptionValueSourceWithGlobals(key: string): OptionValueSource | undefined;
@@ -1176,7 +1199,7 @@ export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
   /**
    * Return an object containing merged local and global option values as key-value pairs.
    */
-  optsWithGlobals<T extends OptionValues>(): T;
+  optsWithGlobals(): Resolve<Opts & GlobalOpts>;
 
   /**
    * Set the description.

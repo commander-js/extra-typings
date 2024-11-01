@@ -3,26 +3,15 @@ const esLintjs = require('@eslint/js');
 const jest = require('eslint-plugin-jest');
 const tseslint = require('typescript-eslint');
 const prettier = require('eslint-config-prettier');
-//const jsdoc = require('eslint-plugin-jsdoc');
 
-// Only run tseslint on the files that we have included for TypeScript.
+// Simpler setup than in Commander as not running TypeScript over .js files.
 const tsconfigTsFiles = ['**/*.{ts,mts}'];
-const tsconfigJsFiles = ['**.{js,mjs}'];
 
 // Using tseslint.config adds some type safety and `extends` to simplify customising config array.
 module.exports = tseslint.config(
   // Add recommended rules.
   esLintjs.configs.recommended,
-  // jsdoc.configs['flat/recommended'],
   jest.configs['flat/recommended'],
-  // tseslint with different setup for js/ts
-  {
-    files: tsconfigJsFiles,
-    extends: [...tseslint.configs.recommended],
-    rules: {
-      '@typescript-eslint/no-var-requires': 'off', // (tseslint does not autodetect commonjs context )
-    },
-  },
   {
     files: tsconfigTsFiles,
     extends: [...tseslint.configs.recommended],
@@ -34,11 +23,6 @@ module.exports = tseslint.config(
     files: ['**/*.{js,mjs,cjs}', '**/*.{ts,mts,cts}'],
     rules: {
       'no-else-return': ['error', { allowElseIf: false }],
-
-      // 'jsdoc/tag-lines': 'off',
-      // 'jsdoc/require-jsdoc': 'off',
-      // 'jsdoc/require-param-description': 'off',
-      // 'jsdoc/require-returns-description': 'off',
     },
     languageOptions: {
       globals: {
@@ -59,7 +43,7 @@ module.exports = tseslint.config(
     },
   },
   {
-    files: [...tsconfigTsFiles, ...tsconfigJsFiles],
+    files: [...tsconfigTsFiles],
     rules: {
       '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/ban-ts-comment': [
