@@ -8,6 +8,8 @@ This package offers TypeScript typings for `commander` which infer strong types 
 - all the parameters of the action handler, including the options
 - options returned by `.opts()`
 
+This package requires TypeScript 5.0 or higher.
+
 The runtime is supplied by commander. This package is all about the typings.
 
 Usage
@@ -61,13 +63,4 @@ import { Command } from '@commander-js/extra-typings';
 const program = new Command()
   .option('-d, --debug'); // program type includes chained options and arguments
 const options = program.opts(); // smart type
-```
-
-Use a "const assertion" on the choices to narrow the option type from `string`:
-
-```typescript
-const program = new Command()
-  .addOption(new Option('--drink-size <size>').choices(['small', 'medium', 'large'] as const))
-  .parse();
-const drinkSize = program.opts().drinkSize; // "small" | "medium" | "large" | undefined
 ```

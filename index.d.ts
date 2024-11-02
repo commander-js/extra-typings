@@ -387,7 +387,7 @@ export class Argument<
   /**
    * Set the default value, and optionally supply the description to be displayed in the help.
    */
-  default<T>(
+  default<const T>(
     value: T,
     description?: string,
   ): Argument<Usage, T, CoerceT, ArgRequired, ChoicesT>;
@@ -402,7 +402,7 @@ export class Argument<
   /**
    * Only allow argument value to be one of choices.
    */
-  choices<T extends readonly string[]>(
+  choices<const T extends readonly string[]>(
     values: T,
   ): Argument<Usage, DefaultT, undefined, ArgRequired, T[number]>; // setting CoerceT to undefined because choices overrides argParser
 
@@ -448,7 +448,7 @@ export class Option<
   /**
    * Set the default value, and optionally supply the description to be displayed in the help.
    */
-  default<T>(
+  default<const T>(
     value: T,
     description?: string,
   ): Option<Usage, PresetT, T, CoerceT, Mandatory, ChoicesT>;
@@ -463,7 +463,9 @@ export class Option<
    * new Option('--donate [amount]').preset('20').argParser(parseFloat);
    * ```
    */
-  preset<T>(arg: T): Option<Usage, T, DefaultT, CoerceT, Mandatory, ChoicesT>;
+  preset<const T>(
+    arg: T,
+  ): Option<Usage, T, DefaultT, CoerceT, Mandatory, ChoicesT>;
 
   /**
    * Add option name(s) that conflict with this option.
@@ -519,7 +521,7 @@ export class Option<
   /**
    * Only allow option value to be one of choices.
    */
-  choices<T extends readonly string[]>(
+  choices<const T extends readonly string[]>(
     values: T,
   ): Option<Usage, PresetT, DefaultT, undefined, Mandatory, T[number]>; // setting CoerceT to undefined becuase choices overrides argParser
 
