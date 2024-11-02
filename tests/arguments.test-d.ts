@@ -153,7 +153,7 @@ program
 
 // mixed types possible, but unusual
 program.addArgument(new Argument('[foo]').default(3)).action((foo, options) => {
-  expectType<string | number>(foo);
+  expectType<string | 3>(foo);
   expectAssignable<OptionValues>(options);
 });
 
@@ -247,28 +247,28 @@ program.command('sub3 [bar]').action((bar, options) => {
 
 // choices
 program
-  .addArgument(new Argument('<foo>').choices(['A', 'B'] as const))
+  .addArgument(new Argument('<foo>').choices(['A', 'B']))
   .action((foo, options) => {
     expectType<'A' | 'B'>(foo);
     expectAssignable<OptionValues>(options);
   });
 
 program
-  .addArgument(new Argument('[foo]').choices(['A', 'B'] as const))
+  .addArgument(new Argument('[foo]').choices(['A', 'B']))
   .action((foo, options) => {
     expectType<'A' | 'B' | undefined>(foo);
     expectAssignable<OptionValues>(options);
   });
 
 program
-  .addArgument(new Argument('<foo...>').choices(['A', 'B'] as const))
+  .addArgument(new Argument('<foo...>').choices(['A', 'B']))
   .action((foo, options) => {
     expectType<('A' | 'B')[]>(foo);
     expectAssignable<OptionValues>(options);
   });
 
 program
-  .addArgument(new Argument('[foo...]').choices(['A', 'B'] as const))
+  .addArgument(new Argument('[foo...]').choices(['A', 'B']))
   .action((foo, options) => {
     expectType<('A' | 'B')[]>(foo);
     expectAssignable<OptionValues>(options);
@@ -286,57 +286,44 @@ program
 
 // default type ignored when arg is required
 expectType<'C'>(
-  program
-    .addArgument(
-      new Argument('<foo>').default('D' as const).choices(['C'] as const),
-    )
-    .parse().processedArgs[0],
+  program.addArgument(new Argument('<foo>').default('D').choices(['C'])).parse()
+    .processedArgs[0],
 );
 
 // default before choices results in union when arg optional
 expectType<'C' | 'D'>(
-  program
-    .addArgument(
-      new Argument('[foo]').default('D' as const).choices(['C'] as const),
-    )
-    .parse().processedArgs[0],
+  program.addArgument(new Argument('[foo]').default('D').choices(['C'])).parse()
+    .processedArgs[0],
 );
 
 // default after choices is still union type
 expectType<'C' | 'D'>(
-  program
-    .addArgument(
-      new Argument('[foo]').choices(['C'] as const).default('D' as const),
-    )
-    .parse().processedArgs[0],
+  program.addArgument(new Argument('[foo]').choices(['C']).default('D')).parse()
+    .processedArgs[0],
 );
 
 // argRequired after choices still narrows type
 expectType<'C'>(
-  program
-    .addArgument(new Argument('foo').choices(['C'] as const).argRequired())
-    .parse().processedArgs[0],
+  program.addArgument(new Argument('foo').choices(['C']).argRequired()).parse()
+    .processedArgs[0],
 );
 
 // argRequired before choices still narrows type
 expectType<'C'>(
-  program
-    .addArgument(new Argument('foo').argRequired().choices(['C'] as const))
-    .parse().processedArgs[0],
+  program.addArgument(new Argument('foo').argRequired().choices(['C'])).parse()
+    .processedArgs[0],
 );
 
 // argOptional after choices narrows type and includes undefined
 expectType<'C' | undefined>(
-  program
-    .addArgument(new Argument('foo').choices(['C'] as const).argOptional())
-    .parse().processedArgs[0],
+  program.addArgument(new Argument('foo').choices(['C']).argOptional()).parse()
+    .processedArgs[0],
 );
 
 // argOptional before choices narrows type and includes undefined
 expectType<'C' | undefined>(
-  program
-    .addArgument(new Argument('foo').argOptional().choices(['C'] as const))
-    .parse().processedArgs[0],
+  program.addArgument(new Argument('foo').argOptional().choices(['C'])).parse()
+    .processedArgs[0],
 );
 
 // argParser after choices overrides choice type
@@ -344,7 +331,7 @@ expectType<number>(
   program
     .addArgument(
       new Argument('<foo>')
-        .choices(['C'] as const)
+        .choices(['C'])
         .argParser((val: string, prev: number) => prev + Number.parseInt(val)),
     )
     .parse().processedArgs[0],
@@ -356,7 +343,7 @@ expectType<'C'>(
     .addArgument(
       new Argument('<foo>')
         .argParser((val: string, prev: number) => prev + Number.parseInt(val))
-        .choices(['C'] as const),
+        .choices(['C']),
     )
     .parse().processedArgs[0],
 );
