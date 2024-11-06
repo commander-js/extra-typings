@@ -67,7 +67,11 @@ Use a "const assertion" on the choices to narrow the option type from `string`:
 
 ```typescript
 const program = new Command()
-  .addOption(new Option('--drink-size <size>').choices(['small', 'medium', 'large'] as const))
-  .parse();
+  .addOption(
+    new Option('--drink-size <size>')
+      .choices(['small', 'medium', 'large'] as const)
+      // if you want to provide a default option, also add a const assertion to it
+      .default('medium' as const)
+  ).parse();
 const drinkSize = program.opts().drinkSize; // "small" | "medium" | "large" | undefined
 ```
