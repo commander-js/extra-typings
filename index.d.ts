@@ -320,8 +320,6 @@ export type CommandUnknownOpts = Command<unknown[], OptionValues, OptionValues>;
 
 // ----- full copy of normal commander typings from here down, with extra type inference -----
 
-// Using method rather than property for method-signature-style, to document method overloads separately. Allow either.
-/* eslint-disable @typescript-eslint/method-signature-style */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 export class CommanderError extends Error {

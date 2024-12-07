@@ -14,8 +14,6 @@ function expectChainedCommand<T extends commander.CommandUnknownOpts>(cmd: T) {}
 
 // We are not just checking return types here, we are also implicitly checking that the expected syntax is allowed.
 
-/* eslint-disable @typescript-eslint/no-empty-function */
-
 const program: commander.Command = new commander.Command();
 // @ts-expect-error Check that Command is strongly typed and does not allow arbitrary properties
 // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -43,7 +41,6 @@ expectType<commander.Argument>(commander.createArgument('<foo>'));
 
 // Command properties
 expectType<string[]>(program.args);
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 expectType<[]>(program.processedArgs);
 expectType<readonly commander.CommandUnknownOpts[]>(program.commands);
 expectType<readonly commander.Option[]>(program.options);
@@ -442,15 +439,12 @@ expectChainedCommand(program.executableDir(__dirname));
 expectType<string | null>(program.executableDir());
 
 // outputHelp
-// eslint-disable-next-line @typescript-eslint/no-invalid-void-type
 expectType<void>(program.outputHelp());
-// eslint-disable-next-line @typescript-eslint/no-invalid-void-type
 expectType<void>(
   program.outputHelp((str: string) => {
     return str;
   }),
 );
-// eslint-disable-next-line @typescript-eslint/no-invalid-void-type
 expectType<void>(program.outputHelp({ error: true }));
 
 // help
