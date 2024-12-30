@@ -9,7 +9,7 @@ The version numbering does not follow semantic versioning but instead aligns wit
 <!-- markdownlint-disable MD024 -->
 <!-- markdownlint-disable MD004 -->
 
-## [13.0.0-1] (2024-12-08)
+## [13.0.0] (2024-12-31)
 
 ### Added
 
@@ -20,6 +20,10 @@ The version numbering does not follow semantic versioning but instead aligns wit
 ### Changed
 
 - *Breaking:* Typescript 5.0 or higher is required ([#79])
+
+## [13.0.0-1] (2024-12-08)
+
+(Released in 13.0.0)
 
 ## 13.0.0-0 (2024-12-08) [YANKED]
 
