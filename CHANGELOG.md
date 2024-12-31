@@ -9,6 +9,26 @@ The version numbering does not follow semantic versioning but instead aligns wit
 <!-- markdownlint-disable MD024 -->
 <!-- markdownlint-disable MD004 -->
 
+## [13.0.0] (2024-12-31)
+
+### Added
+
+- strongly type `.optsWithGlobals()` to include inferred globals ([#78])
+- weakly type `.getOptionValueSourceWithGlobals()` to include inferred globals ([#78])
+- infer narrow types for choices, so no longer need to specify as `const` ([#79])
+
+### Changed
+
+- *Breaking:* Typescript 5.0 or higher is required ([#79])
+
+## [13.0.0-1] (2024-12-08)
+
+(Released in 13.0.0)
+
+## 13.0.0-0 (2024-12-08) [YANKED]
+
+Published from wrong branch.
+
 ## [12.1.0] (2024-05-18)
 
 ### Changed
@@ -168,6 +188,8 @@ The version numbering does not follow semantic versioning but instead aligns wit
 - inferred types for `.action()`
 - inferred types for `.opts()`
 
+[13.0.0]: https://github.com/commander-js/extra-typings/compare/v12.1.0...v13.0.0
+[13.0.0-1]: https://github.com/commander-js/extra-typings/compare/v12.1.0...v13.0.0-1
 [12.1.0]: https://github.com/commander-js/extra-typings/compare/v12.0.1...v12.1.0
 [12.0.1]: https://github.com/commander-js/extra-typings/compare/v12.0.0...v12.0.1
 [12.0.0]: https://github.com/commander-js/extra-typings/compare/v11.0.0...v12.0.0
@@ -197,7 +219,8 @@ The version numbering does not follow semantic versioning but instead aligns wit
 [#49]: https://github.com/commander-js/extra-typings/pull/49
 [#50]: https://github.com/commander-js/extra-typings/pull/50
 [#59]: https://github.com/commander-js/extra-typings/pull/59
-
 [#65]: https://github.com/commander-js/extra-typings/pull/65
 [#66]: https://github.com/commander-js/extra-typings/pull/66
 [#70]: https://github.com/commander-js/extra-typings/pull/70
+[#78]: https://github.com/commander-js/extra-typings/pull/78
+[#79]: https://github.com/commander-js/extra-typings/pull/79

@@ -55,7 +55,7 @@ import { Command, createArgument } from '..';
 {
   const program = new Command();
   program
-    .addArgument(createArgument('<value>').choices(['A', 'B', 'C'] as const))
+    .addArgument(createArgument('<value>').choices(['A', 'B', 'C']))
     .action((arg) => {
       expectType<'A' | 'B' | 'C'>(arg);
     });
@@ -65,7 +65,7 @@ import { Command, createArgument } from '..';
 {
   const program = new Command();
   program
-    .addArgument(createArgument('<value...>').choices(['A', 'B', 'C'] as const))
+    .addArgument(createArgument('<value...>').choices(['A', 'B', 'C']))
     .action((arg) => {
       expectType<('A' | 'B' | 'C')[]>(arg);
     });

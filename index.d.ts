@@ -1,3 +1,6 @@
+// eslint complains about {} as a type, but hard to be more accurate.
+/* eslint-disable @typescript-eslint/no-empty-object-type */
+
 type TrimRight<S extends string> = S extends `${infer R} ` ? TrimRight<R> : S;
 type TrimLeft<S extends string> = S extends ` ${infer R}` ? TrimLeft<R> : S;
 type Trim<S extends string> = TrimLeft<TrimRight<S>>;
@@ -105,7 +108,7 @@ type InferArguments<S extends string> = S extends `${infer First} ${infer Rest}`
   ? [InferArgument<First>, ...InferArguments<TrimLeft<Rest>>]
   : [InferArgument<S>];
 
-type InferCommmandArguments<S extends string> =
+type InferCommandArguments<S extends string> =
   S extends `${string} ${infer Args}` ? InferArguments<TrimLeft<Args>> : [];
 
 type FlagsToFlag<Flags extends string> =
@@ -313,12 +316,10 @@ type InferOptions<
         ChoicesT
       >;
 
-export type CommandUnknownOpts = Command<unknown[], OptionValues>;
+export type CommandUnknownOpts = Command<unknown[], OptionValues, OptionValues>;
 
 // ----- full copy of normal commander typings from here down, with extra type inference -----
 
-// Using method rather than property for method-signature-style, to document method overloads separately. Allow either.
-/* eslint-disable @typescript-eslint/method-signature-style */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 export class CommanderError extends Error {
@@ -384,7 +385,7 @@ export class Argument<
   /**
    * Set the default value, and optionally supply the description to be displayed in the help.
    */
-  default<T>(
+  default<const T>(
     value: T,
     description?: string,
   ): Argument<Usage, T, CoerceT, ArgRequired, ChoicesT>;
@@ -399,7 +400,7 @@ export class Argument<
   /**
    * Only allow argument value to be one of choices.
    */
-  choices<T extends readonly string[]>(
+  choices<const T extends readonly string[]>(
     values: T,
   ): Argument<Usage, DefaultT, undefined, ArgRequired, T[number]>; // setting CoerceT to undefined because choices overrides argParser
 
@@ -445,7 +446,7 @@ export class Option<
   /**
    * Set the default value, and optionally supply the description to be displayed in the help.
    */
-  default<T>(
+  default<const T>(
     value: T,
     description?: string,
   ): Option<Usage, PresetT, T, CoerceT, Mandatory, ChoicesT>;
@@ -460,7 +461,9 @@ export class Option<
    * new Option('--donate [amount]').preset('20').argParser(parseFloat);
    * ```
    */
-  preset<T>(arg: T): Option<Usage, T, DefaultT, CoerceT, Mandatory, ChoicesT>;
+  preset<const T>(
+    arg: T,
+  ): Option<Usage, T, DefaultT, CoerceT, Mandatory, ChoicesT>;
 
   /**
    * Add option name(s) that conflict with this option.
@@ -516,7 +519,7 @@ export class Option<
   /**
    * Only allow option value to be one of choices.
    */
-  choices<T extends readonly string[]>(
+  choices<const T extends readonly string[]>(
     values: T,
   ): Option<Usage, PresetT, DefaultT, undefined, Mandatory, T[number]>; // setting CoerceT to undefined becuase choices overrides argParser
 
@@ -527,7 +530,7 @@ export class Option<
 
   /**
    * Return option name, in a camelcase format that can be used
-   * as a object attribute key.
+   * as an object attribute key.
    */
   attributeName(): string;
 
@@ -542,11 +545,24 @@ export class Option<
 export class Help {
   /** output helpWidth, long lines are wrapped to fit */
   helpWidth?: number;
+  minWidthToWrap: number;
   sortSubcommands: boolean;
   sortOptions: boolean;
   showGlobalOptions: boolean;
 
   constructor();
+
+  /*
+   * prepareContext is called by Commander after applying overrides from `Command.configureHelp()`
+   * and just before calling `formatHelp()`.
+   *
+   * Commander just uses the helpWidth and the others are provided for subclasses.
+   */
+  prepareContext(contextOptions: {
+    error?: boolean;
+    helpWidth?: number;
+    outputHasColors?: boolean;
+  }): void;
 
   /** Get the command term to show in the list of subcommands. */
   subcommandTerm(cmd: CommandUnknownOpts): string;
@@ -583,18 +599,60 @@ export class Help {
   longestGlobalOptionTermLength(cmd: CommandUnknownOpts, helper: Help): number;
   /** Get the longest argument term length. */
   longestArgumentTermLength(cmd: CommandUnknownOpts, helper: Help): number;
+
+  /** Return display width of string, ignoring ANSI escape sequences. Used in padding and wrapping calculations. */
+  displayWidth(str: string): number;
+
+  /** Style the titles. Called with 'Usage:', 'Options:', etc. */
+  styleTitle(title: string): string;
+
+  /** Usage: <str> */
+  styleUsage(str: string): string;
+  /** Style for command name in usage string.  */
+  styleCommandText(str: string): string;
+
+  styleCommandDescription(str: string): string;
+  styleOptionDescription(str: string): string;
+  styleSubcommandDescription(str: string): string;
+  styleArgumentDescription(str: string): string;
+  /** Base style used by descriptions. */
+  styleDescriptionText(str: string): string;
+
+  styleOptionTerm(str: string): string;
+  styleSubcommandTerm(str: string): string;
+  styleArgumentTerm(str: string): string;
+
+  /** Base style used in terms and usage for options. */
+  styleOptionText(str: string): string;
+  /** Base style used in terms and usage for subcommands. */
+  styleSubcommandText(str: string): string;
+  /** Base style used in terms and usage for arguments. */
+  styleArgumentText(str: string): string;
+
   /** Calculate the pad width from the maximum term length. */
   padWidth(cmd: CommandUnknownOpts, helper: Help): number;
 
   /**
-   * Wrap the given string to width characters per line, with lines after the first indented.
-   * Do not wrap if insufficient room for wrapping (minColumnWidth), or string is manually formatted.
+   * Wrap a string at whitespace, preserving existing line breaks.
+   * Wrapping is skipped if the width is less than `minWidthToWrap`.
    */
-  wrap(
-    str: string,
-    width: number,
-    indent: number,
-    minColumnWidth?: number,
+  boxWrap(str: string, width: number): string;
+
+  /** Detect manually wrapped and indented strings by checking for line break followed by whitespace. */
+  preformatted(str: string): boolean;
+
+  /**
+   * Format the "item", which consists of a term and description. Pad the term and wrap the description, indenting the following lines.
+   *
+   * So "TTT", 5, "DDD DDDD DD DDD" might be formatted for this.helpWidth=17 like so:
+   *   TTT    DDD DDDD
+   *          DD DDD
+   */
+  formatItem(
+    term: string,
+    termWidth: number,
+    description: string,
+    helper: Help,
   ): string;
 
   /** Generate the built-in help text. */
@@ -617,9 +675,14 @@ export interface AddHelpTextContext {
 export interface OutputConfiguration {
   writeOut?(str: string): void;
   writeErr?(str: string): void;
+  outputError?(str: string, write: (str: string) => void): void;
+
   getOutHelpWidth?(): number;
   getErrHelpWidth?(): number;
-  outputError?(str: string, write: (str: string) => void): void;
+
+  getOutHasColors?(): boolean;
+  getErrHasColors?(): boolean;
+  stripColor?(str: string): string;
 }
 
 export type AddHelpTextPosition = 'beforeAll' | 'before' | 'after' | 'afterAll';
@@ -631,9 +694,11 @@ export type OptionValueSource =
 
 export type OptionValues = Record<string, unknown>;
 
-// eslint unimpressed with `OptionValues = {}`, but not sure what to use instead.
-// eslint-disable-next-line @typescript-eslint/ban-types
-export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
+export class Command<
+  Args extends any[] = [],
+  Opts extends OptionValues = {},
+  GlobalOpts extends OptionValues = {},
+> {
   args: string[];
   processedArgs: Args;
   readonly commands: readonly CommandUnknownOpts[];
@@ -679,7 +744,7 @@ export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
   command<Usage extends string>(
     nameAndArgs: Usage,
     opts?: CommandOptions,
-  ): Command<[...InferCommmandArguments<Usage>]>;
+  ): Command<[...InferCommandArguments<Usage>], {}, Opts & GlobalOpts>;
   /**
    * Define a command, implemented in a separate executable file.
    *
@@ -750,22 +815,22 @@ export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
     flags: S,
     description: string,
     fn: (value: string, previous: T) => T,
-  ): Command<[...Args, InferArgument<S, undefined, T>], Opts>;
+  ): Command<[...Args, InferArgument<S, undefined, T>], Opts, GlobalOpts>;
   argument<S extends string, T>(
     flags: S,
     description: string,
     fn: (value: string, previous: T) => T,
     defaultValue: T,
-  ): Command<[...Args, InferArgument<S, T, T>], Opts>;
+  ): Command<[...Args, InferArgument<S, T, T>], Opts, GlobalOpts>;
   argument<S extends string>(
     usage: S,
     description?: string,
-  ): Command<[...Args, InferArgument<S, undefined>], Opts>;
+  ): Command<[...Args, InferArgument<S, undefined>], Opts, GlobalOpts>;
   argument<S extends string, DefaultT>(
     usage: S,
     description: string,
     defaultValue: DefaultT,
-  ): Command<[...Args, InferArgument<S, DefaultT>], Opts>;
+  ): Command<[...Args, InferArgument<S, DefaultT>], Opts, GlobalOpts>;
 
   /**
    * Define argument syntax for command, adding a prepared argument.
@@ -782,7 +847,8 @@ export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
     arg: Argument<Usage, DefaultT, CoerceT, ArgRequired, ChoicesT>,
   ): Command<
     [...Args, InferArgument<Usage, DefaultT, CoerceT, ArgRequired, ChoicesT>],
-    Opts
+    Opts,
+    GlobalOpts
   >;
 
   /**
@@ -799,7 +865,7 @@ export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
    */
   arguments<Names extends string>(
     args: Names,
-  ): Command<[...Args, ...InferArguments<Names>], Opts>;
+  ): Command<[...Args, ...InferArguments<Names>], Opts, GlobalOpts>;
 
   /**
    * Customise or override default help command. By default a help command is automatically added if your command has subcommands.
@@ -938,23 +1004,31 @@ export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
   option<S extends string>(
     usage: S,
     description?: string,
-  ): Command<Args, InferOptions<Opts, S, undefined, undefined, false>>;
+  ): Command<
+    Args,
+    InferOptions<Opts, S, undefined, undefined, false>,
+    GlobalOpts
+  >;
   option<S extends string, DefaultT extends string | boolean | string[] | []>(
     usage: S,
     description?: string,
     defaultValue?: DefaultT,
-  ): Command<Args, InferOptions<Opts, S, DefaultT, undefined, false>>;
+  ): Command<
+    Args,
+    InferOptions<Opts, S, DefaultT, undefined, false>,
+    GlobalOpts
+  >;
   option<S extends string, T>(
     usage: S,
     description: string,
     parseArg: (value: string, previous: T) => T,
-  ): Command<Args, InferOptions<Opts, S, undefined, T, false>>;
+  ): Command<Args, InferOptions<Opts, S, undefined, T, false>, GlobalOpts>;
   option<S extends string, T>(
     usage: S,
     description: string,
     parseArg: (value: string, previous: T) => T,
     defaultValue?: T,
-  ): Command<Args, InferOptions<Opts, S, T, T, false>>;
+  ): Command<Args, InferOptions<Opts, S, T, T, false>, GlobalOpts>;
 
   /**
    * Define a required option, which must have a value after parsing. This usually means
@@ -965,7 +1039,11 @@ export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
   requiredOption<S extends string>(
     usage: S,
     description?: string,
-  ): Command<Args, InferOptions<Opts, S, undefined, undefined, true>>;
+  ): Command<
+    Args,
+    InferOptions<Opts, S, undefined, undefined, true>,
+    GlobalOpts
+  >;
   requiredOption<
     S extends string,
     DefaultT extends string | boolean | string[],
@@ -973,18 +1051,22 @@ export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
     usage: S,
     description?: string,
     defaultValue?: DefaultT,
-  ): Command<Args, InferOptions<Opts, S, DefaultT, undefined, true>>;
+  ): Command<
+    Args,
+    InferOptions<Opts, S, DefaultT, undefined, true>,
+    GlobalOpts
+  >;
   requiredOption<S extends string, T>(
     usage: S,
     description: string,
     parseArg: (value: string, previous: T) => T,
-  ): Command<Args, InferOptions<Opts, S, undefined, T, true>>;
+  ): Command<Args, InferOptions<Opts, S, undefined, T, true>, GlobalOpts>;
   requiredOption<S extends string, T, D extends T>(
     usage: S,
     description: string,
     parseArg: (value: string, previous: T) => T,
     defaultValue?: D,
-  ): Command<Args, InferOptions<Opts, S, D, T, true>>;
+  ): Command<Args, InferOptions<Opts, S, D, T, true>, GlobalOpts>;
 
   /**
    * Factory routine to create a new unattached option.
@@ -1014,7 +1096,8 @@ export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
     option: Option<Usage, PresetT, DefaultT, CoerceT, Mandatory, ChoicesT>,
   ): Command<
     Args,
-    InferOptions<Opts, Usage, DefaultT, CoerceT, Mandatory, PresetT, ChoicesT>
+    InferOptions<Opts, Usage, DefaultT, CoerceT, Mandatory, PresetT, ChoicesT>,
+    GlobalOpts
   >;
 
   /**
@@ -1066,7 +1149,7 @@ export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
   /**
    * Get source of option value. See also .optsWithGlobals().
    */
-  getOptionValueSourceWithGlobals<K extends keyof Opts>(
+  getOptionValueSourceWithGlobals<K extends keyof (Opts & GlobalOpts)>(
     key: K,
   ): OptionValueSource | undefined;
   getOptionValueSourceWithGlobals(key: string): OptionValueSource | undefined;
@@ -1157,6 +1240,22 @@ export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
   parseAsync(argv?: readonly string[], options?: ParseOptions): Promise<this>;
 
   /**
+   * Called the first time parse is called to save state and allow a restore before subsequent calls to parse.
+   * Not usually called directly, but available for subclasses to save their custom state.
+   *
+   * This is called in a lazy way. Only commands used in parsing chain will have state saved.
+   */
+  saveStateBeforeParse(): void;
+
+  /**
+   * Restore state before parse for calls after the first.
+   * Not usually called directly, but available for subclasses to save their custom state.
+   *
+   * This is called in a lazy way. Only commands used in parsing chain will have state restored.
+   */
+  restoreStateBeforeParse(): void;
+
+  /**
    * Parse options from `argv` removing known options,
    * and return argv split into operands and unknown arguments.
    *
@@ -1176,7 +1275,7 @@ export class Command<Args extends any[] = [], Opts extends OptionValues = {}> {
   /**
    * Return an object containing merged local and global option values as key-value pairs.
    */
-  optsWithGlobals<T extends OptionValues>(): T;
+  optsWithGlobals(): Resolve<Opts & GlobalOpts>;
 
   /**
    * Set the description.

@@ -12,9 +12,7 @@ import { expectType, expectAssignable } from 'tsd';
 
 function expectChainedCommand<T extends commander.CommandUnknownOpts>(cmd: T) {}
 
-// We are are not just checking return types here, we are also implicitly checking that the expected syntax is allowed.
-
-/* eslint-disable @typescript-eslint/no-empty-function */
+// We are not just checking return types here, we are also implicitly checking that the expected syntax is allowed.
 
 const program: commander.Command = new commander.Command();
 // @ts-expect-error Check that Command is strongly typed and does not allow arbitrary properties
@@ -43,7 +41,6 @@ expectType<commander.Argument>(commander.createArgument('<foo>'));
 
 // Command properties
 expectType<string[]>(program.args);
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 expectType<[]>(program.processedArgs);
 expectType<readonly commander.CommandUnknownOpts[]>(program.commands);
 expectType<readonly commander.Option[]>(program.options);
@@ -365,6 +362,10 @@ expectType<{ operands: string[]; unknown: string[] }>(
   program.parseOptions(['node', 'script.js', 'hello']),
 );
 
+// save/restore state
+expectType<void>(program.saveStateBeforeParse());
+expectType<void>(program.restoreStateBeforeParse());
+
 // opts
 const opts = program.opts();
 expectAssignable<commander.OptionValues>(opts);
@@ -384,9 +385,18 @@ expectAssignable<commander.OptionValues>(opts);
 
 // optsWithGlobals
 const optsWithGlobals = program.optsWithGlobals();
-expectType<commander.OptionValues>(optsWithGlobals);
-expectType(optsWithGlobals.foo);
-expectType(optsWithGlobals.bar);
+{
+  const rootCommand = new commander.Command().option('-b');
+  const subCommand = rootCommand.command('sub').option('-s <value>');
+  const optsWithGlobals = subCommand.optsWithGlobals();
+  expectType<{ s?: string; b?: true }>(optsWithGlobals);
+  // nested subcommands
+  const nestedSubCommand = subCommand.command('subsub').option('-o [value]');
+  const nestedOptsWithGlobals = nestedSubCommand.optsWithGlobals();
+  expectType<{ s?: string; b?: true; o?: string | true }>(
+    nestedOptsWithGlobals,
+  );
+}
 
 // optsWithGlobals with generics
 // Breaking change: user supplied type no longer supported this way
@@ -433,15 +443,12 @@ expectChainedCommand(program.executableDir(__dirname));
 expectType<string | null>(program.executableDir());
 
 // outputHelp
-// eslint-disable-next-line @typescript-eslint/no-invalid-void-type
 expectType<void>(program.outputHelp());
-// eslint-disable-next-line @typescript-eslint/no-invalid-void-type
 expectType<void>(
   program.outputHelp((str: string) => {
     return str;
   }),
 );
-// eslint-disable-next-line @typescript-eslint/no-invalid-void-type
 expectType<void>(program.outputHelp({ error: true }));
 
 // help
@@ -530,11 +537,16 @@ expectChainedCommand(
   program.configureOutput({
     writeOut: (str: string) => console.log(str),
     writeErr: (str: string) => console.error(str),
-    getOutHelpWidth: () => 80,
-    getErrHelpWidth: () => 80,
     outputError: (str: string, write: (str: string) => void) => {
       write(str);
     },
+
+    getOutHelpWidth: () => 80,
+    getErrHelpWidth: () => 80,
+
+    getOutHasColors: () => true,
+    getErrHasColors: () => true,
+    stripColor: (str) => str,
   }),
 );
 
@@ -544,7 +556,11 @@ const helperCommand = new commander.Command();
 const helperOption = new commander.Option('-a, --all');
 const helperArgument = new commander.Argument('<file>');
 
+helper.prepareContext({});
+helper.prepareContext({ helpWidth: 120, error: true, outputHasColors: false });
+
 expectType<number | undefined>(helper.helpWidth);
+expectType<number>(helper.minWidthToWrap);
 expectType<boolean>(helper.sortSubcommands);
 expectType<boolean>(helper.sortOptions);
 expectType<boolean>(helper.showGlobalOptions);
@@ -571,8 +587,31 @@ expectType<number>(helper.longestGlobalOptionTermLength(helperCommand, helper));
 expectType<number>(helper.longestArgumentTermLength(helperCommand, helper));
 expectType<number>(helper.padWidth(helperCommand, helper));
 
-expectType<string>(helper.wrap('a b c', 50, 3));
+expectType<number>(helper.displayWidth('some string'));
+expectType<string>(helper.boxWrap('a b c', 50));
+expectType<string>(
+  helper.formatItem('--example', 12, 'example description', helper),
+);
+expectType<boolean>(helper.preformatted('a\nb c'));
 
+expectType<string>(helper.styleTitle('Usage:'));
+
+expectType<string>(helper.styleUsage('foo [options] <file>'));
+expectType<string>(helper.styleCommandText('foo'));
+
+expectType<string>(helper.styleCommandDescription('description'));
+expectType<string>(helper.styleOptionDescription('description'));
+expectType<string>(helper.styleSubcommandDescription('description'));
+expectType<string>(helper.styleArgumentDescription('description'));
+expectType<string>(helper.styleDescriptionText('description'));
+
+expectType<string>(helper.styleOptionTerm('-a, --all'));
+expectType<string>(helper.styleSubcommandTerm('bar [options]'));
+expectType<string>(helper.styleArgumentTerm('<file>'));
+
+expectType<string>(helper.styleOptionText('-a, --all'));
+expectType<string>(helper.styleSubcommandText('bar'));
+expectType<string>(helper.styleArgumentText('<file>'));
 expectType<string>(helper.formatHelp(helperCommand, helper));
 
 // Option properties

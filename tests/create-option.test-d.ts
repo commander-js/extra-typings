@@ -62,11 +62,7 @@ import { Command, createOption } from '..';
   const program = new Command();
   const foo = program
     .addOption(
-      createOption('-f, --foo <value>', 'description').choices([
-        'A',
-        'B',
-        'C',
-      ] as const),
+      createOption('-f, --foo <value>', 'description').choices(['A', 'B', 'C']),
     )
     .opts().foo;
   expectType<'A' | 'B' | 'C' | undefined>(foo);
@@ -78,7 +74,7 @@ import { Command, createOption } from '..';
   const foo = program
     .addOption(
       createOption('-f, --foo <value...>', 'description')
-        .choices(['A', 'B', 'C'] as const)
+        .choices(['A', 'B', 'C'])
         .makeOptionMandatory(),
     )
     .opts().foo;
