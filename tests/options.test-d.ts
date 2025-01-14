@@ -190,6 +190,9 @@ expectType<{ debug?: true }>(us6);
 const us7 = program.addOption(new Option('-d --debug')).opts();
 expectType<{ debug?: true }>(us7);
 
+const us8 = program.addOption(new Option('--db, --debug')).opts();
+expectType<{ debug?: true }>(us8);
+
 // choices
 
 // narrows required value to given choices
