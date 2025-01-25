@@ -9,6 +9,13 @@ The version numbering does not follow semantic versioning but instead aligns wit
 <!-- markdownlint-disable MD024 -->
 <!-- markdownlint-disable MD004 -->
 
+## [13.1.0] (2025-01-25)
+
+## Changed
+
+- peer dependency on Commander 13.1.x
+- update dependencies
+
 ## [13.0.0] (2024-12-31)
 
 ### Added
@@ -188,6 +195,7 @@ Published from wrong branch.
 - inferred types for `.action()`
 - inferred types for `.opts()`
 
+[13.1.0]: https://github.com/commander-js/extra-typings/compare/v13.0.0...v13.1.0
 [13.0.0]: https://github.com/commander-js/extra-typings/compare/v12.1.0...v13.0.0
 [13.0.0-1]: https://github.com/commander-js/extra-typings/compare/v12.1.0...v13.0.0-1
 [12.1.0]: https://github.com/commander-js/extra-typings/compare/v12.0.1...v12.1.0
