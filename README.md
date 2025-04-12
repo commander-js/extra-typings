@@ -16,7 +16,7 @@ Usage
 
 - install `@commander-js/extra-typings` using your preferred package manager
 - install `commander`, if not already installed (peer dependency)
-- in code import from `@commander-js/extra-typings` instead of `commander`
+- in code import from `@commander-js/extra-typings` instead of `commander` (or set up an ambient module)
 
 The installed version of this package should match the major and minor version numbers of the installed commander package, but the patch version number is independent (following pattern used by [Definitely Typed](https://github.com/DefinitelyTyped/DefinitelyTyped#how-do-definitely-typed-package-versions-relate-to-versions-of-the-corresponding-library)).
 
@@ -62,5 +62,28 @@ import { Command } from '@commander-js/extra-typings';
 // working pattern
 const program = new Command()
   .option('-d, --debug'); // program type includes chained options and arguments
+const options = program.opts(); // smart type
+```
+
+## Ambient module setup
+
+An alternative approach is to setup `@commander-js/extra-typings` as an ambient module and a development-only dependency. We only worked
+this out recently so it isn't being promoted as the suggested method yet!
+
+Add a simple ambient module file to your project to use the enhanced typings instead of the default typings:
+
+```typescript
+// commander.d.ts
+declare module "commander" {
+  export * from "@commander-js/extra-typings";
+}
+```
+
+Import from `commander` as usual and you hopefully get the extra typings from the ambient module without needing `extra-typings` at runtime:
+
+```typescript
+import { Command } from 'commander';
+const program = new Command()
+  .option('-d, --debug');
 const options = program.opts(); // smart type
 ```
