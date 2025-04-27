@@ -815,12 +815,12 @@ export class Command<
   argument<S extends string, T>(
     flags: S,
     description: string,
-    fn: (value: string, previous: T) => T,
+    parseArg: (value: string, previous: T) => T,
   ): Command<[...Args, InferArgument<S, undefined, T>], Opts, GlobalOpts>;
   argument<S extends string, T>(
     flags: S,
     description: string,
-    fn: (value: string, previous: T) => T,
+    parseArg: (value: string, previous: T) => T,
     defaultValue: T,
   ): Command<[...Args, InferArgument<S, T, T>], Opts, GlobalOpts>;
   argument<S extends string>(
