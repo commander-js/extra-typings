@@ -74,7 +74,7 @@ type InferArgumentTypeResolvedRequired<
   : InferArgumentOptionalType<Value, DefaultT, CoerceT, ChoicesT>;
 
 // Resolve whether argument required, and strip []/<> from around value.
-type InferArgument<
+export type InferArgument<
   S extends string,
   DefaultT = undefined,
   CoerceT = undefined,
@@ -104,11 +104,12 @@ type InferArgument<
         ChoicesT
       >; // the implementation fallback is treat as <required>
 
-type InferArguments<S extends string> = S extends `${infer First} ${infer Rest}`
-  ? [InferArgument<First>, ...InferArguments<TrimLeft<Rest>>]
-  : [InferArgument<S>];
+export type InferArguments<S extends string> =
+  S extends `${infer First} ${infer Rest}`
+    ? [InferArgument<First>, ...InferArguments<TrimLeft<Rest>>]
+    : [InferArgument<S>];
 
-type InferCommandArguments<S extends string> =
+export type InferCommandArguments<S extends string> =
   S extends `${string} ${infer Args}` ? InferArguments<TrimLeft<Args>> : [];
 
 type FlagsToFlag<Flags extends string> =
@@ -272,7 +273,7 @@ type InferOptionsFlag<
 >;
 
 // Split up Usage into Flags and Value
-type InferOptions<
+export type InferOptions<
   Options,
   Usage extends string,
   DefaultT,
