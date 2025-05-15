@@ -1,7 +1,12 @@
 version: 2
 updates:
+  - package-ecosystem: "npm"
+    target-branch: "develop"
+    directory: "/"
+    schedule:
+      interval: "monthly"
   - package-ecosystem: "github-actions"
-    target-branch: "main"
+    target-branch: "develop"
     directory: "/"
     schedule:
       interval: "weekly"
