@@ -246,3 +246,4 @@ Published from wrong branch.
 [#78]: https://github.com/commander-js/extra-typings/pull/78
 [#79]: https://github.com/commander-js/extra-typings/pull/79
 [#93]: https://github.com/commander-js/extra-typings/pull/93
+[#100]: https://github.com/commander-js/extra-typings/pull/100
