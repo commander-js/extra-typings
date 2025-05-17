@@ -9,6 +9,18 @@ The version numbering does not follow semantic versioning but instead aligns wit
 <!-- markdownlint-disable MD024 -->
 <!-- markdownlint-disable MD004 -->
 
+## [14.0.0] (2025-05-18)
+
+### Added
+
+- support for groups of options and commands in the help using low-level `.helpGroup()` on `Option` and `Command`, and higher-level `.optionsGroup()` and `.commandsGroup()` which can be used in chaining way to specify group title for following options/commands ([#100])
+- TypeScript: add `parseArg` property to `Argument` class ([#93])
+
+### Changed
+
+- peer dependency on Commander 14.0.x
+- internal refactor of `Help` class adding `.formatItemList()` and `.groupItems()` methods ([#93])
+
 ## [13.1.0] (2025-01-25)
 
 ## Changed
@@ -195,6 +207,7 @@ Published from wrong branch.
 - inferred types for `.action()`
 - inferred types for `.opts()`
 
+[14.0.0]: https://github.com/commander-js/extra-typings/compare/v13.1.0...v14.0.0
 [13.1.0]: https://github.com/commander-js/extra-typings/compare/v13.0.0...v13.1.0
 [13.0.0]: https://github.com/commander-js/extra-typings/compare/v12.1.0...v13.0.0
 [13.0.0-1]: https://github.com/commander-js/extra-typings/compare/v12.1.0...v13.0.0-1
@@ -232,3 +245,4 @@ Published from wrong branch.
 [#70]: https://github.com/commander-js/extra-typings/pull/70
 [#78]: https://github.com/commander-js/extra-typings/pull/78
 [#79]: https://github.com/commander-js/extra-typings/pull/79
+[#93]: https://github.com/commander-js/extra-typings/pull/93
