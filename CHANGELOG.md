@@ -18,7 +18,7 @@ The version numbering does not follow semantic versioning but instead aligns wit
 
 ### Changed
 
-- peer dependency on Commander 14.0.x
+- *Breaking:* peer dependency on Commander 14.0.x which requires Node.js 20 or higher
 - internal refactor of `Help` class adding `.formatItemList()` and `.groupItems()` methods ([#93])
 
 ## [13.1.0] (2025-01-25)

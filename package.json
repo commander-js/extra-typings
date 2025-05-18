@@ -43,12 +43,12 @@
   },
   "homepage": "https://github.com/commander-js/extra-typings#readme",
   "peerDependencies": {
-    "commander": "~13.1.0"
+    "commander": "~14.0.0"
   },
   "devDependencies": {
     "@jest/globals": "^29.3.1",
     "@types/node": "^22.10.1",
-    "commander": "~13.1.0",
+    "commander": "~14.0.0",
     "eslint": "^9.16.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-jest": "^28.9.0",
