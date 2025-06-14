@@ -2,7 +2,7 @@ const globals = require('globals');
 const esLintjs = require('@eslint/js');
 const jest = require('eslint-plugin-jest');
 const tseslint = require('typescript-eslint');
-const prettier = require('eslint-config-prettier');
+const eslintConfigPrettier = require('eslint-config-prettier/flat');
 
 // Simpler setup than in Commander as not running TypeScript over .js files.
 const tsconfigTsFiles = ['**/*.{ts,mts}'];
@@ -16,7 +16,7 @@ module.exports = tseslint.config(
     files: tsconfigTsFiles,
     extends: [...tseslint.configs.recommended],
   },
-  prettier, // Do Prettier last so it can override previous configs.
+  eslintConfigPrettier, // Do Prettier last so it can override previous configs.
 
   // Customise rules.
   {
