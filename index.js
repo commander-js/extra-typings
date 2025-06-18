@@ -18,8 +18,6 @@ exports.InvalidArgumentError = commander.InvalidArgumentError;
 exports.InvalidOptionArgumentError = commander.InvalidArgumentError; // Deprecated
 exports.Option = commander.Option;
 
-exports.createCommand = (name) => new commander.Command(name);
-exports.createOption = (flags, description) =>
-  new commander.Option(flags, description);
-exports.createArgument = (name, description) =>
-  new commander.Argument(name, description);
+exports.createCommand = commander.createCommand;
+exports.createOption = commander.createOption;
+exports.createArgument = commander.createArgument;

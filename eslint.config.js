@@ -1,6 +1,5 @@
 const globals = require('globals');
 const esLintjs = require('@eslint/js');
-const jest = require('eslint-plugin-jest');
 const tseslint = require('typescript-eslint');
 const eslintConfigPrettier = require('eslint-config-prettier/flat');
 
@@ -11,7 +10,6 @@ const tsconfigTsFiles = ['**/*.{ts,mts}'];
 module.exports = tseslint.config(
   // Add recommended rules.
   esLintjs.configs.recommended,
-  jest.configs['flat/recommended'],
   {
     files: tsconfigTsFiles,
     extends: [...tseslint.configs.recommended],
