@@ -46,7 +46,7 @@
     "commander": "~14.0.0"
   },
   "devDependencies": {
-    "@types/node": "^22.10.1",
+    "@types/node": "^24.0.8",
     "commander": "~14.0.0",
     "eslint": "^9.16.0",
     "eslint-config-prettier": "^10.0.1",
