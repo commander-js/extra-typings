@@ -1000,7 +1000,7 @@ export class Command<
    * @returns `this` command for chaining
    */
   action(
-    fn: (this: this, ...args: [...Args, Opts, this]) => void | Promise<void>,
+    fn: (this: this, ...args: [...Args, Opts, this]) => unknown | Promise<unknown>,
   ): this;
 
   /**
