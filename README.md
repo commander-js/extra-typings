@@ -67,8 +67,7 @@ const options = program.opts(); // smart type
 
 ## Ambient module setup
 
-An alternative approach is to setup `@commander-js/extra-typings` as an ambient module and a development-only dependency. We only worked
-this out recently so it isn't being promoted as the suggested method yet!
+An alternative approach is to setup `@commander-js/extra-typings` as an ambient module and a development-only dependency.
 
 Add a simple ambient module file to your project to use the enhanced typings instead of the default typings:
 
