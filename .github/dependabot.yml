@@ -13,6 +13,14 @@ updates:
           - "minor"
         applies-to:
           - "version-updates"
+      eslint:
+        patterns:
+          - "@eslint-community/*"
+          - "@eslint/*"
+          - "@types/eslint*"
+          - "@typescript-eslint/*"
+          - "eslint*"
+          - "typescript-eslint*"
   - package-ecosystem: "github-actions"
     target-branch: "develop"
     directory: "/"
