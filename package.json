@@ -46,9 +46,10 @@
     "commander": "~15.0.0-0"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/node": "^22.10.1",
     "commander": "~15.0.0-0",
-    "eslint": "^9.16.0",
+    "eslint": "^10.0.2",
     "eslint-config-prettier": "^10.0.1",
     "globals": "^17.0.0",
     "prettier": "^3.2.5",

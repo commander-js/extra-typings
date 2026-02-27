@@ -1,5 +1,6 @@
 const globals = require('globals');
 const esLintjs = require('@eslint/js');
+const { defineConfig } = require('eslint/config');
 const tseslint = require('typescript-eslint');
 const eslintConfigPrettier = require('eslint-config-prettier/flat');
 
@@ -7,12 +8,12 @@ const eslintConfigPrettier = require('eslint-config-prettier/flat');
 const tsconfigTsFiles = ['**/*.{ts,mts}'];
 
 // Using tseslint.config adds some type safety and `extends` to simplify customising config array.
-module.exports = tseslint.config(
+module.exports = defineConfig(
   // Add recommended rules.
   esLintjs.configs.recommended,
   {
     files: tsconfigTsFiles,
-    extends: [...tseslint.configs.recommended],
+    extends: [tseslint.configs.recommended],
   },
   eslintConfigPrettier, // Do Prettier last so it can override previous configs.
 
