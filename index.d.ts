@@ -32,6 +32,23 @@ type InferVariadic<S extends string, ArgT> = S extends `${string}...`
   ? ArgT[]
   : ArgT;
 
+// Allowed default value type based on whether the option takes an argument.
+// Required variadic <value...>: string[] only.
+// Optional variadic [value...]: string[] or boolean (flag-only use returns true as preset).
+// Required non-variadic <value>: string only.
+// Optional non-variadic [value]: string or boolean (flag-only use returns true as preset).
+// Boolean flags (no argument): boolean only.
+type AllowedDefaultType<S extends string> =
+  S extends `${string} <${string}...>`
+    ? string[]
+    : S extends `${string} [${string}...]`
+      ? string[] | boolean
+      : S extends `${string} <${string}>`
+        ? string
+        : S extends `${string} [${string}]`
+          ? string | boolean
+          : boolean;
+
 type InferArgumentType<Value extends string, DefaultT, CoerceT, ChoicesT> = [
   CoerceT,
 ] extends [undefined]
@@ -1031,7 +1048,7 @@ export class Command<
     InferOptions<Opts, S, undefined, undefined, false>,
     GlobalOpts
   >;
-  option<S extends string, DefaultT extends string | boolean | string[] | []>(
+  option<S extends string, DefaultT extends AllowedDefaultType<S>>(
     usage: S,
     description?: string,
     defaultValue?: DefaultT,
@@ -1066,10 +1083,7 @@ export class Command<
     InferOptions<Opts, S, undefined, undefined, true>,
     GlobalOpts
   >;
-  requiredOption<
-    S extends string,
-    DefaultT extends string | boolean | string[],
-  >(
+  requiredOption<S extends string, DefaultT extends AllowedDefaultType<S>>(
     usage: S,
     description?: string,
     defaultValue?: DefaultT,
