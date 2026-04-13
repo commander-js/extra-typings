@@ -41,13 +41,19 @@ expectType<{ debug: string | true }>(o8);
 const o9 = program.option('--debug [value]', 'description', false).opts();
 expectType<{ debug: string | boolean }>(o9);
 
-const o10 = program.option('--debug <value...>', 'description', [] as string[]).opts();
+const o10 = program
+  .option('--debug <value...>', 'description', [] as string[])
+  .opts();
 expectType<{ debug: string[] }>(o10);
 
-const o11 = program.option('--debug <value...>', 'description', ['a', 'b']).opts();
+const o11 = program
+  .option('--debug <value...>', 'description', ['a', 'b'])
+  .opts();
 expectType<{ debug: string[] }>(o11);
 
-const o12 = program.option('--debug [value...]', 'description', [] as string[]).opts();
+const o12 = program
+  .option('--debug [value...]', 'description', [] as string[])
+  .opts();
 expectType<{ debug: string[] | true }>(o12);
 
 const o13 = program.option('--debug [value...]', 'description', ['a']).opts();
@@ -279,24 +285,20 @@ expectType<{ foo: 'C' }>(c10);
 
 // mismatched defaults should be errors
 
-// string default on a boolean flag is an error
-// @ts-expect-error
+// @ts-expect-error string default on a boolean flag is an error
 program.option('--debug', 'description', 'string-value');
 
-// boolean default on a required option is an error
-// @ts-expect-error
+// @ts-expect-error boolean default on a required option is an error
 program.option('--debug <value>', 'description', false);
-// @ts-expect-error
+// @ts-expect-error boolean default on a required option is an error
 program.option('--debug <value...>', 'description', false);
 
-// string[] default on a non-variadic flag is an error
-// @ts-expect-error
+// @ts-expect-error string[] default on a non-variadic flag is an error
 program.option('--debug <value>', 'description', ['arr']);
-// @ts-expect-error
+// @ts-expect-error string[] default on a non-variadic flag is an error
 program.option('--debug [value]', 'description', ['arr']);
 
-// string default on a variadic flag is an error
-// @ts-expect-error
+// @ts-expect-error string default on a variadic flag is an error
 program.option('--debug <value...>', 'description', 'str');
-// @ts-expect-error
+// @ts-expect-error string default on a variadic flag is an error
 program.option('--debug [value...]', 'description', 'str');

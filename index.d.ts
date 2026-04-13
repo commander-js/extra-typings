@@ -38,16 +38,15 @@ type InferVariadic<S extends string, ArgT> = S extends `${string}...`
 // Required non-variadic <value>: string only.
 // Optional non-variadic [value]: string or boolean (flag-only use returns true as preset).
 // Boolean flags (no argument): boolean only.
-type AllowedDefaultType<S extends string> =
-  S extends `${string} <${string}...>`
-    ? string[]
-    : S extends `${string} [${string}...]`
-      ? string[] | boolean
-      : S extends `${string} <${string}>`
-        ? string
-        : S extends `${string} [${string}]`
-          ? string | boolean
-          : boolean;
+type AllowedDefaultType<S extends string> = S extends `${string} <${string}...>`
+  ? string[]
+  : S extends `${string} [${string}...]`
+    ? string[] | boolean
+    : S extends `${string} <${string}>`
+      ? string
+      : S extends `${string} [${string}]`
+        ? string | boolean
+        : boolean;
 
 type InferArgumentType<Value extends string, DefaultT, CoerceT, ChoicesT> = [
   CoerceT,
