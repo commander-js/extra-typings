@@ -9,6 +9,18 @@ The version numbering does not follow semantic versioning but instead aligns wit
 <!-- markdownlint-disable MD024 -->
 <!-- markdownlint-disable MD004 -->
 
+## [15.0.0] (2026-05-29)
+
+### Added
+
+- [Release Policy document](./docs/release-policy.md)
+  
+### Changed
+
+- *Breaking:* peer dependency on Commander 15.0.x which requires Node.js 22.12 or higher
+- update dependencies
+- old major versions now supported for 12 months instead of just previous major version, to give predictable end-of-life date
+
 ## [14.0.0] (2025-05-18)
 
 ### Added
@@ -207,6 +219,7 @@ Published from wrong branch.
 - inferred types for `.action()`
 - inferred types for `.opts()`
 
+[15.0.0]: https://github.com/commander-js/extra-typings/compare/v14.0.0...v15.0.0
 [14.0.0]: https://github.com/commander-js/extra-typings/compare/v13.1.0...v14.0.0
 [13.1.0]: https://github.com/commander-js/extra-typings/compare/v13.0.0...v13.1.0
 [13.0.0]: https://github.com/commander-js/extra-typings/compare/v12.1.0...v13.0.0
