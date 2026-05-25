@@ -13,7 +13,7 @@ The version numbering does not follow semantic versioning but instead aligns wit
 
 `@commander-js/extra-typings` 15 is ESM only. This is expected to be seamless for ESM consumers, but some CommonJS consumers may hit issues with tooling requiring configuration for ESM-only dependencies. See Migration Tips below.
 
-The release of `@commander-js/extra-typings` 15 `@commander-js/extra-typings` Commander 14 into maintenance. `@commander-js/extra-typings` 14 will get security updates for
+The release of `@commander-js/extra-typings` 15 moves version 14 into maintenance. `@commander-js/extra-typings` 14 will get security updates for
 12 months (to May 2027). For more info see [Release Policy](./docs/release-policy.md).
 
 ### Added
