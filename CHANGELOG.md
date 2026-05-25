@@ -25,6 +25,7 @@ The release of `@commander-js/extra-typings` 15 `@commander-js/extra-typings` Co
 - *Breaking:* peer dependency on Commander 15.0.x which requires Node.js 22.12 or higher
 - update dependencies
 - old major versions now supported for 12 months instead of just previous major version, to give predictable end-of-life date
+- now reexporting the global `program` singleton from Commander rather than creating a separate one
 
 ### Migration Tips
 
