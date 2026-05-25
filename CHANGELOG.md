@@ -11,6 +11,11 @@ The version numbering does not follow semantic versioning but instead aligns wit
 
 ## [15.0.0] (2026-05-29)
 
+`@commander-js/extra-typings` 15 is ESM only. This is expected to be seamless for ESM consumers, but some CommonJS consumers may hit issues with tooling requiring configuration for ESM-only dependencies. See Migration Tips below.
+
+The release of `@commander-js/extra-typings` 15 `@commander-js/extra-typings` Commander 14 into maintenance. `@commander-js/extra-typings` 14 will get security updates for
+12 months (to May 2027). For more info see [Release Policy](./docs/release-policy.md).
+
 ### Added
 
 - [Release Policy document](./docs/release-policy.md)
@@ -20,6 +25,16 @@ The version numbering does not follow semantic versioning but instead aligns wit
 - *Breaking:* peer dependency on Commander 15.0.x which requires Node.js 22.12 or higher
 - update dependencies
 - old major versions now supported for 12 months instead of just previous major version, to give predictable end-of-life date
+
+### Migration Tips
+
+`@commander-js/extra-typings` 15 is ESM only, but this does not mean you need to migrate to ESM to use it. Importing ESM from CommonJS is
+supported by Node.js, and Bun, Deno, and TypeScript. Hopefully it Just Works for you! However, you may be using a different runtime or
+some other part of your setup that may not yet natively support importing ESM from CommonJS, such as your testing framework
+or bundler.
+
+If you have problems using `@commander-js/extra-typings` 15 in your environment, one option is stay on version 14 for now. `@commander-js/extra-typings` 14 will
+get security updates until May 2027 and things will hopefully improve for your setup in the meantime.
 
 ## [14.0.0] (2025-05-18)
 

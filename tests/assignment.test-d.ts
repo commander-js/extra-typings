@@ -1,5 +1,5 @@
 import { expectAssignable, expectNotAssignable } from 'tsd';
-import { Command, CommandUnknownOpts, Option } from '..';
+import { Command, CommandUnknownOpts, Option } from '../index.js';
 
 // 'when assign Command to CommandUnknownOpts then no error'
 {
