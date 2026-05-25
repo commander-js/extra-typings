@@ -92,14 +92,23 @@ expectType<{ debug: string | true }>(o20);
 
 // negated
 
+// note: negated alone implicitly sets default to true
 const o21 = program.option('--C, --no-colour').opts();
 expectType<{ colour: boolean }>(o21);
 
-const o22 = program
+// note: combo with negated second does not implicitly set default to true
+const o22PositiveFirst = program
   .option('--c, --colour <string>')
   .option('--C, --no-colour')
   .opts();
-expectType<{ colour?: string | false }>(o22);
+expectType<{ colour?: string | false }>(o22PositiveFirst);
+
+// note: since Command 15, combo with negated first does not implicitly set default to true
+const o22NegativeFirst = program
+  .option('--C, --no-colour')
+  .option('--c, --colour <string>')
+  .opts();
+expectType<{ colour?: string | false }>(o22NegativeFirst);
 
 const o23 = program
   .option('--c, --colour <string>', 'description', 'red')
@@ -109,9 +118,9 @@ expectType<{ colour: string | false }>(o23);
 
 const o24 = program
   .addOption(new Option('-c, --colour').default(0).preset(BigInt(3)))
-  .addOption(new Option('-C, --no-colour').preset('on'))
+  .addOption(new Option('-C, --no-colour').preset('none'))
   .opts();
-expectType<{ colour: 'on' | 0 | bigint }>(o24);
+expectType<{ colour: 'none' | 0 | bigint }>(o24);
 
 // multiple
 

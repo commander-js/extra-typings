@@ -230,14 +230,21 @@ type InferOptionsNegateCombo<
   AlwaysDefined extends boolean,
 > = Flag extends `--no-${string}`
   ? Name extends keyof Options
-    ? InferOptionsCombine<Options, Name, PresetT, true> // combo does not set default, leave that to positive option
+    ? InferOptionsCombine<Options, Name, PresetT, true> // negated option does not set default (true) in combo
     : InferOptionsCombine<Options, Name, PresetT | DefaultT, true> // lone negated option sets default
-  : InferOptionsCombine<
-      Options,
-      Name,
-      ValueT | PresetT | DefaultT,
-      AlwaysDefined
-    >;
+  : Name extends keyof Options
+    ? InferOptionsCombine<
+        Omit<Options, Name>, // remove earlier negated option which probably had implied `true` (see NegateDefaultType), add back without `true`
+        Name,
+        Exclude<Options[Name], true> | ValueT | PresetT | DefaultT,
+        AlwaysDefined
+      >
+    : InferOptionsCombine<
+        Options,
+        Name,
+        ValueT | PresetT | DefaultT,
+        AlwaysDefined
+      >;
 
 // Recalc values taking into account negated option.
 // Fill in appropriate PresetT value if undefined.
