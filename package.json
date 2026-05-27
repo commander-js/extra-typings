@@ -19,8 +19,6 @@
     "url": "git+https://github.com/commander-js/extra-typings.git"
   },
   "files": [
-    "esm.mjs",
-    "esm.d.mts",
     "index.js",
     "index.d.ts"
   ],
