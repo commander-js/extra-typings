@@ -22,6 +22,7 @@ The release of `@commander-js/extra-typings` 15 moves version 14 into maintenanc
   
 ### Changed
 
+- *Breaking:* migrated implementation from CommonJS to ESM ([#178])
 - *Breaking:* peer dependency on Commander 15.0.x which requires Node.js 22.12 or higher
 - update dependencies
 - old major versions now supported for 12 months instead of just previous major version, to give predictable end-of-life date
@@ -277,4 +278,5 @@ Published from wrong branch.
 [#79]: https://github.com/commander-js/extra-typings/pull/79
 [#93]: https://github.com/commander-js/extra-typings/pull/93
 [#100]: https://github.com/commander-js/extra-typings/pull/100
+[#178]: https://github.com/commander-js/extra-typings/pull/178
 [#179]: https://github.com/commander-js/extra-typings/pull/179
