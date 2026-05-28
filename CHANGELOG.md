@@ -20,6 +20,7 @@ The version numbering does not follow semantic versioning but instead aligns wit
 - *Breaking:* peer dependency on Commander 15.0.x which requires Node.js 22.12 or higher
 - update dependencies
 - old major versions now supported for 12 months instead of just previous major version, to give predictable end-of-life date
+- only lone negated option defaults option value to true (matching Commander 15) ([#179])
 
 ## [14.0.0] (2025-05-18)
 
@@ -260,3 +261,4 @@ Published from wrong branch.
 [#79]: https://github.com/commander-js/extra-typings/pull/79
 [#93]: https://github.com/commander-js/extra-typings/pull/93
 [#100]: https://github.com/commander-js/extra-typings/pull/100
+[#179]: https://github.com/commander-js/extra-typings/pull/179
