@@ -1,4 +1,4 @@
-import * as commander from '../index';
+import * as commander from '../index.js';
 import { expectType, expectAssignable } from 'tsd';
 
 // This is a copy of the TypeScript tests in Commander to see

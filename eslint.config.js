@@ -1,14 +1,14 @@
-const globals = require('globals');
-const esLintjs = require('@eslint/js');
-const { defineConfig } = require('eslint/config');
-const tseslint = require('typescript-eslint');
-const eslintConfigPrettier = require('eslint-config-prettier/flat');
+import globals from 'globals';
+import esLintjs from '@eslint/js';
+import { defineConfig } from 'eslint/config';
+import tseslint from 'typescript-eslint';
+import eslintConfigPrettier from 'eslint-config-prettier';
 
 // Simpler setup than in Commander as not running TypeScript over .js files.
 const tsconfigTsFiles = ['**/*.{ts,mts}'];
 
 // Using tseslint.config adds some type safety and `extends` to simplify customising config array.
-module.exports = defineConfig(
+export default defineConfig(
   // Add recommended rules.
   esLintjs.configs.recommended,
   {

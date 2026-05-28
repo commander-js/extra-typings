@@ -1,5 +1,5 @@
 import { expectType, expectAssignable } from 'tsd';
-import { Help, Command, CommandUnknownOpts, Option } from '..';
+import { Help, Command, CommandUnknownOpts, Option } from '../index.js';
 
 // Still exploring when to use Command/CommandUnknownOpts in Help.
 //

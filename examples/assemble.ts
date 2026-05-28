@@ -1,5 +1,5 @@
-import { createProgram, type ProgramOpts } from './assemble-program';
-import { createSub, type SubOpts } from './assemble-sub';
+import { createProgram, type ProgramOpts } from './assemble-program.js';
+import { createSub, type SubOpts } from './assemble-sub.js';
 
 // Example of strongly typed globals in a subcommand which is added to program using .addCommand().
 

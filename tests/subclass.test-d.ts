@@ -1,5 +1,5 @@
 import { expectType } from 'tsd';
-import { Command, Option } from '..';
+import { Command, Option } from '../index.js';
 
 // Breaking: need to add type parameter for use in super constructor
 class MyOption<Usage extends string = ''> extends Option<Usage> {

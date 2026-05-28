@@ -2,7 +2,7 @@
   "name": "@commander-js/extra-typings",
   "version": "15.0.0",
   "description": "Infer strong typings for commander options and action handlers",
-  "main": "index.js",
+  "main": "./index.js",
   "scripts": {
     "check": "npm run check:type && npm run check:lint && npm run check:format",
     "check:format": "prettier --check .",
@@ -19,19 +19,16 @@
     "url": "git+https://github.com/commander-js/extra-typings.git"
   },
   "files": [
-    "esm.mjs",
-    "esm.d.mts",
     "index.js",
     "index.d.ts"
   ],
-  "type": "commonjs",
+  "type": "module",
   "exports": {
     ".": {
-      "require": "./index.js",
-      "import": "./esm.mjs"
+      "types": "./index.d.ts",
+      "default": "./index.js"
     }
   },
-  "types": "index.d.ts",
   "tsd": {
     "directory": "tests"
   },

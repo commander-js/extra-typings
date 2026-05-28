@@ -1,5 +1,5 @@
 import { expectType } from 'tsd';
-import { Command } from '..';
+import { Command } from '../index.js';
 
 // Doing a subset of the full tests in arguments.test-d.ts
 

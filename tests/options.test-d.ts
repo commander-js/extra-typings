@@ -1,5 +1,5 @@
 import { expectType, expectAssignable } from 'tsd';
-import { Command, Option, OptionValues } from '..';
+import { Command, Option, OptionValues } from '../index.js';
 
 function myParseInt(arg: string, previous: number): number {
   return parseInt(arg);
