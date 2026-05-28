@@ -1,5 +1,5 @@
 import { expectType } from 'tsd';
-import { Command } from '..';
+import { Command } from '../index.js';
 
 // 'when getOptionValue is unknown then key is unknown'
 {

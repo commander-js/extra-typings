@@ -1,4 +1,4 @@
-const config = {
+export default {
   // plugins: ['prettier-plugin-jsdoc'],
   singleQuote: true,
   overrides: [
@@ -8,5 +8,3 @@ const config = {
     },
   ],
 };
-
-module.exports = config;

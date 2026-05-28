@@ -1,5 +1,5 @@
 import { expectType } from 'tsd';
-import { Command, createArgument } from '..';
+import { Command, createArgument } from '../index.js';
 
 // Doing end-to-end test, rather than checking created Argument directly.
 
