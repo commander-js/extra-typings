@@ -32,6 +32,22 @@ type InferVariadic<S extends string, ArgT> = S extends `${string}...`
   ? ArgT[]
   : ArgT;
 
+// Allowed default value type based on whether the option takes an argument.
+// Required variadic <value...>: string[] only.
+// Optional variadic [value...]: string[] or boolean (flag-only use returns true as preset).
+// Required non-variadic <value>: string only.
+// Optional non-variadic [value]: string or boolean (flag-only use returns true as preset).
+// Boolean flags (no argument): boolean only.
+type AllowedDefaultType<S extends string> = S extends `${string} <${string}...>`
+  ? string[]
+  : S extends `${string} [${string}...]`
+    ? string[] | boolean
+    : S extends `${string} <${string}>`
+      ? string
+      : S extends `${string} [${string}]`
+        ? string | boolean
+        : boolean;
+
 type InferArgumentType<Value extends string, DefaultT, CoerceT, ChoicesT> = [
   CoerceT,
 ] extends [undefined]
@@ -214,14 +230,21 @@ type InferOptionsNegateCombo<
   AlwaysDefined extends boolean,
 > = Flag extends `--no-${string}`
   ? Name extends keyof Options
-    ? InferOptionsCombine<Options, Name, PresetT, true> // combo does not set default, leave that to positive option
+    ? InferOptionsCombine<Options, Name, PresetT, true> // negated option does not set default (true) in combo
     : InferOptionsCombine<Options, Name, PresetT | DefaultT, true> // lone negated option sets default
-  : InferOptionsCombine<
-      Options,
-      Name,
-      ValueT | PresetT | DefaultT,
-      AlwaysDefined
-    >;
+  : Name extends keyof Options
+    ? InferOptionsCombine<
+        Omit<Options, Name>, // remove earlier negated option which probably had implied `true` (see NegateDefaultType), add back without `true`
+        Name,
+        Exclude<Options[Name], true> | ValueT | PresetT | DefaultT,
+        AlwaysDefined
+      >
+    : InferOptionsCombine<
+        Options,
+        Name,
+        ValueT | PresetT | DefaultT,
+        AlwaysDefined
+      >;
 
 // Recalc values taking into account negated option.
 // Fill in appropriate PresetT value if undefined.
@@ -1031,7 +1054,7 @@ export class Command<
     InferOptions<Opts, S, undefined, undefined, false>,
     GlobalOpts
   >;
-  option<S extends string, DefaultT extends string | boolean | string[] | []>(
+  option<S extends string, DefaultT extends AllowedDefaultType<S>>(
     usage: S,
     description?: string,
     defaultValue?: DefaultT,
@@ -1066,10 +1089,7 @@ export class Command<
     InferOptions<Opts, S, undefined, undefined, true>,
     GlobalOpts
   >;
-  requiredOption<
-    S extends string,
-    DefaultT extends string | boolean | string[],
-  >(
+  requiredOption<S extends string, DefaultT extends AllowedDefaultType<S>>(
     usage: S,
     description?: string,
     defaultValue?: DefaultT,
@@ -1461,7 +1481,7 @@ export class Command<
    */
   outputHelp(context?: HelpContext): void;
   /** @deprecated since v7 */
-  outputHelp(cb?: (str: string) => string): void;
+  outputHelp(cb: (str: string) => string): void;
 
   /**
    * Return command help documentation.
@@ -1488,7 +1508,7 @@ export class Command<
    */
   help(context?: HelpContext): never;
   /** @deprecated since v7 */
-  help(cb?: (str: string) => string): never;
+  help(cb: (str: string) => string): never;
 
   /**
    * Add additional text to be displayed with the built-in help.

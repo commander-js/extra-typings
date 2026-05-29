@@ -1,4 +1,4 @@
-import { Command, CommandUnknownOpts } from '..';
+import { Command, CommandUnknownOpts } from '../index.js';
 import { expectType } from 'tsd';
 
 // Fallback location for CommandUnknownOpts if not better file for the test.

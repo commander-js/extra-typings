@@ -1,5 +1,5 @@
 import { expectType, expectAssignable } from 'tsd';
-import { Command, Argument, OptionValues } from '..';
+import { Command, Argument, OptionValues } from '../index.js';
 
 // Reusing same program variable through tests for convenience.
 const program = new Command();

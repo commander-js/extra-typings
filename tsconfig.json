@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "lib": ["es6"],
+    "module": "nodenext",
+    "lib": ["ESNext"],
     "types": ["node"],
     "noImplicitAny": true,
     "noImplicitThis": true,

@@ -1,5 +1,5 @@
 import { expectType, expectAssignable } from 'tsd';
-import { Command, Option, OptionValues } from '..';
+import { Command, Option, OptionValues } from '../index.js';
 
 const program = new Command();
 program.setOptionValueWithSource('key', 'value', 'cli'); // expected source used by Commander

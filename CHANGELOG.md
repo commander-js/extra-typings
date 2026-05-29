@@ -9,6 +9,36 @@ The version numbering does not follow semantic versioning but instead aligns wit
 <!-- markdownlint-disable MD024 -->
 <!-- markdownlint-disable MD004 -->
 
+## [15.0.0] (2026-05-29)
+
+`@commander-js/extra-typings` 15 is ESM only. This is expected to be seamless for ESM consumers, but some CommonJS consumers may hit issues with tooling requiring configuration for ESM-only dependencies. See Migration Tips below.
+
+The release of `@commander-js/extra-typings` 15 moves version 14 into maintenance. `@commander-js/extra-typings` 14 will get security updates for
+12 months (to May 2027). For more info see [Release Policy](./docs/release-policy.md).
+
+### Added
+
+- [Release Policy document](./docs/release-policy.md)
+  
+### Changed
+
+- *Breaking:* migrated implementation from CommonJS to ESM ([#178])
+- *Breaking:* peer dependency on Commander 15.0.x which requires Node.js 22.12 or higher
+- update dependencies
+- old major versions now supported for 12 months instead of just previous major version, to give predictable end-of-life date
+- only lone negated option defaults option value to true (matching Commander 15) ([#179])
+- now reexporting the global `program` singleton from Commander rather than creating a separate one
+
+### Migration Tips
+
+`@commander-js/extra-typings` 15 is ESM only, but this does not mean you need to migrate to ESM to use it. Importing ESM from CommonJS is
+supported by Node.js, and Bun, Deno, and TypeScript. Hopefully it Just Works for you! However, you may be using a different runtime or
+some other part of your setup that may not yet natively support importing ESM from CommonJS, such as your testing framework
+or bundler.
+
+If you have problems using `@commander-js/extra-typings` 15 in your environment, one option is stay on version 14 for now. `@commander-js/extra-typings` 14 will
+get security updates until May 2027 and things will hopefully improve for your setup in the meantime.
+
 ## [14.0.0] (2025-05-18)
 
 ### Added
@@ -207,6 +237,7 @@ Published from wrong branch.
 - inferred types for `.action()`
 - inferred types for `.opts()`
 
+[15.0.0]: https://github.com/commander-js/extra-typings/compare/v14.0.0...v15.0.0
 [14.0.0]: https://github.com/commander-js/extra-typings/compare/v13.1.0...v14.0.0
 [13.1.0]: https://github.com/commander-js/extra-typings/compare/v13.0.0...v13.1.0
 [13.0.0]: https://github.com/commander-js/extra-typings/compare/v12.1.0...v13.0.0
@@ -247,3 +278,5 @@ Published from wrong branch.
 [#79]: https://github.com/commander-js/extra-typings/pull/79
 [#93]: https://github.com/commander-js/extra-typings/pull/93
 [#100]: https://github.com/commander-js/extra-typings/pull/100
+[#178]: https://github.com/commander-js/extra-typings/pull/178
+[#179]: https://github.com/commander-js/extra-typings/pull/179

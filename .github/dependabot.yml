@@ -5,6 +5,22 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+    groups:
+      # group simple version updates, leave major updates and security updates as single pull requests
+      minor-and-patch:
+        update-types:
+          - "patch"
+          - "minor"
+        applies-to:
+          - "version-updates"
+      eslint:
+        patterns:
+          - "@eslint-community/*"
+          - "@eslint/*"
+          - "@types/eslint*"
+          - "@typescript-eslint/*"
+          - "eslint*"
+          - "typescript-eslint*"
   - package-ecosystem: "github-actions"
     target-branch: "develop"
     directory: "/"

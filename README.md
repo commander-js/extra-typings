@@ -67,8 +67,7 @@ const options = program.opts(); // smart type
 
 ## Ambient module setup
 
-An alternative approach is to setup `@commander-js/extra-typings` as an ambient module and a development-only dependency. We only worked
-this out recently so it isn't being promoted as the suggested method yet!
+An alternative approach is to setup `@commander-js/extra-typings` as an ambient module and a development-only dependency.
 
 Add a simple ambient module file to your project to use the enhanced typings instead of the default typings:
 
@@ -87,3 +86,11 @@ const program = new Command()
   .option('-d, --debug');
 const options = program.opts(); // smart type
 ```
+
+## Support
+
+The current version of `@commander-js/extra-typings` is fully supported on Long Term Support versions of Node.js, and requires at least v22.12.0.
+
+Older major versions receive security updates for 12 months. For more see: [Release Policy](./docs/release-policy.md).
+
+The main forum for free and community support is the project [Issues](https://github.com/commander-js/extra-typings/issues) on GitHub.

@@ -1,8 +1,8 @@
 {
   "name": "@commander-js/extra-typings",
-  "version": "14.0.0",
+  "version": "15.0.0",
   "description": "Infer strong typings for commander options and action handlers",
-  "main": "index.js",
+  "main": "./index.js",
   "scripts": {
     "check": "npm run check:type && npm run check:lint && npm run check:format",
     "check:format": "prettier --check .",
@@ -12,26 +12,23 @@
     "fix:format": "prettier --write .",
     "fix:lint": "eslint --fix .",
     "prepublishOnly": "npm run --silent test",
-    "test": "tsd && jest"
+    "test": "tsd"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/commander-js/extra-typings.git"
   },
   "files": [
-    "esm.mjs",
-    "esm.d.mts",
     "index.js",
     "index.d.ts"
   ],
-  "type": "commonjs",
+  "type": "module",
   "exports": {
     ".": {
-      "require": "./index.js",
-      "import": "./esm.mjs"
+      "types": "./index.d.ts",
+      "default": "./index.js"
     }
   },
-  "types": "index.d.ts",
   "tsd": {
     "directory": "tests"
   },
@@ -43,21 +40,18 @@
   },
   "homepage": "https://github.com/commander-js/extra-typings#readme",
   "peerDependencies": {
-    "commander": "~14.0.0"
+    "commander": "~15.0.0"
   },
   "devDependencies": {
-    "@jest/globals": "^29.3.1",
+    "@eslint/js": "^10.0.1",
     "@types/node": "^22.10.1",
-    "commander": "~14.0.0",
-    "eslint": "^9.16.0",
+    "commander": "~15.0.0",
+    "eslint": "^10.0.2",
     "eslint-config-prettier": "^10.0.1",
-    "eslint-plugin-jest": "^28.9.0",
-    "globals": "^15.0.0",
-    "jest": "^29.3.1",
+    "globals": "^17.0.0",
     "prettier": "^3.2.5",
-    "ts-jest": "^29.0.5",
-    "tsd": "^0.31.2",
-    "typescript": "^5.3.3",
+    "tsd": "^0.33.0",
+    "typescript": "^6.0.2",
     "typescript-eslint": "^8.11.0"
   }
 }

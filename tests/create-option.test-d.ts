@@ -1,5 +1,5 @@
 import { expectType } from 'tsd';
-import { Command, createOption } from '..';
+import { Command, createOption } from '../index.js';
 
 // Doing end-to-end test, rather than checking created Option directly.
 
