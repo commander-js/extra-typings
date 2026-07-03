@@ -23,8 +23,7 @@ type Resolve<T> = T extends infer O ? { [K in keyof O]: O[K] } : never;
 // - https://github.com/sindresorhus/type-fest/blob/main/source/literal-union.d.ts
 // - https://github.com/sindresorhus/type-fest/blob/main/source/primitive.d.ts
 type LiteralUnion<LiteralType, BaseType extends string | number> =
-  | LiteralType
-  | (BaseType & Record<never, never>);
+  LiteralType | (BaseType & Record<never, never>);
 
 // Side note: not trying to represent arrays as non-empty, keep it simple.
 // https://stackoverflow.com/a/56006703/1082434
@@ -51,9 +50,8 @@ type AllowedDefaultType<S extends string> = S extends `${string} <${string}...>`
 type InferArgumentType<Value extends string, DefaultT, CoerceT, ChoicesT> = [
   CoerceT,
 ] extends [undefined]
-  ?
-      | InferVariadic<Value, [ChoicesT] extends [undefined] ? string : ChoicesT>
-      | DefaultT
+  ? | InferVariadic<Value, [ChoicesT] extends [undefined] ? string : ChoicesT>
+    | DefaultT
   : [ChoicesT] extends [undefined]
     ? CoerceT | DefaultT
     : CoerceT | DefaultT | ChoicesT;
