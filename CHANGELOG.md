@@ -2,12 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/2.0.0/).
 
 The version numbering does not follow semantic versioning but instead aligns with the `commander` version number. The installed version of this package should match the major and minor version numbers of the installed commander package, but the patch version number is independent (following pattern used by [Definitely Typed](https://github.com/DefinitelyTyped/DefinitelyTyped#how-do-definitely-typed-package-versions-relate-to-versions-of-the-corresponding-library)).
 
 <!-- markdownlint-disable MD024 -->
 <!-- markdownlint-disable MD004 -->
+
+## [15.1.0] (2026-11-08)
+
+## Changed
+
+- peer dependency on Commander 15.1.x
+
+### Deprecated
+
+- `cmd.storeOptionsAsProperties()`
+- `cmd.combineFlagAndOptionalValue()`
 
 ## [15.0.0] (2026-05-29)
 
@@ -237,6 +248,7 @@ Published from wrong branch.
 - inferred types for `.action()`
 - inferred types for `.opts()`
 
+[15.1.0]: https://github.com/commander-js/extra-typings/compare/v15.0.0...v15.1.0
 [15.0.0]: https://github.com/commander-js/extra-typings/compare/v14.0.0...v15.0.0
 [14.0.0]: https://github.com/commander-js/extra-typings/compare/v13.1.0...v14.0.0
 [13.1.0]: https://github.com/commander-js/extra-typings/compare/v13.0.0...v13.1.0

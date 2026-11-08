@@ -368,7 +368,7 @@ export class InvalidArgumentError extends CommanderError {
    */
   constructor(message: string);
 }
-export { InvalidArgumentError as InvalidOptionArgumentError }; // deprecated old name
+export { InvalidArgumentError as InvalidOptionArgumentError };
 
 export interface ErrorOptions {
   // optional parameter for error()
@@ -1146,10 +1146,13 @@ export class Command<
    *
    * @returns `this` command for chaining
    */
+  /** @deprecated since v15 */
   storeOptionsAsProperties<T extends OptionValues>(): this & T;
+  /** @deprecated since v15 */
   storeOptionsAsProperties<T extends OptionValues>(
     storeAsProperties: true,
   ): this & T;
+  /** @deprecated since v15 */
   storeOptionsAsProperties(storeAsProperties?: boolean): this;
 
   /**
@@ -1206,6 +1209,7 @@ export class Command<
    *
    * @returns `this` command for chaining
    */
+  /** @deprecated since v15 */
   combineFlagAndOptionalValue(combine?: boolean): this;
 
   /**
